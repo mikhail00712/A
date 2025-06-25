@@ -15,44 +15,39 @@
       width: 100vw;
       overflow-x: hidden;
     }
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
+    /* "Фоновый" заголовок, НЕ фиксированный */
+    .header-bg {
       width: 100vw;
-    }
-    .header-bg, .result-header-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
+      height: 90px;
       background: #6d758f;
-      z-index: 1;
-      height: 87px;
       border-radius: 0 0 19px 19px;
       box-shadow: 0 2px 16px #a9adc4bb;
+      position: relative;
+      z-index: 1;
+      /* остаётся просто как фон сверху */
     }
     header {
-      position: relative;
-      font-size: 2.2em;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      color: #fff;
       width: 100vw;
       text-align: center;
-      padding: 34px 0 20px 0;
-      margin-bottom: 18px;
+      position: absolute;
+      top: 18px;
+      left: 0;
+      font-size: 2.2em;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.03em;
       z-index: 2;
-      background: transparent;
+      pointer-events: none;
+      user-select: none;
     }
     .wrapper {
       max-width: 490px;
       width: 96vw;
       margin: 0 auto;
-      background: none;
       padding-bottom: 24px;
-      margin-top: 90px;
+      margin-top: 95px;
+      z-index: 10;
+      position: relative;
     }
     .section {
       background: #fff;
@@ -62,7 +57,7 @@
       padding: 16px 16px 8px 16px;
       width: 100%;
       position: relative;
-      z-index: 10;
+      z-index: 11;
     }
     .section-title {
       font-size: 1.1em;
@@ -100,31 +95,34 @@
       box-shadow: 0 1px 3px #d2d6e8aa;
       outline: none;
     }
-    .input-medium {
-      width: 70px;
-    }
-    .input-dual {
-      display: flex;
-      align-items: center;
-    }
+    .input-medium { width: 70px; }
+    .input-dual { display: flex; align-items: center; }
     .input-dual input { width: 41px; margin-right: 3px; }
+    /* СТИЛЬНАЯ кнопка "Загрузить скрин..." */
     .file-label {
-      display: inline-block;
-      padding: 15px 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 250px;
+      padding: 16px 32px;
+      margin: 0 auto 10px auto;
       background: #234ad8;
       color: #fff;
-      border-radius: 17px;
-      font-size: 1.1em;
+      border-radius: 15px;
+      font-size: 1.15em;
       font-weight: 700;
-      cursor: pointer;
-      margin: 0 0 12px 0;
       box-shadow: 0 2px 12px #b5b8c9a0;
       border: none;
       letter-spacing: 0.01em;
-      transition: background 0.19s;
+      transition: background 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+      text-align: center;
+      outline: none;
+      border-bottom: 3px solid #193175;
     }
-    .file-label:hover {
-      background: #1e3ca7;
+    .file-label:hover, .file-label:focus {
+      background: #193175;
+      box-shadow: 0 2px 12px #234ad8cc;
     }
     input[type="file"] { display: none; }
     .divider {
@@ -225,14 +223,16 @@
       letter-spacing: 0.01em;
       min-height: 22px;
     }
+    /* ----------------- */
     @media (max-width: 600px) {
-      header { font-size: 1.19em; padding: 18px 0 11px 0; }
-      .header-bg, .result-header-bg { height: 59px; }
+      header { font-size: 1.19em; top: 13px;}
+      .header-bg { height: 59px; }
       .wrapper, .sum-block { max-width: 99vw; }
       .section { padding: 12px 4vw 7px 4vw; }
       .divider { margin: 10px 0 13px 0; }
       #calculateBtn { font-size: 1.05em; padding: 14px 8vw; }
       .sum-block { margin-top: 22px;}
+      .file-label { min-width: unset; width: 100%; font-size: 1em;}
     }
   </style>
 </head>
@@ -241,7 +241,7 @@
   <header>Рабочее время</header>
   <form class="wrapper" id="mainForm" autocomplete="off" onsubmit="return false">
     <div class="section">
-      <div class="row">
+      <div class="row" style="justify-content:center;">
         <label class="file-label" id="labelScreenshot">
           Загрузить скрин полетных смен Аккорд
           <input type="file" id="imageInput" accept="image/*">
@@ -327,33 +327,31 @@
       <div class="pretime" id="pretime_training"></div>
     </div>
     <div class="divider"></div>
-    <!-- Новый блок командировок -->
+    <!-- Командировки с динамическим добавлением пар -->
     <div class="section" id="cmdSection">
       <div class="section-title">Командировки (включая разделённые полётные смены)</div>
       <div id="cmdPairs"></div>
-      <div style="display:flex;justify-content:center;margin:12px 0;">
-        <button type="button" id="addCmdPairBtn" style="background:#234ad8;color:#fff;border:none;border-radius:50%;width:38px;height:38px;font-size:1.5em;box-shadow:0 1px 6px #234ad81a;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
-      </div>
+      <button type="button" id="addCmdBtn" style="display:block;margin:9px auto 6px auto;background:#234ad8;color:#fff;border:none;border-radius:14px;padding:9px 26px;font-size:1.15em;font-weight:700;cursor:pointer;">+</button>
       <div class="switch-row">
         <label class="switch">
-          <input type="checkbox" id="multiBase2">
+          <input type="checkbox" id="multiBase">
           <span class="slider"></span>
         </label>
-        <span class="switch-label" style="font-size:1.13em;">Многобазовость</span>
+        <span class="switch-label" style="font-weight:700;color:#204499;font-size:1.13em;">Многобазовость</span>
       </div>
       <div class="pretime" id="pretime_cmd"></div>
     </div>
     <div class="divider"></div>
-   <div class="section">
-  <div class="row">
-    <label>Рейсы, которые еще осталось отлетать (для предварительного расчета):</label>
-    <input type="number" min="0" id="extraPlanH" placeholder="ч." class="input-short">
-    <span>ч</span>
-    <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
-    <span>мин</span>
-  </div>
-  <div class="pretime" id="pretime_extraplan"></div>
-</div>
+    <div class="section">
+      <div class="row">
+        <label>Рейсы, которые ещё осталось отлетать:</label>
+        <input type="number" min="0" id="extraPlanH" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
+        <span>мин</span>
+      </div>
+      <div class="pretime" id="pretime_extraplan"></div>
+    </div>
     <div class="divider"></div>
     <div class="section fond-row">
       <div>Фонд рабочего времени</div>
@@ -408,11 +406,12 @@
     function toMinutes(h, m) {
       h = parseInt(h) || 0; m = parseInt(m) || 0; return h * 60 + m;
     }
+
     function updatePreTime(id, mins) {
       document.getElementById(id).textContent = mins > 0 ? `Предварительное время: ${toTimeString(mins)}` : '';
     }
 
-    // Скриншот/ручное время
+    // --------- Скриншот/ручное время ---------
     let mainMinutes = 0;
     let inputMode = "screenshot";
     document.getElementById('imageInput').addEventListener('change', async function(e) {
@@ -450,7 +449,7 @@
       updatePreTime('pretime_main', mins);
     });
 
-    // Полёт пассажиром
+    // --------- Полёт пассажиром ---------
     function calcFlyTime() {
       let out = toMinutes(document.getElementById('flyOutH').value, document.getElementById('flyOutM').value);
       let inn = toMinutes(document.getElementById('flyInH').value, document.getElementById('flyInM').value);
@@ -466,7 +465,7 @@
       document.getElementById(id).addEventListener('input', calcFlyTime);
     });
 
-    // Резерв домашний (делить на 4)
+    // --------- Резерв домашний (делить на 4) ---------
     function calcReserveHome() {
       let mins = Math.floor(toMinutes(document.getElementById('reserveHomeH').value, document.getElementById('reserveHomeM').value) / 4);
       updatePreTime('pretime_rhome', mins);
@@ -475,7 +474,7 @@
     document.getElementById('reserveHomeH').addEventListener('input', calcReserveHome);
     document.getElementById('reserveHomeM').addEventListener('input', calcReserveHome);
 
-    // Резерв гостиница (все минуты)
+    // --------- Резерв гостиница (все минуты) ---------
     function calcReserveHotel() {
       let mins = toMinutes(document.getElementById('reserveHotelH').value, document.getElementById('reserveHotelM').value);
       updatePreTime('pretime_rhotel', mins);
@@ -484,7 +483,7 @@
     document.getElementById('reserveHotelH').addEventListener('input', calcReserveHotel);
     document.getElementById('reserveHotelM').addEventListener('input', calcReserveHotel);
 
-    // Отпуск/больничный (N дней * 7ч12м)
+    // --------- Отпуск/больничный (N дней * 7ч12м) ---------
     function calcExtraDays() {
       let days = parseInt(document.getElementById('extraDays').value) || 0;
       let mins = days * (7 * 60 + 12);
@@ -493,7 +492,7 @@
     }
     document.getElementById('extraDays').addEventListener('input', calcExtraDays);
 
-    // ВЛЭК (N дней * 7ч12м)
+    // --------- ВЛЭК (N дней * 7ч12м) ---------
     function calcVlek() {
       let days = parseInt(document.getElementById('vlekDays').value) || 0;
       let mins = days * (7 * 60 + 12);
@@ -502,7 +501,7 @@
     }
     document.getElementById('vlekDays').addEventListener('input', calcVlek);
 
-    // Тренажёр/CRM/ПП и т.д.
+    // --------- Тренажёр/CRM/ПП и т.д. ---------
     function calcTraining() {
       let mins = toMinutes(document.getElementById('trainingH').value, document.getElementById('trainingM').value);
       updatePreTime('pretime_training', mins);
@@ -511,84 +510,108 @@
     document.getElementById('trainingH').addEventListener('input', calcTraining);
     document.getElementById('trainingM').addEventListener('input', calcTraining);
 
-    // ------- Динамические командировки (несколько пар дат/времени) -------
-    let cmdPairsData = [];
+    // --------- Командировки с динамическими парами ---------
+    let cmdPairs = [
+      { close: '', open: '' }
+    ];
     function renderCmdPairs() {
-      const container = document.getElementById('cmdPairs');
-      container.innerHTML = '';
-      cmdPairsData.forEach((pair, idx) => {
-        const pairDiv = document.createElement('div');
-        pairDiv.className = "cmd-pair-block";
-        pairDiv.style = "margin-bottom:8px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;";
-
+      const wrap = document.getElementById('cmdPairs');
+      wrap.innerHTML = '';
+      cmdPairs.forEach((pair, idx) => {
+        let row = document.createElement('div');
+        row.style.display = "flex";
+        row.style.flexDirection = "column";
+        row.style.marginBottom = "6px";
+        row.style.position = "relative";
         // Закрытие смены
-        const closeInp = document.createElement('input');
-        closeInp.type = "datetime-local";
-        closeInp.value = pair.close || "";
-        closeInp.className = "datetime-input";
-        closeInp.style = "margin-right:6px;margin-bottom:4px;";
-        closeInp.oninput = e => { cmdPairsData[idx].close = e.target.value; calcCmdAll(); };
-
+        let close = document.createElement('input');
+        close.type = "datetime-local";
+        close.value = pair.close;
+        close.className = "datetime-input";
+        close.style.marginBottom = "4px";
+        close.oninput = e => {
+          cmdPairs[idx].close = e.target.value;
+          calcCmd();
+        };
         // Открытие смены
-        const openInp = document.createElement('input');
-        openInp.type = "datetime-local";
-        openInp.value = pair.open || "";
-        openInp.className = "datetime-input";
-        openInp.style = "margin-right:6px;margin-bottom:4px;";
-        openInp.oninput = e => { cmdPairsData[idx].open = e.target.value; calcCmdAll(); };
-
-        pairDiv.appendChild(document.createTextNode('Закрытие смены по прилёту:'));
-        pairDiv.appendChild(closeInp);
-
-        pairDiv.appendChild(document.createTextNode('Открытие смены при вылете:'));
-        pairDiv.appendChild(openInp);
-
-        // Кнопка удалить, если не первая пара
-        if (cmdPairsData.length > 1) {
-          const delBtn = document.createElement('button');
+        let open = document.createElement('input');
+        open.type = "datetime-local";
+        open.value = pair.open;
+        open.className = "datetime-input";
+        open.oninput = e => {
+          cmdPairs[idx].open = e.target.value;
+          calcCmd();
+        };
+        // Крестик удалить
+        if (cmdPairs.length > 1) {
+          let delBtn = document.createElement('button');
+          delBtn.textContent = "✕";
           delBtn.type = "button";
-          delBtn.textContent = "–";
-          delBtn.title = "Удалить";
-          delBtn.style = "background:#e44444;color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:1.3em;cursor:pointer;vertical-align:middle;margin-left:4px;";
-          delBtn.onclick = () => { cmdPairsData.splice(idx, 1); renderCmdPairs(); calcCmdAll(); };
-          pairDiv.appendChild(delBtn);
+          delBtn.style = "position:absolute;top:4px;right:2px;width:28px;height:28px;background:#ff4040cc;color:#fff;border:none;border-radius:50%;font-size:1.25em;cursor:pointer;";
+          delBtn.onclick = () => {
+            cmdPairs.splice(idx, 1);
+            renderCmdPairs();
+            calcCmd();
+          };
+          row.appendChild(delBtn);
         }
-        container.appendChild(pairDiv);
+        // Подписи
+        let l1 = document.createElement('label');
+        l1.textContent = "Закрытие смены по прилёту:";
+        l1.style.fontSize = "1em";
+        l1.style.fontWeight = "500";
+        l1.style.marginBottom = "1px";
+        row.appendChild(l1);
+        row.appendChild(close);
+        let l2 = document.createElement('label');
+        l2.textContent = "Открытие смены при вылете:";
+        l2.style.fontSize = "1em";
+        l2.style.fontWeight = "500";
+        l2.style.margin = "4px 0 1px 0";
+        row.appendChild(l2);
+        row.appendChild(open);
+        wrap.appendChild(row);
       });
     }
-    // Расчёт общего времени по всем парам командировок
-    function calcCmdAll() {
-      if (document.getElementById('multiBase2').checked) {
-        document.getElementById('pretime_cmd').textContent = '';
-        setCmdSectionStrike(true);
+    renderCmdPairs();
+    document.getElementById('addCmdBtn').onclick = function() {
+      cmdPairs.push({ close: '', open: '' });
+      renderCmdPairs();
+      calcCmd();
+    };
+    // Многобазовость — вычеркиваем командировку если включено
+    function setCmdSectionStrike(isOn) {
+      let el = document.getElementById('cmdSection');
+      if (isOn) el.classList.add('strike');
+      else el.classList.remove('strike');
+    }
+    document.getElementById('multiBase').addEventListener('change', function(){
+      setCmdSectionStrike(this.checked);
+      updatePreTime('pretime_cmd', this.checked ? 0 : calcCmd());
+    });
+
+    // Расчет по всем парам
+    function calcCmd() {
+      if (document.getElementById('multiBase').checked) {
+        updatePreTime('pretime_cmd', 0);
         return 0;
       }
-      setCmdSectionStrike(false);
-      let totalMins = 0;
-      cmdPairsData.forEach(pair => {
-        if (pair.close && pair.open) {
-          let dClose = new Date(pair.close);
-          let dOpen = new Date(pair.open);
-          let diff = (dOpen - dClose) / 60000;
-          if (diff < 0) diff += 24*60*7;
-          totalMins += Math.floor(diff / 4);
+      let sum = 0;
+      for (let p of cmdPairs) {
+        if (p.close && p.open) {
+          let t1 = new Date(p.close);
+          let t2 = new Date(p.open);
+          let delta = (t2 - t1) / 60000; // в минутах
+          if (delta < 0) delta += 24 * 60;
+          let mins = Math.floor(delta / 4);
+          sum += mins;
         }
-      });
-      document.getElementById('pretime_cmd').textContent = totalMins > 0 ? `Предварительное время: ${toTimeString(totalMins)}` : '';
-      return totalMins;
+      }
+      updatePreTime('pretime_cmd', sum);
+      return sum;
     }
-    // Плюсик — добавить пару
-    document.getElementById('addCmdPairBtn').onclick = function() {
-      cmdPairsData.push({close:'', open:''});
-      renderCmdPairs();
-    };
-    // Переключатель многобазовости
-    document.getElementById('multiBase2').addEventListener('change', calcCmdAll);
-    // Инициализация пары при запуске
-    cmdPairsData.push({close:'', open:''});
-    renderCmdPairs();
 
-    // Дополнительный план
+    // --------- Дополнительный план (рейсы которые ещё осталось отлетать) ---------
     function calcExtraPlan() {
       let mins = toMinutes(document.getElementById('extraPlanH').value, document.getElementById('extraPlanM').value);
       updatePreTime('pretime_extraplan', mins);
@@ -597,14 +620,7 @@
     document.getElementById('extraPlanH').addEventListener('input', calcExtraPlan);
     document.getElementById('extraPlanM').addEventListener('input', calcExtraPlan);
 
-    // Вычёркиваем командировки, если включена многобазовость
-    function setCmdSectionStrike(isOn) {
-      let el = document.getElementById('cmdSection');
-      if (isOn) el.classList.add('strike');
-      else el.classList.remove('strike');
-    }
-
-    // -------------------- КНОПКА РАССЧИТАТЬ --------------------
+    // --------- КНОПКА РАССЧИТАТЬ ---------
     document.getElementById('mainForm').onsubmit = function() {
       let result = (inputMode === "screenshot") ? mainMinutes :
         toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
@@ -614,7 +630,7 @@
       result += calcExtraDays();
       result += calcVlek();
       result += calcTraining();
-      if (!document.getElementById('multiBase2').checked) result += calcCmdAll();
+      if (!document.getElementById('multiBase').checked) result += calcCmd();
       result += calcExtraPlan();
       // Фонд
       const fondRaw = fondData[document.getElementById('monthPicker').value] || 0;
@@ -641,6 +657,9 @@
       document.querySelector('.result-header-bg').style.display = "none";
       document.getElementById('resultPage').style.display = "none";
     };
+
+    // ---- Пересчёт предварительных по командировкам при старте ----
+    calcCmd();
   </script>
 </body>
 </html>
