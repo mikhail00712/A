@@ -12,6 +12,8 @@
       font-family: 'Inter', Arial, sans-serif;
       color: #23273b;
       min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
     }
     body {
       display: flex;
@@ -21,18 +23,28 @@
       min-height: 100vh;
       width: 100vw;
     }
+    .header-bg, .result-header-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      background: #6d758f;
+      z-index: 1;
+      height: 87px;
+      border-radius: 0 0 19px 19px;
+      box-shadow: 0 2px 16px #a9adc4bb;
+    }
     header {
+      position: relative;
       font-size: 2.2em;
       font-weight: 800;
       letter-spacing: 0.03em;
       color: #fff;
-      background: #6d758f;
       width: 100vw;
       text-align: center;
       padding: 34px 0 20px 0;
       margin-bottom: 18px;
-      border-radius: 0 0 19px 19px;
-      box-shadow: 0 2px 16px #a9adc4bb;
+      z-index: 2;
+      background: transparent;
     }
     .wrapper {
       max-width: 490px;
@@ -40,6 +52,7 @@
       margin: 0 auto;
       background: none;
       padding-bottom: 24px;
+      margin-top: 90px;
     }
     .section {
       background: #fff;
@@ -48,6 +61,8 @@
       margin-bottom: 20px;
       padding: 16px 16px 8px 16px;
       width: 100%;
+      position: relative;
+      z-index: 10;
     }
     .section-title {
       font-size: 1.1em;
@@ -202,16 +217,27 @@
       transition: background 0.19s;
     }
     #calculateBtn:hover { background: #1e3ca7; }
+    .pretime {
+      margin: 7px 0 0 4px;
+      font-size: 0.98em;
+      font-weight: 600;
+      color: #407cc1;
+      letter-spacing: 0.01em;
+      min-height: 22px;
+    }
     @media (max-width: 600px) {
       header { font-size: 1.19em; padding: 18px 0 11px 0; }
+      .header-bg, .result-header-bg { height: 59px; }
       .wrapper, .sum-block { max-width: 99vw; }
       .section { padding: 12px 4vw 7px 4vw; }
       .divider { margin: 10px 0 13px 0; }
       #calculateBtn { font-size: 1.05em; padding: 14px 8vw; }
+      .sum-block { margin-top: 22px;}
     }
   </style>
 </head>
 <body>
+  <div class="header-bg"></div>
   <header>Рабочее время</header>
   <form class="wrapper" id="mainForm" autocomplete="off" onsubmit="return false">
     <div class="section">
@@ -231,6 +257,7 @@
           <span>мин</span>
         </div>
       </div>
+      <div class="pretime" id="pretime_main"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -249,6 +276,7 @@
         <input type="number" min="0" max="59" id="flyInM" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
+      <div class="pretime" id="pretime_fly"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -259,6 +287,7 @@
         <input type="number" min="0" max="59" id="reserveHomeM" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
+      <div class="pretime" id="pretime_rhome"></div>
       <div class="row">
         <label>Резерв гостиница:</label>
         <input type="number" min="0" id="reserveHotelH" placeholder="ч." class="input-short">
@@ -266,6 +295,7 @@
         <input type="number" min="0" max="59" id="reserveHotelM" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
+      <div class="pretime" id="pretime_rhotel"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -275,6 +305,7 @@
         </label>
         <input type="number" min="0" id="extraDays" placeholder="Кол-во дней" class="input-short">
       </div>
+      <div class="pretime" id="pretime_extra"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -282,6 +313,7 @@
         <label>ВЛЭК (кол-во дней):</label>
         <input type="number" min="0" id="vlekDays" placeholder="Кол-во дней" class="input-short">
       </div>
+      <div class="pretime" id="pretime_vlek"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -292,6 +324,7 @@
         <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
+      <div class="pretime" id="pretime_training"></div>
     </div>
     <div class="divider"></div>
     <div class="section" id="cmdSection">
@@ -317,6 +350,7 @@
         </label>
         <span class="switch-label">Подписан многобазовость</span>
       </div>
+      <div class="pretime" id="pretime_cmd"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -327,6 +361,7 @@
         <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
+      <div class="pretime" id="pretime_extraplan"></div>
     </div>
     <div class="divider"></div>
     <div class="section fond-row">
@@ -352,48 +387,53 @@
   </form>
 
   <!-- Итоговая страница -->
+  <div class="result-header-bg" style="display:none;position:fixed;top:0;left:0;width:100vw;background:#6d758f;height:87px;border-radius:0 0 19px 19px;z-index:5;box-shadow:0 2px 16px #a9adc4bb;"></div>
   <div id="resultPage" style="display:none;">
     <header>Результат расчёта</header>
     <div class="sum-block">
       <div>Моё рабочее время:</div>
       <div id="myWorkTime" style="font-size:1.45em;margin:8px 0 14px 0;"></div>
       <div>Фонд рабочего времени:</div>
-      <div id="fondWorkTime" style="font-size:1.28em;margin-bottom:10px;"></div>
-      <div id="deltaBlock"></div>
+      <div id="fondWorkTime" style="font-size:1.22em;margin:7px 0 14px 0;"></div>
+      <div id="deltaBlock" style="font-size:1.15em;margin-top:18px;"></div>
+      <button id="backBtn" style="margin-top:28px;background:#234ad8;color:#fff;padding:14px 36px;font-size:1.1em;border-radius:16px;border:none;cursor:pointer;">Назад</button>
     </div>
-    <button id="backBtn" style="margin:42px auto 0 auto;display:block;padding:14px 36px;border-radius:24px;background:#234ad8;color:#fff;font-size:1.13em;font-weight:800;border:none;cursor:pointer;">Назад</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
-    // Фонды рабочего времени (36-часовая неделя) по месяцам (актуально на 2025)
+    // --- фонд рабочего времени (36ч неделя)
     const fondData = {
       "2025-01": 143.6, "2025-02": 140.4, "2025-03": 148.8, "2025-04": 151.2,
       "2025-05": 151.2, "2025-06": 135.8, "2025-07": 151.2, "2025-08": 151.2,
       "2025-09": 151.2, "2025-10": 151.2, "2025-11": 143.6, "2025-12": 143.6
     };
-    let mainMinutes = 0;
 
-    // Суммирование времени (часы, минуты → минуты)
-    function toMinutes(h, m) { return (parseInt(h) || 0) * 60 + (parseInt(m) || 0); }
-    function toTimeString(minutes) {
-      const h = Math.floor(minutes / 60);
-      const m = minutes % 60;
-      return h + ' ч ' + m + ' мин';
+    // --- minutes => "чч ч мм мин"
+    function toTimeString(mins) {
+      let h = Math.floor(mins / 60);
+      let m = mins % 60;
+      return `${h} ч ${m} мин`;
+    }
+    function toMinutes(h, m) {
+      h = parseInt(h) || 0; m = parseInt(m) || 0; return h * 60 + m;
     }
 
-    // Выбор — либо скриншот, либо ручной ввод
-    let inputMode = "manual"; // manual | screenshot
+    // -------------------- ПРЕДВАРИТЕЛЬНЫЕ ВРЕМЕНА --------------------
+    function updatePreTime(id, mins) {
+      document.getElementById(id).textContent = mins > 0 ? `Предварительное время: ${toTimeString(mins)}` : '';
+    }
+
+    // Скриншот/ручное время
+    let mainMinutes = 0;
+    let inputMode = "screenshot";
     document.getElementById('imageInput').addEventListener('change', async function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      document.getElementById('progress').textContent = 'Распознаём...';
       inputMode = "screenshot";
       document.getElementById('manualHours').value = '';
       document.getElementById('manualMinutes').value = '';
       let total = 0;
       const { data: { text } } = await Tesseract.recognize(
-        file, 'rus',
+        e.target.files[0], 'rus',
         { logger: m => {
           if (m.status === 'recognizing text') {
             document.getElementById('progress').textContent = `Распознавание: ${Math.round(m.progress*100)}%`;
@@ -403,20 +443,107 @@
       document.getElementById('progress').textContent = '';
       const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
       let match;
-      while ((match = re.exec(text)) !== null) {
-        total += toMinutes(match[1], match[2]);
-      }
+      while ((match = re.exec(text)) !== null) total += toMinutes(match[1], match[2]);
       mainMinutes = total;
+      updatePreTime('pretime_main', total);
     });
     document.getElementById('manualHours').addEventListener('input', function(){
       inputMode = "manual";
       document.getElementById('imageInput').value = '';
+      let mins = toMinutes(this.value, document.getElementById('manualMinutes').value);
+      mainMinutes = mins;
+      updatePreTime('pretime_main', mins);
     });
     document.getElementById('manualMinutes').addEventListener('input', function(){
       inputMode = "manual";
       document.getElementById('imageInput').value = '';
+      let mins = toMinutes(document.getElementById('manualHours').value, this.value);
+      mainMinutes = mins;
+      updatePreTime('pretime_main', mins);
     });
 
+    // Полёт пассажиром
+    function calcFlyTime() {
+      let out = toMinutes(document.getElementById('flyOutH').value, document.getElementById('flyOutM').value);
+      let inn = toMinutes(document.getElementById('flyInH').value, document.getElementById('flyInM').value);
+      if (out && inn) {
+        let diff = inn - out; if (diff < 0) diff += 24 * 60;
+        diff += 40;
+        updatePreTime('pretime_fly', diff);
+        return diff;
+      } else updatePreTime('pretime_fly', 0);
+      return 0;
+    }
+    ['flyOutH','flyOutM','flyInH','flyInM'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calcFlyTime);
+    });
+
+    // Резерв домашний (делить на 4)
+    function calcReserveHome() {
+      let mins = Math.floor(toMinutes(document.getElementById('reserveHomeH').value, document.getElementById('reserveHomeM').value) / 4);
+      updatePreTime('pretime_rhome', mins);
+      return mins;
+    }
+    document.getElementById('reserveHomeH').addEventListener('input', calcReserveHome);
+    document.getElementById('reserveHomeM').addEventListener('input', calcReserveHome);
+
+    // Резерв гостиница (все минуты)
+    function calcReserveHotel() {
+      let mins = toMinutes(document.getElementById('reserveHotelH').value, document.getElementById('reserveHotelM').value);
+      updatePreTime('pretime_rhotel', mins);
+      return mins;
+    }
+    document.getElementById('reserveHotelH').addEventListener('input', calcReserveHotel);
+    document.getElementById('reserveHotelM').addEventListener('input', calcReserveHotel);
+
+    // Отпуск/больничный (N дней * 7ч12м)
+    function calcExtraDays() {
+      let days = parseInt(document.getElementById('extraDays').value) || 0;
+      let mins = days * (7 * 60 + 12);
+      updatePreTime('pretime_extra', mins);
+      return mins;
+    }
+    document.getElementById('extraDays').addEventListener('input', calcExtraDays);
+
+    // ВЛЭК (N дней * 7ч12м)
+    function calcVlek() {
+      let days = parseInt(document.getElementById('vlekDays').value) || 0;
+      let mins = days * (7 * 60 + 12);
+      updatePreTime('pretime_vlek', mins);
+      return mins;
+    }
+    document.getElementById('vlekDays').addEventListener('input', calcVlek);
+
+    // Тренажёр/CRM/ПП и т.д.
+    function calcTraining() {
+      let mins = toMinutes(document.getElementById('trainingH').value, document.getElementById('trainingM').value);
+      updatePreTime('pretime_training', mins);
+      return mins;
+    }
+    document.getElementById('trainingH').addEventListener('input', calcTraining);
+    document.getElementById('trainingM').addEventListener('input', calcTraining);
+
+    // Командировка (разница дат, делить на 4)
+    function calcCmd() {
+      let closeDate = document.getElementById('closeShiftDate').value;
+      let openDate = document.getElementById('openShiftDate').value;
+      let closeH = document.getElementById('closeShiftH').value, closeM = document.getElementById('closeShiftM').value;
+      let openH = document.getElementById('openShiftH').value, openM = document.getElementById('openShiftM').value;
+      if (closeDate && openDate && closeH !== "" && openH !== "" && closeM !== "" && openM !== "") {
+        let d1 = new Date(closeDate + "T" + String(closeH).padStart(2,'0') + ":" + String(closeM).padStart(2,'0'));
+        let d2 = new Date(openDate + "T" + String(openH).padStart(2,'0') + ":" + String(openM).padStart(2,'0'));
+        let delta = Math.round((d1 - d2)/60000);
+        if (delta < 0) delta += 24 * 60;
+        let mins = Math.floor(delta/4);
+        updatePreTime('pretime_cmd', mins);
+        return mins;
+      }
+      updatePreTime('pretime_cmd', 0);
+      return 0;
+    }
+    ['closeShiftDate','closeShiftH','closeShiftM','openShiftDate','openShiftH','openShiftM'].forEach(id=>{
+      document.getElementById(id).addEventListener('input', calcCmd);
+    });
     // Многобазовость — вычеркиваем командировку если включено
     function setCmdSectionStrike(isOn) {
       let el = document.getElementById('cmdSection');
@@ -425,72 +552,40 @@
     }
     document.getElementById('multiBase').addEventListener('change', function(){
       setCmdSectionStrike(this.checked);
+      updatePreTime('pretime_cmd', this.checked ? 0 : calcCmd());
     });
 
-    // Основная логика расчета
+    // Дополнительный план
+    function calcExtraPlan() {
+      let mins = toMinutes(document.getElementById('extraPlanH').value, document.getElementById('extraPlanM').value);
+      updatePreTime('pretime_extraplan', mins);
+      return mins;
+    }
+    document.getElementById('extraPlanH').addEventListener('input', calcExtraPlan);
+    document.getElementById('extraPlanM').addEventListener('input', calcExtraPlan);
+
+    // -------------------- КНОПКА РАССЧИТАТЬ --------------------
     document.getElementById('mainForm').onsubmit = function() {
-      // 1. Главное время — либо скриншот, либо ручной
       let result = (inputMode === "screenshot") ? mainMinutes :
         toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
-
-      // 2. Полёт пассажиром (вылет, прилёт, +40 минут к разнице)
-      let out = toMinutes(document.getElementById('flyOutH').value, document.getElementById('flyOutM').value);
-      let inn = toMinutes(document.getElementById('flyInH').value, document.getElementById('flyInM').value);
-      if (out && inn) {
-        let diff = inn - out;
-        if (diff < 0) diff += 24 * 60; // если через полночь
-        diff += 40; // +40 минут
-        result += diff;
-      }
-
-      // 3. Резервы и гостиница
-      let rh = toMinutes(document.getElementById('reserveHomeH').value, document.getElementById('reserveHomeM').value);
-      result += Math.floor(rh / 4);
-
-      let hh = toMinutes(document.getElementById('reserveHotelH').value, document.getElementById('reserveHotelM').value);
-      result += hh;
-
-      // 4. Отпуск/больничный (дни * 7ч12мин)
-      let extraDays = parseInt(document.getElementById('extraDays').value) || 0;
-      result += extraDays * (7 * 60 + 12);
-
-      // 5. ВЛЭК (дни * 7ч12мин)
-      let vlekDays = parseInt(document.getElementById('vlekDays').value) || 0;
-      result += vlekDays * (7 * 60 + 12);
-
-      // 6. Тренажёр/CRM/ПП
-      result += toMinutes(document.getElementById('trainingH').value, document.getElementById('trainingM').value);
-
-      // 7. Командировка (если многобазовость не включена)
-      if (!document.getElementById('multiBase').checked) {
-        let closeDate = document.getElementById('closeShiftDate').value;
-        let openDate = document.getElementById('openShiftDate').value;
-        let closeH = document.getElementById('closeShiftH').value, closeM = document.getElementById('closeShiftM').value;
-        let openH = document.getElementById('openShiftH').value, openM = document.getElementById('openShiftM').value;
-        if (closeDate && openDate && closeH !== "" && openH !== "" && closeM !== "" && openM !== "") {
-          let d1 = new Date(closeDate + "T" + String(closeH).padStart(2,'0') + ":" + String(closeM).padStart(2,'0'));
-          let d2 = new Date(openDate + "T" + String(openH).padStart(2,'0') + ":" + String(openM).padStart(2,'0'));
-          let delta = Math.round((d1 - d2)/60000);
-          if (delta < 0) delta += 24 * 60; // через сутки
-          result += Math.floor(delta/4);
-        }
-      }
-
-      // 8. Дополнительный план
-      result += toMinutes(document.getElementById('extraPlanH').value, document.getElementById('extraPlanM').value);
-
-      // Фонд рабочего времени
+      result += calcFlyTime();
+      result += calcReserveHome();
+      result += calcReserveHotel();
+      result += calcExtraDays();
+      result += calcVlek();
+      result += calcTraining();
+      if (!document.getElementById('multiBase').checked) result += calcCmd();
+      result += calcExtraPlan();
+      // Фонд
       const fondRaw = fondData[document.getElementById('monthPicker').value] || 0;
       const fondMin = Math.round(fondRaw * 60);
-
-      // Показываем итоговую страницу
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
       document.getElementById('mainForm').style.display = "none";
+      document.querySelector('.result-header-bg').style.display = "block";
       document.getElementById('resultPage').style.display = "block";
       document.getElementById('myWorkTime').textContent = toTimeString(result);
       document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
-
       let deltaBlock = document.getElementById('deltaBlock');
       if (result > fondMin) {
         deltaBlock.innerHTML = "<span style='color:#c23535;font-weight:700;'>Переработка:</span> " +
@@ -501,9 +596,9 @@
       }
       return false;
     };
-
     document.getElementById('backBtn').onclick = function() {
       document.getElementById('mainForm').style.display = "block";
+      document.querySelector('.result-header-bg').style.display = "none";
       document.getElementById('resultPage').style.display = "none";
     };
   </script>
