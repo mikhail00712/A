@@ -36,87 +36,69 @@
       border-radius: 0 0 22px 22px;
       box-shadow: 0 2px 16px #a9adc4bb;
     }
-    #fond {
+    .container {
       width: 100vw;
-      text-align: center;
-      margin: 0 0 16px 0;
-      font-size: 1.22em;
-      color: #333a50;
-      font-weight: 600;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 5vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .block {
       background: #fff;
       border-radius: 13px;
       box-shadow: 0 3px 15px #e6e6ef33;
-      padding: 18px 0 14px 0;
+      padding: 18px 18px 14px 18px;
+      margin-bottom: 18px;
+      width: 100%;
       max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
     }
-    #monthPicker {
-      margin: 0 auto 18px auto;
-      font-size: 1.13em;
-      border-radius: 8px;
-      padding: 6px 18px;
-      border: 1.5px solid #d5d7e2;
-      background: #f9f9fd;
-      color: #24273b;
-      font-weight: 500;
-      display: block;
-      box-shadow: 0 1px 6px #c7cad6b2;
-      outline: none;
-    }
-    h2 {
-      margin: 10px 0 28px 0;
-      text-align: center;
-      color: #24273b;
-      font-size: 1.56em;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-    #extra-block {
+    .row {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      margin: 0 0 22px 0;
-      font-size: 1.08em;
-      color: #24273b;
-      background: #fff;
-      padding: 14px 16px 10px 16px;
-      border-radius: 11px;
-      box-shadow: 0 3px 15px #e6e6ef44;
-      font-weight: 600;
-      max-width: 430px;
+      margin-bottom: 13px;
+      flex-wrap: wrap;
     }
-    #extra-block label {
-      margin-right: 12px;
-      min-width: 178px;
-      text-align: left;
+    .row label {
+      min-width: 140px;
       font-size: 1em;
+      color: #23262e;
+      margin-right: 10px;
+      margin-bottom: 4px;
     }
-    #extraDays {
-      width: 62px;
-      font-size: 1.08em;
+    .input-short,
+    .input-medium {
+      font-size: 1.09em;
       border-radius: 8px;
       border: 1.5px solid #bfc2d6;
-      padding: 6px 9px;
       background: #f3f4f9;
       color: #24273b;
       font-weight: 600;
+      padding: 6px 10px;
       text-align: center;
+      margin-right: 7px;
+      margin-bottom: 2px;
       box-shadow: 0 1px 3px #d2d6e8aa;
       outline: none;
+      width: 60px;
     }
+    .input-medium { width: 90px; }
+    .input-dual {
+      display: flex;
+      align-items: center;
+    }
+    .input-dual input { width: 48px; margin-right: 3px; }
     .file-label {
       display: inline-block;
-      padding: 17px 38px;
+      padding: 16px 36px;
       background: #234ad8;
       color: #fff;
       border-radius: 20px;
-      font-size: 1.28em;
+      font-size: 1.13em;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.19s;
-      margin-top: 14px;
-      margin-bottom: 18px;
+      margin: 0 0 12px 0;
       box-shadow: 0 2px 12px #b5b8c9a0;
       border: none;
       letter-spacing: 0.01em;
@@ -124,165 +106,139 @@
     .file-label:hover {
       background: #1e3ca7;
     }
-    input[type="file"] {
-      display: none;
-    }
+    input[type="file"] { display: none; }
     #progress {
-      font-size: 1.09em;
+      font-size: 1.05em;
       color: #234ad8;
-      margin-top: 10px;
+      margin-top: 8px;
       margin-bottom: 8px;
       text-align: center;
       font-weight: 600;
       letter-spacing: 0.01em;
     }
-    #calc-table {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+    .sum-block {
+      margin-top: 28px;
       background: #fff;
-      border-radius: 12px;
-      padding: 18px 32px 18px 28px;
-      box-shadow: 0 3px 16px #e6e6ef33;
-      font-size: 1.14em;
-      min-width: 260px;
-      margin-bottom: 38px;
-    }
-    .calc-row {
-      display: flex;
-      align-items: center;
-      font-size: 1.13em;
-      margin-bottom: 2px;
-      color: #24273b;
-      font-weight: 500;
-    }
-    .calc-row .sign {
-      width: 32px;
+      border-radius: 15px;
+      box-shadow: 0 4px 16px #d2e2e244;
+      padding: 22px 14px 20px 14px;
       font-size: 1.2em;
-      font-weight: bold;
-      color: #234ad8;
-      display: inline-block;
       text-align: center;
-    }
-    .calc-row .caption {
-      width: 170px;
-      min-width: 130px;
-      color: #61677c;
-      margin-right: 10px;
-      text-align: right;
-      font-weight: 600;
-      font-size: 1.03em;
-    }
-    .calc-row .value {
-      font-weight: bold;
+      font-weight: 700;
       color: #234ad8;
-      font-size: 1.13em;
-      margin-left: 6px;
-      min-width: 75px;
-      text-align: left;
-    }
-    .calc-row.sum {
-      font-size: 1.17em;
-      font-weight: bold;
-      margin-top: 13px;
-      color: #19bb86;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
+      width: 100%;
+      max-width: 420px;
     }
     @media (max-width: 600px) {
       header { font-size: 1.3em; padding: 20px 0 0 0; }
-      #fond, #extra-block, #calc-table { max-width: 99vw; min-width: 0; }
-      #extra-block { font-size: 0.97em; }
-      .calc-row .caption { width: 35vw; min-width: 0; }
+      .container { max-width: 99vw; padding: 0 2vw; }
+      .block, .sum-block { max-width: 99vw; }
       .file-label { font-size: 1em; padding: 13px 16px; }
     }
   </style>
 </head>
 <body>
-  <header>Рабочее время</header>
-  <div id="fond"></div>
-  <select id="monthPicker">
-    <option value="2025-01">Январь 2025</option>
-    <option value="2025-02">Февраль 2025</option>
-    <option value="2025-03">Март 2025</option>
-    <option value="2025-04">Апрель 2025</option>
-    <option value="2025-05">Май 2025</option>
-    <option value="2025-06" selected>Июнь 2025</option>
-    <option value="2025-07">Июль 2025</option>
-    <option value="2025-08">Август 2025</option>
-    <option value="2025-09">Сентябрь 2025</option>
-    <option value="2025-10">Октябрь 2025</option>
-    <option value="2025-11">Ноябрь 2025</option>
-    <option value="2025-12">Декабрь 2025</option>
-  </select>
-  <h2>Сумма рабочего времени по скриншоту</h2>
-  <div id="extra-block">
-    <label for="extraDays">Больничный/отпуск (количество дней):</label>
-    <input type="number" id="extraDays" min="0" step="1" value="0">
+  <header>РАБОЧЕЕ ВРЕМЯ</header>
+  <div class="container">
+
+    <!-- Загрузка скриншота и ручной ввод -->
+    <div class="block">
+      <div class="row">
+        <label class="file-label">
+          Загрузить скриншот
+          <input type="file" id="imageInput" accept="image/*">
+        </label>
+        <span id="progress"></span>
+      </div>
+      <div class="row">
+        <label>Ввести время вручную:</label>
+        <div class="input-dual">
+          <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Больничный/отпуск -->
+    <div class="block">
+      <div class="row">
+        <label for="extraDays" style="min-width:210px;">Больничный/отпуск <br><span style="font-size:0.93em;font-weight:400;color:#697084;">(дней, не по парадной, не на выходные и праздники)</span>:</label>
+        <input type="number" id="extraDays" min="0" step="1" value="0" class="input-short">
+      </div>
+    </div>
+
+    <!-- Резервы, тренажер -->
+    <div class="block">
+      <div class="row">
+        <label for="reserveHomeH">Резерв в месте жительства:</label>
+        <div class="input-dual">
+          <input type="number" min="0" id="reserveHomeH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="reserveHomeM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
+      </div>
+      <div class="row">
+        <label for="reserveHotelH">Резерв в гостинице:</label>
+        <div class="input-dual">
+          <input type="number" min="0" id="reserveHotelH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="reserveHotelM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
+      </div>
+      <div class="row">
+        <label for="trainingH">Тренажёр/предварительная/учёба на земле:</label>
+        <div class="input-dual">
+          <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Командировка -->
+    <div class="block">
+      <div class="row">
+        <label>Командировка (закрытие смены):</label>
+        <div class="input-dual">
+          <input type="number" min="0" max="23" id="closeShiftH" placeholder="чч" class="input-short">
+          <span>:</span>
+          <input type="number" min="0" max="59" id="closeShiftM" placeholder="мм" class="input-short">
+        </div>
+      </div>
+      <div class="row">
+        <label>Открытие смены:</label>
+        <div class="input-dual">
+          <input type="number" min="0" max="23" id="openShiftH" placeholder="чч" class="input-short">
+          <span>:</span>
+          <input type="number" min="0" max="59" id="openShiftM" placeholder="мм" class="input-short">
+        </div>
+      </div>
+    </div>
+
+    <!-- Итоговый подсчет -->
+    <div class="sum-block" id="sumBlock">
+      Сумма рабочего времени: <br>
+      <span id="finalSum" style="font-size:1.4em;"></span>
+    </div>
   </div>
-  <label class="file-label">
-    Загрузить скриншот
-    <input type="file" id="imageInput" accept="image/*">
-  </label>
-  <div id="progress"></div>
-  <div id="calc-table" style="display:none;">
-    <div class="calc-row">
-      <span class="caption">По скриншоту:</span>
-      <span class="sign"></span>
-      <span class="value" id="val-main"></span>
-    </div>
-    <div class="calc-row">
-      <span class="caption">Больничный/отпуск:</span>
-      <span class="sign">+</span>
-      <span class="value" id="val-extra"></span>
-    </div>
-    <div class="calc-row sum">
-      <span class="caption">Итого:</span>
-      <span class="sign">=</span>
-      <span class="value" id="val-sum"></span>
-    </div>
-  </div>
+
+  <!-- Tesseract -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
-    // Фонды рабочего времени (36-часовая неделя) по месяцам (актуально на 2025)
-    const fondData = {
-      "2025-01": 143.6,
-      "2025-02": 140.4,
-      "2025-03": 148.8,
-      "2025-04": 151.2,
-      "2025-05": 151.2,
-      "2025-06": 135.8,
-      "2025-07": 151.2,
-      "2025-08": 151.2,
-      "2025-09": 151.2,
-      "2025-10": 151.2,
-      "2025-11": 143.6,
-      "2025-12": 143.6
-    };
-
-    const monthNames = {
-      "01": "январь", "02": "февраль", "03": "март", "04": "апрель",
-      "05": "май", "06": "июнь", "07": "июль", "08": "август",
-      "09": "сентябрь", "10": "октябрь", "11": "ноябрь", "12": "декабрь"
-    };
-
-    function updateFondDisplay() {
-      const select = document.getElementById("monthPicker");
-      const fondDiv = document.getElementById("fond");
-      const val = select.value;
-      const fond = fondData[val] || 0;
-      const hours = Math.floor(fond);
-      const minutes = Math.round((fond - hours) * 60);
-      const [year, month] = val.split("-");
-      fondDiv.innerHTML =
-        `Фонд рабочего времени ${monthNames[month]} ${year} года: <span style="font-size:1.15em;">${hours} часов ${minutes} минут</span>`;
-    }
-    document.getElementById("monthPicker").addEventListener("change", updateFondDisplay);
-    updateFondDisplay();
-
-    // --- Складываем рабочее время и дни отпуска/больничного ---
-    let mainMinutes = 0; // сумма из скриншота
-    let extraMinutes = 0; // за больничный/отпуск
+    // Расчет из скриншота
+    let screenshotMinutes = 0;
+    let manualMinutes = 0;
+    let extraMinutes = 0;
+    let reserveHomeMinutes = 0;
+    let reserveHotelMinutes = 0;
+    let trainingMinutes = 0;
+    let tripMinutes = 0;
 
     function toTimeString(minutes) {
       const h = Math.floor(minutes / 60);
@@ -290,57 +246,91 @@
       return h + ' ч ' + m + ' мин';
     }
 
-    function updateCalcTable() {
-      document.getElementById('calc-table').style.display = (mainMinutes > 0 || extraMinutes > 0) ? 'flex' : 'none';
-      document.getElementById('val-main').textContent = mainMinutes > 0 ? toTimeString(mainMinutes) : '';
-      document.getElementById('val-extra').textContent = extraMinutes > 0 ? toTimeString(extraMinutes) : '';
-      const sum = mainMinutes + extraMinutes;
-      document.getElementById('val-sum').textContent = (mainMinutes > 0 || extraMinutes > 0) ? toTimeString(sum) : '';
+    function calcTripTime() {
+      let closeH = parseInt(document.getElementById('closeShiftH').value) || 0;
+      let closeM = parseInt(document.getElementById('closeShiftM').value) || 0;
+      let openH = parseInt(document.getElementById('openShiftH').value) || 0;
+      let openM = parseInt(document.getElementById('openShiftM').value) || 0;
+      let total = ((closeH * 60 + closeM) - (openH * 60 + openM));
+      if (total < 0) total += 24 * 60; // если через полночь
+      return Math.floor(total / 4);
     }
 
-    document.getElementById('extraDays').addEventListener('input', function() {
-      const days = parseInt(this.value) || 0;
+    function updateSum() {
+      // Скриншот + ручной ввод
+      let baseMinutes = screenshotMinutes + manualMinutes;
+      // Больничный/отпуск
+      let days = parseInt(document.getElementById('extraDays').value) || 0;
       extraMinutes = days * (7 * 60 + 12);
-      updateCalcTable();
-    });
 
-    // --- Твой исходный функционал (не менялся) ---
-    function sumTimes(text) {
-      const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
-      let totalMinutes = 0, match;
-      while ((match = re.exec(text)) !== null) {
-        let h = parseInt(match[1]);
-        let m = parseInt(match[2]);
-        totalMinutes += h * 60 + m;
-      }
-      mainMinutes = totalMinutes;
-      updateCalcTable();
-      return toTimeString(totalMinutes);
+      // Резервы и тренажёры делим на 4
+      let rh = (parseInt(document.getElementById('reserveHomeH').value) || 0) * 60;
+      let rm = parseInt(document.getElementById('reserveHomeM').value) || 0;
+      reserveHomeMinutes = Math.floor((rh + rm) / 4);
+
+      let hh = (parseInt(document.getElementById('reserveHotelH').value) || 0) * 60;
+      let hm = parseInt(document.getElementById('reserveHotelM').value) || 0;
+      reserveHotelMinutes = Math.floor((hh + hm) / 4);
+
+      let th = (parseInt(document.getElementById('trainingH').value) || 0) * 60;
+      let tm = parseInt(document.getElementById('trainingM').value) || 0;
+      trainingMinutes = Math.floor((th + tm) / 4);
+
+      // Командировка — закрытие минус открытие / 4
+      tripMinutes = calcTripTime();
+
+      // Финал
+      let sum = baseMinutes + extraMinutes + reserveHomeMinutes +
+        reserveHotelMinutes + trainingMinutes + tripMinutes;
+
+      document.getElementById('finalSum').textContent = toTimeString(sum);
     }
 
+    // Все input'ы вызывают updateSum
+    Array.from(document.querySelectorAll('input')).forEach(el =>
+      el.addEventListener('input', updateSum)
+    );
+
+    // Скриншот
     document.getElementById('imageInput').addEventListener('change', async function(e) {
       const file = e.target.files[0];
       if (!file) return;
-
       document.getElementById('progress').textContent = 'Распознаём...';
-      mainMinutes = 0;
-      updateCalcTable();
+      screenshotMinutes = 0;
+      updateSum();
 
       const { data: { text } } = await Tesseract.recognize(
-        file,
-        'rus',
-        {
-          logger: m => {
-            if (m.status === 'recognizing text') {
-              document.getElementById('progress').textContent = `Распознавание: ${Math.round(m.progress*100)}%`;
-            }
+        file, 'rus',
+        { logger: m => {
+          if (m.status === 'recognizing text') {
+            document.getElementById('progress').textContent = `Распознавание: ${Math.round(m.progress*100)}%`;
           }
-        }
+        } }
       );
-
       document.getElementById('progress').textContent = '';
-      sumTimes(text);
+      // Суммируем часы и минуты по паттерну
+      const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
+      let total = 0, match;
+      while ((match = re.exec(text)) !== null) {
+        let h = parseInt(match[1]);
+        let m = parseInt(match[2]);
+        total += h * 60 + m;
+      }
+      screenshotMinutes = total;
+      updateSum();
     });
+
+    // Ручной ввод времени
+    function updateManual() {
+      let h = parseInt(document.getElementById('manualHours').value) || 0;
+      let m = parseInt(document.getElementById('manualMinutes').value) || 0;
+      manualMinutes = h * 60 + m;
+      updateSum();
+    }
+    document.getElementById('manualHours').addEventListener('input', updateManual);
+    document.getElementById('manualMinutes').addEventListener('input', updateManual);
+
+    updateSum(); // Для инициализации
   </script>
 </body>
 </html>
