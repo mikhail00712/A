@@ -51,9 +51,41 @@
       margin-top: 20px;
       text-align: center;
     }
+    #fond {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1.3em;
+      color: #1a2c4a;
+      font-weight: 600;
+    }
+    #monthPicker {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      padding: 6px 18px;
+      border: 1px solid #1373b2;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
+  <div id="fond"></div>
+  <select id="monthPicker">
+    <option value="2025-01">Январь 2025</option>
+    <option value="2025-02">Февраль 2025</option>
+    <option value="2025-03">Март 2025</option>
+    <option value="2025-04">Апрель 2025</option>
+    <option value="2025-05">Май 2025</option>
+    <option value="2025-06" selected>Июнь 2025</option>
+    <option value="2025-07">Июль 2025</option>
+    <option value="2025-08">Август 2025</option>
+    <option value="2025-09">Сентябрь 2025</option>
+    <option value="2025-10">Октябрь 2025</option>
+    <option value="2025-11">Ноябрь 2025</option>
+    <option value="2025-12">Декабрь 2025</option>
+  </select>
   <h2>Сумма рабочего времени по скриншоту</h2>
   <label class="file-label">
     Загрузить скриншот
@@ -64,6 +96,44 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
+    // Фонды рабочего времени (36-часовая неделя) по месяцам (актуально на 2025)
+    const fondData = {
+      "2025-01": 143.6,
+      "2025-02": 140.4,
+      "2025-03": 148.8,
+      "2025-04": 151.2,
+      "2025-05": 151.2,
+      "2025-06": 135.8,
+      "2025-07": 151.2,
+      "2025-08": 151.2,
+      "2025-09": 151.2,
+      "2025-10": 151.2,
+      "2025-11": 143.6,
+      "2025-12": 143.6
+    };
+
+    const monthNames = {
+      "01": "Январь", "02": "Февраль", "03": "Март", "04": "Апрель",
+      "05": "Май", "06": "Июнь", "07": "Июль", "08": "Август",
+      "09": "Сентябрь", "10": "Октябрь", "11": "Ноябрь", "12": "Декабрь"
+    };
+
+    function updateFondDisplay() {
+      const select = document.getElementById("monthPicker");
+      const fondDiv = document.getElementById("fond");
+      const val = select.value;
+      const fond = fondData[val] || 0;
+      const hours = Math.floor(fond);
+      const minutes = Math.round((fond - hours) * 60);
+      const [year, month] = val.split("-");
+      fondDiv.innerHTML =
+        `Фонд рабочего времени на ${monthNames[month]} ${year} года при 36‑часовой рабочей неделе:<br>
+        <span style="font-size: 1.25em;">${fond} часов (${hours*60 + minutes} минут)</span>`;
+    }
+    document.getElementById("monthPicker").addEventListener("change", updateFondDisplay);
+    updateFondDisplay();
+
+    // --- Твой исходный функционал (не менялся) ---
     function sumTimes(text) {
       const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
       let totalMinutes = 0, match;
