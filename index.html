@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сумма рабочего времени с картинки</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #eaf4fa; padding: 20px; }
+    #result { font-size: 1.4em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Рассчитать сумму рабочего времени по скриншоту</h2>
+  <input type="file" id="imageInput" accept="image/*"><br>
+  <div id="progress"></div>
+  <div id="result"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script>
+    document.getElementById('imageInput').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      document.getElementById('progress').textContent = 'Распознаём текст...';
+
+      const { data: { text } } = await Tesseract.recognize(
+        file,
+        'rus',
+        {
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              document.getElementById('progress').textContent = `Распознавание: ${Math.round(m.progress*100)}%`;
+            }
+          }
+        }
+      );
+
+      // Извлекаем часы и минуты из каждой строки
+      const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
+      let totalMinutes = 0, match;
+      while ((match = re.exec(text)) !== null) {
+        totalMinutes += parseInt(match[1]) * 60 + parseInt(match[2]);
+      }
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+
+      document.getElementById('progress').textContent = '';
+      document.getElementById('result').textContent = 
+        'Суммарное рабочее время: ' + hours + ' ч ' + minutes + ' мин';
+    });
+  </script>
+</body>
+</html>
