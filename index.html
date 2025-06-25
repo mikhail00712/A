@@ -21,11 +21,12 @@
       font-size: 2em;
     }
     #result, #final {
-      font-size: 2.2em;
+      font-size: 2em;
       font-weight: bold;
       color: #1a2c4a;
-      margin-top: 40px;
       text-align: center;
+      margin: 0;
+      margin-bottom: 0.2em;
     }
     .file-label {
       display: inline-block;
@@ -90,14 +91,57 @@
       padding: 4px 8px;
       margin-right: 7px;
     }
-    #final {
-      color: #297399;
-      margin-top: 8px;
-      font-size: 1.6em;
+    #calc-table {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px 32px 18px 28px;
+      box-shadow: 0 2px 12px #b6c7d9cc;
+      font-size: 1.16em;
+      min-width: 260px;
+    }
+    .calc-row {
+      display: flex;
+      align-items: center;
+      font-size: 1.18em;
+      margin-bottom: 2px;
+    }
+    .calc-row .sign {
+      width: 32px;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #1373b2;
+      display: inline-block;
+      text-align: center;
+    }
+    .calc-row .caption {
+      width: 170px;
+      min-width: 130px;
+      color: #275180;
+      margin-right: 10px;
+      text-align: right;
+    }
+    .calc-row .value {
+      font-weight: bold;
+      color: #1a2c4a;
+      font-size: 1.18em;
+      margin-left: 6px;
+      min-width: 75px;
+      text-align: left;
+    }
+    .calc-row.sum {
+      font-size: 1.23em;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #1a5812;
     }
     @media (max-width: 500px) {
-      #extra-block { width: 95vw; font-size: 1em;}
-      #final { font-size: 1.2em; }
+      #extra-block, #calc-table { width: 99vw; min-width: 0; padding: 10px 5vw 10px 3vw;}
+      #calc-table { font-size: 0.98em;}
+      .calc-row .caption { width: 45vw; min-width: 0; }
     }
   </style>
 </head>
@@ -127,9 +171,25 @@
     <input type="file" id="imageInput" accept="image/*">
   </label>
   <div id="progress"></div>
-  <div id="result"></div>
-  <div id="final"></div>
-
+  
+  <div id="calc-table" style="display:none;">
+    <div class="calc-row">
+      <span class="caption">По скриншоту:</span>
+      <span class="sign"></span>
+      <span class="value" id="val-main"></span>
+    </div>
+    <div class="calc-row">
+      <span class="caption">Больничный/отпуск:</span>
+      <span class="sign">+</span>
+      <span class="value" id="val-extra"></span>
+    </div>
+    <div class="calc-row sum">
+      <span class="caption">Итого:</span>
+      <span class="sign">=</span>
+      <span class="value" id="val-sum"></span>
+    </div>
+  </div>
+  
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
     // Фонды рабочего времени (36-часовая неделя) по месяцам (актуально на 2025)
@@ -170,6 +230,7 @@
 
     // --- Складываем рабочее время и дни отпуска/больничного ---
     let mainMinutes = 0; // сумма из скриншота
+    let extraMinutes = 0; // за больничный/отпуск
 
     function toTimeString(minutes) {
       const h = Math.floor(minutes / 60);
@@ -177,18 +238,19 @@
       return h + ' ч ' + m + ' мин';
     }
 
-    function updateFinalSum() {
-      const extraDays = parseInt(document.getElementById('extraDays').value) || 0;
-      const extraMinutes = extraDays * (7 * 60 + 12);
-      const total = mainMinutes + extraMinutes;
-      let txt = '';
-      if (extraDays > 0) {
-        txt = 'Сумма с учётом больничного/отпуска: ' + toTimeString(total);
-      }
-      document.getElementById('final').textContent = txt;
+    function updateCalcTable() {
+      document.getElementById('calc-table').style.display = (mainMinutes > 0 || extraMinutes > 0) ? 'flex' : 'none';
+      document.getElementById('val-main').textContent = mainMinutes > 0 ? toTimeString(mainMinutes) : '';
+      document.getElementById('val-extra').textContent = extraMinutes > 0 ? toTimeString(extraMinutes) : '';
+      const sum = mainMinutes + extraMinutes;
+      document.getElementById('val-sum').textContent = (mainMinutes > 0 || extraMinutes > 0) ? toTimeString(sum) : '';
     }
 
-    document.getElementById('extraDays').addEventListener('input', updateFinalSum);
+    document.getElementById('extraDays').addEventListener('input', function() {
+      const days = parseInt(this.value) || 0;
+      extraMinutes = days * (7 * 60 + 12);
+      updateCalcTable();
+    });
 
     // --- Твой исходный функционал (не менялся) ---
     function sumTimes(text) {
@@ -200,7 +262,7 @@
         totalMinutes += h * 60 + m;
       }
       mainMinutes = totalMinutes;
-      updateFinalSum();
+      updateCalcTable();
       return toTimeString(totalMinutes);
     }
 
@@ -209,8 +271,8 @@
       if (!file) return;
 
       document.getElementById('progress').textContent = 'Распознаём...';
-      document.getElementById('result').textContent = '';
-      document.getElementById('final').textContent = '';
+      mainMinutes = 0;
+      updateCalcTable();
 
       const { data: { text } } = await Tesseract.recognize(
         file,
@@ -225,7 +287,7 @@
       );
 
       document.getElementById('progress').textContent = '';
-      document.getElementById('result').textContent = sumTimes(text);
+      sumTimes(text);
     });
   </script>
 </body>
