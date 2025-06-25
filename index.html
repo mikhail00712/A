@@ -225,6 +225,35 @@
       letter-spacing: 0.01em;
       min-height: 22px;
     }
+    /* Новый для datetime */
+    .datetime-input {
+      padding: 9px 13px;
+      font-size: 1em;
+      border: 1.5px solid #d7deed;
+      border-radius: 12px;
+      background: #f5f7fb;
+      outline: none;
+      margin-right: 0.7em;
+      box-shadow: 0 2px 10px #eaf1ff33;
+      color: #244;
+      min-width: 170px;
+    }
+    .input-label {font-size:1.09em;color:#20355a;font-weight:500;}
+    .pretimetext {margin:9px 0 0 0;font-size:1.08em;color:#26a654;font-weight:600;}
+    /* Для ползунка "Многобазовость" */
+    .switch-multibase-label {display:flex;align-items:center;gap:12px;margin-top:6px;}
+    .switch-multibase {
+      width:38px;height:24px;background:#f3f6ff;border-radius:14px;display:inline-block;position:relative;
+      box-shadow:0 1px 5px #bbb2;
+      transition:background .2s;
+      border:1.5px solid #d7deed;cursor:pointer;
+    }
+    .switch-multibase:before {
+      content:"";display:block;position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;
+      transition:.21s;box-shadow:0 2px 5px #aaa7;
+    }
+    .switch-multibase-label input:checked + .switch-multibase {background:#1e8c51;}
+    .switch-multibase-label input:checked + .switch-multibase:before {left:17px;background:#fff;}
     @media (max-width: 600px) {
       header { font-size: 1.19em; padding: 18px 0 11px 0; }
       .header-bg, .result-header-bg { height: 59px; }
@@ -233,6 +262,7 @@
       .divider { margin: 10px 0 13px 0; }
       #calculateBtn { font-size: 1.05em; padding: 14px 8vw; }
       .sum-block { margin-top: 22px;}
+      .datetime-input { min-width: 100px;}
     }
   </style>
 </head>
@@ -327,33 +357,25 @@
       <div class="pretime" id="pretime_training"></div>
     </div>
     <div class="divider"></div>
-   <div class="section" id="cmdSection">
-  <div class="section-title">Командировки (включая разделённые полётные смены)</div>
-  <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;">
-    <label class="input-label">
-      Закрытие смены по прилёту:
-      <input type="datetime-local" id="closeShiftDT" class="datetime-input" style="margin-left:7px;">
-    </label>
-    <label class="input-label">
-      Открытие смены при вылете:
-      <input type="datetime-local" id="openShiftDT" class="datetime-input" style="margin-left:7px;">
-    </label>
-    <label class="switch-label" style="margin-top:8px;">
-      <input type="checkbox" id="multiBase" style="display:none;">
-      <span class="switch"></span>
-      <span style="font-weight:600;color:#204499;font-size:1.13em;vertical-align:middle;">Многобазовость</span>
-    </label>
-    <div id="pretime_cmd" class="pretimetext"></div>
-  </div>
-</div>
-      <div class="switch-row">
-        <label class="switch">
-          <input type="checkbox" id="multiBase">
-          <span class="slider"></span>
+    <!-- Новый блок КОМАНДИРОВКИ -->
+    <div class="section" id="cmdSection">
+      <div class="section-title">Командировки (включая разделённые полётные смены)</div>
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;">
+        <label class="input-label">
+          Закрытие смены по прилёту:
+          <input type="datetime-local" id="closeShiftDT" class="datetime-input" style="margin-left:7px;">
         </label>
-        <span class="switch-label">Подписан многобазовость</span>
+        <label class="input-label">
+          Открытие смены при вылете:
+          <input type="datetime-local" id="openShiftDT" class="datetime-input" style="margin-left:7px;">
+        </label>
+        <label class="switch-multibase-label" style="margin-top:8px;">
+          <input type="checkbox" id="multiBase2" style="display:none;">
+          <span class="switch-multibase"></span>
+          <span style="font-weight:600;color:#204499;font-size:1.13em;vertical-align:middle;">Многобазовость</span>
+        </label>
+        <div id="pretime_cmd" class="pretimetext"></div>
       </div>
-      <div class="pretime" id="pretime_cmd"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -526,34 +548,35 @@
     document.getElementById('trainingH').addEventListener('input', calcTraining);
     document.getElementById('trainingM').addEventListener('input', calcTraining);
 
-    // Командировка (разница дат, делить на 4)
+    // КОМАНДИРОВКА (новый расчет и логика с датой и временем и многобазовость)
     function calcCmd() {
-      let closeDate = document.getElementById('closeShiftDate').value;
-      let openDate = document.getElementById('openShiftDate').value;
-      let closeH = document.getElementById('closeShiftH').value, closeM = document.getElementById('closeShiftM').value;
-      let openH = document.getElementById('openShiftH').value, openM = document.getElementById('openShiftM').value;
-      if (closeDate && openDate && closeH !== "" && openH !== "" && closeM !== "" && openM !== "") {
-        let d1 = new Date(closeDate + "T" + String(closeH).padStart(2,'0') + ":" + String(closeM).padStart(2,'0'));
-        let d2 = new Date(openDate + "T" + String(openH).padStart(2,'0') + ":" + String(openM).padStart(2,'0'));
-        let delta = Math.round((d1 - d2)/60000);
-        if (delta < 0) delta += 24 * 60;
-        let mins = Math.floor(delta/4);
+      let close = document.getElementById('closeShiftDT').value;
+      let open = document.getElementById('openShiftDT').value;
+      let isMulti = document.getElementById('multiBase2').checked;
+      if (close && open && !isMulti) {
+        let dClose = new Date(close);
+        let dOpen = new Date(open);
+        let diff = (dOpen - dClose) / 60000; // минуты
+        if (diff < 0) diff += 24 * 60 * 7; // запас на неделю
+        let mins = Math.floor(diff / 4);
         updatePreTime('pretime_cmd', mins);
         return mins;
       }
       updatePreTime('pretime_cmd', 0);
       return 0;
     }
-    ['closeShiftDate','closeShiftH','closeShiftM','openShiftDate','openShiftH','openShiftM'].forEach(id=>{
+    ['closeShiftDT', 'openShiftDT', 'multiBase2'].forEach(id => {
       document.getElementById(id).addEventListener('input', calcCmd);
+      document.getElementById(id).addEventListener('change', calcCmd);
     });
-    // Многобазовость — вычеркиваем командировку если включено
+
+    // Для подсвечивания зачёркнутого раздела (strike)
     function setCmdSectionStrike(isOn) {
       let el = document.getElementById('cmdSection');
       if (isOn) el.classList.add('strike');
       else el.classList.remove('strike');
     }
-    document.getElementById('multiBase').addEventListener('change', function(){
+    document.getElementById('multiBase2').addEventListener('change', function(){
       setCmdSectionStrike(this.checked);
       updatePreTime('pretime_cmd', this.checked ? 0 : calcCmd());
     });
@@ -577,7 +600,7 @@
       result += calcExtraDays();
       result += calcVlek();
       result += calcTraining();
-      if (!document.getElementById('multiBase').checked) result += calcCmd();
+      if (!document.getElementById('multiBase2').checked) result += calcCmd();
       result += calcExtraPlan();
       // Фонд
       const fondRaw = fondData[document.getElementById('monthPicker').value] || 0;
