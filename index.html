@@ -4,60 +4,58 @@
   <meta charset="UTF-8">
   <title>Сумма рабочего времени</title>
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background: #eaf4fa;
       min-height: 100vh;
+      min-width: 100vw;
+      width: 100vw;
+      height: 100vh;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       margin: 0;
+      /* Прозрачный фон для блоков */
+      color: #e9ffe9;
+      position: relative;
+      z-index: 1;
+      /* Чтобы текст был поверх фона */
+    }
+    /* Фоновая гифка — всегда на весь экран */
+    #matrix-bg {
+      position: fixed;
+      z-index: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center;
+      min-width: 100vw;
+      min-height: 100vh;
+      opacity: 0.33; /* Можно сделать чуть прозрачнее для комфорта */
+      pointer-events: none; /* чтобы не перекрывал кнопки */
     }
     h2 {
       margin-bottom: 30px;
       text-align: center;
-      color: #1373b2;
+      color: #41ff41;
       font-size: 2em;
-    }
-    #result, #final {
-      font-size: 2em;
-      font-weight: bold;
-      color: #1a2c4a;
-      text-align: center;
-      margin: 0;
-      margin-bottom: 0.2em;
-    }
-    .file-label {
-      display: inline-block;
-      padding: 16px 36px;
-      background: #1373b2;
-      color: #fff;
-      border-radius: 24px;
-      font-size: 1.3em;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 10px;
-    }
-    .file-label:hover {
-      background: #105b90;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    #progress {
-      font-size: 1.2em;
-      color: #333;
-      margin-top: 20px;
-      text-align: center;
+      text-shadow: 0 0 10px #000, 0 0 3px #0f0;
+      z-index: 2;
     }
     #fond {
       text-align: center;
       margin-top: 30px;
       font-size: 1.3em;
-      color: #1a2c4a;
+      color: #baf8ba;
       font-weight: 600;
+      text-shadow: 0 0 6px #000, 0 0 2px #0f0;
+      z-index: 2;
     }
     #monthPicker {
       margin-bottom: 10px;
@@ -65,9 +63,13 @@
       border-radius: 8px;
       padding: 6px 18px;
       border: 1px solid #1373b2;
+      background: rgba(0,0,0,0.6);
+      color: #9fffa3;
+      box-shadow: 0 0 10px #000;
       display: block;
       margin-left: auto;
       margin-right: auto;
+      z-index: 2;
     }
     #extra-block {
       display: flex;
@@ -76,7 +78,9 @@
       width: 320px;
       margin: 10px 0 0 0;
       font-size: 1.06em;
-      color: #0c416b;
+      color: #0cfa67;
+      z-index: 2;
+      text-shadow: 0 0 7px #000;
     }
     #extra-block label {
       margin-right: 12px;
@@ -90,18 +94,49 @@
       border: 1px solid #1373b2;
       padding: 4px 8px;
       margin-right: 7px;
+      background: rgba(0,0,0,0.55);
+      color: #51ff51;
+    }
+    .file-label {
+      display: inline-block;
+      padding: 16px 36px;
+      background: rgba(0,64,0,0.75);
+      color: #6fff6f;
+      border-radius: 24px;
+      font-size: 1.3em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 10px;
+      box-shadow: 0 0 8px #000, 0 0 2px #0f0;
+      z-index: 2;
+    }
+    .file-label:hover {
+      background: #2c8c2c;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    #progress {
+      font-size: 1.2em;
+      color: #81ff8a;
+      margin-top: 20px;
+      text-align: center;
+      text-shadow: 0 0 6px #000;
+      z-index: 2;
     }
     #calc-table {
       margin-top: 30px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      background: #fff;
+      background: rgba(6,22,9,0.77);
       border-radius: 12px;
       padding: 18px 32px 18px 28px;
-      box-shadow: 0 2px 12px #b6c7d9cc;
+      box-shadow: 0 2px 12px #0f0a 0 0 2px #000;
       font-size: 1.16em;
       min-width: 260px;
+      z-index: 2;
     }
     .calc-row {
       display: flex;
@@ -113,30 +148,33 @@
       width: 32px;
       font-size: 1.3em;
       font-weight: bold;
-      color: #1373b2;
+      color: #41ff41;
       display: inline-block;
       text-align: center;
     }
     .calc-row .caption {
       width: 170px;
       min-width: 130px;
-      color: #275180;
+      color: #57ff7d;
       margin-right: 10px;
       text-align: right;
+      text-shadow: 0 0 6px #000;
     }
     .calc-row .value {
       font-weight: bold;
-      color: #1a2c4a;
+      color: #e9ffe9;
       font-size: 1.18em;
       margin-left: 6px;
       min-width: 75px;
       text-align: left;
+      text-shadow: 0 0 6px #000;
     }
     .calc-row.sum {
       font-size: 1.23em;
       font-weight: bold;
       margin-top: 10px;
-      color: #1a5812;
+      color: #8fff8f;
+      text-shadow: 0 0 8px #000, 0 0 2px #0f0;
     }
     @media (max-width: 500px) {
       #extra-block, #calc-table { width: 99vw; min-width: 0; padding: 10px 5vw 10px 3vw;}
@@ -146,6 +184,7 @@
   </style>
 </head>
 <body>
+  <img id="matrix-bg" src="matrix.gif" alt="matrix background gif">
   <div id="fond"></div>
   <select id="monthPicker">
     <option value="2025-01">Январь 2025</option>
