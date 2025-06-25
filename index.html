@@ -21,20 +21,24 @@
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
     function sumTimes(text) {
-      // ищем все строки вида 5 ч 17 мин
+      // Ищем все варианты "5 ч 17 мин", допускаем отсутствие пробела, любые регистры, капс/строчные
       const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
       let totalMinutes = 0, match;
       let foundAny = false;
+      let debug = '';
       while ((match = re.exec(text)) !== null) {
         foundAny = true;
-        totalMinutes += parseInt(match[1]) * 60 + parseInt(match[2]);
+        let h = parseInt(match[1]);
+        let m = parseInt(match[2]);
+        totalMinutes += h * 60 + m;
+        debug += `Нашёл: ${h} ч ${m} мин\n`;
       }
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
       if (!foundAny) {
         return "Не найдено ни одной строки времени!";
       }
-      return 'Суммарное рабочее время: ' + hours + ' ч ' + minutes + ' мин';
+      return debug + '\nСуммарное рабочее время: ' + hours + ' ч ' + minutes + ' мин';
     }
 
     document.getElementById('imageInput').addEventListener('change', async function(e) {
