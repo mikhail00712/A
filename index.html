@@ -7,6 +7,7 @@
     body { font-family: Arial, sans-serif; background: #eaf4fa; padding: 20px; }
     #result { font-size: 1.2em; margin-top: 20px; }
     #text { font-size: 1em; color: #333; margin-top: 15px; background: #fff; padding: 10px; border-radius: 7px;}
+    textarea { width: 100%; min-height: 80px; margin-top: 10px;}
   </style>
 </head>
 <body>
@@ -15,9 +16,27 @@
   <div id="progress"></div>
   <div id="text"></div>
   <div id="result"></div>
-
+  <textarea id="manualText" placeholder="Если OCR не сработал, вставь сюда текст и нажми кнопку ниже"></textarea>
+  <button onclick="manualSum()">Сложить из поля выше</button>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
+    function sumTimes(text) {
+      // ищем все строки вида 5 ч 17 мин
+      const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
+      let totalMinutes = 0, match;
+      let foundAny = false;
+      while ((match = re.exec(text)) !== null) {
+        foundAny = true;
+        totalMinutes += parseInt(match[1]) * 60 + parseInt(match[2]);
+      }
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      if (!foundAny) {
+        return "Не найдено ни одной строки времени!";
+      }
+      return 'Суммарное рабочее время: ' + hours + ' ч ' + minutes + ' мин';
+    }
+
     document.getElementById('imageInput').addEventListener('change', async function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -41,18 +60,14 @@
       document.getElementById('progress').textContent = '';
       document.getElementById('text').textContent = "Распознанный текст:\n" + text;
 
-      // Поиск всех вариантов времени: "ч", "чac", "чaс", "ч.", "мин", "минyт", "мин."
-      const re = /(\d+)\s*ч[аa.]?\s*(\d+)\s*мин[\.]*/gi;
-      let totalMinutes = 0, match;
-      while ((match = re.exec(text)) !== null) {
-        totalMinutes += parseInt(match[1]) * 60 + parseInt(match[2]);
-      }
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-
-      document.getElementById('result').textContent = 
-        'Суммарное рабочее время: ' + hours + ' ч ' + minutes + ' мин';
+      document.getElementById('result').textContent = sumTimes(text);
+      document.getElementById('manualText').value = text;
     });
+
+    window.manualSum = function() {
+      const text = document.getElementById('manualText').value;
+      document.getElementById('result').textContent = sumTimes(text);
+    }
   </script>
 </body>
 </html>
