@@ -327,22 +327,25 @@
       <div class="pretime" id="pretime_training"></div>
     </div>
     <div class="divider"></div>
-    <div class="section" id="cmdSection">
-      <div class="section-title">Командировки (включая разделённые полетные смены)</div>
-      <div class="row">
-        <label>Закрытие смены по прилёту:</label>
-        <input type="date" id="closeShiftDate" style="width: 123px;" class="input-medium">
-        <input type="number" min="0" max="23" id="closeShiftH" placeholder="чч" class="input-short">
-        <span>:</span>
-        <input type="number" min="0" max="59" id="closeShiftM" placeholder="мм" class="input-short">
-      </div>
-      <div class="row">
-        <label>Открытие смены при вылете:</label>
-        <input type="date" id="openShiftDate" style="width: 123px;" class="input-medium">
-        <input type="number" min="0" max="23" id="openShiftH" placeholder="чч" class="input-short">
-        <span>:</span>
-        <input type="number" min="0" max="59" id="openShiftM" placeholder="мм" class="input-short">
-      </div>
+   <div class="section" id="cmdSection">
+  <div class="section-title">Командировки (включая разделённые полётные смены)</div>
+  <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;">
+    <label class="input-label">
+      Закрытие смены по прилёту:
+      <input type="datetime-local" id="closeShiftDT" class="datetime-input" style="margin-left:7px;">
+    </label>
+    <label class="input-label">
+      Открытие смены при вылете:
+      <input type="datetime-local" id="openShiftDT" class="datetime-input" style="margin-left:7px;">
+    </label>
+    <label class="switch-label" style="margin-top:8px;">
+      <input type="checkbox" id="multiBase" style="display:none;">
+      <span class="switch"></span>
+      <span style="font-weight:600;color:#204499;font-size:1.13em;vertical-align:middle;">Многобазовость</span>
+    </label>
+    <div id="pretime_cmd" class="pretimetext"></div>
+  </div>
+</div>
       <div class="switch-row">
         <label class="switch">
           <input type="checkbox" id="multiBase">
