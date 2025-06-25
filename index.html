@@ -225,35 +225,6 @@
       letter-spacing: 0.01em;
       min-height: 22px;
     }
-    /* Новый для datetime */
-    .datetime-input {
-      padding: 9px 13px;
-      font-size: 1em;
-      border: 1.5px solid #d7deed;
-      border-radius: 12px;
-      background: #f5f7fb;
-      outline: none;
-      margin-right: 0.7em;
-      box-shadow: 0 2px 10px #eaf1ff33;
-      color: #244;
-      min-width: 170px;
-    }
-    .input-label {font-size:1.09em;color:#20355a;font-weight:500;}
-    .pretimetext {margin:9px 0 0 0;font-size:1.08em;color:#26a654;font-weight:600;}
-    /* Для ползунка "Многобазовость" */
-    .switch-multibase-label {display:flex;align-items:center;gap:12px;margin-top:6px;}
-    .switch-multibase {
-      width:38px;height:24px;background:#f3f6ff;border-radius:14px;display:inline-block;position:relative;
-      box-shadow:0 1px 5px #bbb2;
-      transition:background .2s;
-      border:1.5px solid #d7deed;cursor:pointer;
-    }
-    .switch-multibase:before {
-      content:"";display:block;position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;
-      transition:.21s;box-shadow:0 2px 5px #aaa7;
-    }
-    .switch-multibase-label input:checked + .switch-multibase {background:#1e8c51;}
-    .switch-multibase-label input:checked + .switch-multibase:before {left:17px;background:#fff;}
     @media (max-width: 600px) {
       header { font-size: 1.19em; padding: 18px 0 11px 0; }
       .header-bg, .result-header-bg { height: 59px; }
@@ -262,7 +233,6 @@
       .divider { margin: 10px 0 13px 0; }
       #calculateBtn { font-size: 1.05em; padding: 14px 8vw; }
       .sum-block { margin-top: 22px;}
-      .datetime-input { min-width: 100px;}
     }
   </style>
 </head>
@@ -357,25 +327,21 @@
       <div class="pretime" id="pretime_training"></div>
     </div>
     <div class="divider"></div>
-    <!-- Новый блок КОМАНДИРОВКИ -->
+    <!-- Новый блок командировок -->
     <div class="section" id="cmdSection">
       <div class="section-title">Командировки (включая разделённые полётные смены)</div>
-      <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;">
-        <label class="input-label">
-          Закрытие смены по прилёту:
-          <input type="datetime-local" id="closeShiftDT" class="datetime-input" style="margin-left:7px;">
-        </label>
-        <label class="input-label">
-          Открытие смены при вылете:
-          <input type="datetime-local" id="openShiftDT" class="datetime-input" style="margin-left:7px;">
-        </label>
-        <label class="switch-multibase-label" style="margin-top:8px;">
-          <input type="checkbox" id="multiBase2" style="display:none;">
-          <span class="switch-multibase"></span>
-          <span style="font-weight:600;color:#204499;font-size:1.13em;vertical-align:middle;">Многобазовость</span>
-        </label>
-        <div id="pretime_cmd" class="pretimetext"></div>
+      <div id="cmdPairs"></div>
+      <div style="display:flex;justify-content:center;margin:12px 0;">
+        <button type="button" id="addCmdPairBtn" style="background:#234ad8;color:#fff;border:none;border-radius:50%;width:38px;height:38px;font-size:1.5em;box-shadow:0 1px 6px #234ad81a;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
       </div>
+      <div class="switch-row">
+        <label class="switch">
+          <input type="checkbox" id="multiBase2">
+          <span class="slider"></span>
+        </label>
+        <span class="switch-label" style="font-size:1.13em;">Многобазовость</span>
+      </div>
+      <div class="pretime" id="pretime_cmd"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -434,7 +400,6 @@
       "2025-09": 151.2, "2025-10": 151.2, "2025-11": 143.6, "2025-12": 143.6
     };
 
-    // --- minutes => "чч ч мм мин"
     function toTimeString(mins) {
       let h = Math.floor(mins / 60);
       let m = mins % 60;
@@ -443,8 +408,6 @@
     function toMinutes(h, m) {
       h = parseInt(h) || 0; m = parseInt(m) || 0; return h * 60 + m;
     }
-
-    // -------------------- ПРЕДВАРИТЕЛЬНЫЕ ВРЕМЕНА --------------------
     function updatePreTime(id, mins) {
       document.getElementById(id).textContent = mins > 0 ? `Предварительное время: ${toTimeString(mins)}` : '';
     }
@@ -548,38 +511,82 @@
     document.getElementById('trainingH').addEventListener('input', calcTraining);
     document.getElementById('trainingM').addEventListener('input', calcTraining);
 
-    // КОМАНДИРОВКА (новый расчет и логика с датой и временем и многобазовость)
-    function calcCmd() {
-      let close = document.getElementById('closeShiftDT').value;
-      let open = document.getElementById('openShiftDT').value;
-      let isMulti = document.getElementById('multiBase2').checked;
-      if (close && open && !isMulti) {
-        let dClose = new Date(close);
-        let dOpen = new Date(open);
-        let diff = (dOpen - dClose) / 60000; // минуты
-        if (diff < 0) diff += 24 * 60 * 7; // запас на неделю
-        let mins = Math.floor(diff / 4);
-        updatePreTime('pretime_cmd', mins);
-        return mins;
-      }
-      updatePreTime('pretime_cmd', 0);
-      return 0;
-    }
-    ['closeShiftDT', 'openShiftDT', 'multiBase2'].forEach(id => {
-      document.getElementById(id).addEventListener('input', calcCmd);
-      document.getElementById(id).addEventListener('change', calcCmd);
-    });
+    // ------- Динамические командировки (несколько пар дат/времени) -------
+    let cmdPairsData = [];
+    function renderCmdPairs() {
+      const container = document.getElementById('cmdPairs');
+      container.innerHTML = '';
+      cmdPairsData.forEach((pair, idx) => {
+        const pairDiv = document.createElement('div');
+        pairDiv.className = "cmd-pair-block";
+        pairDiv.style = "margin-bottom:8px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;";
 
-    // Для подсвечивания зачёркнутого раздела (strike)
-    function setCmdSectionStrike(isOn) {
-      let el = document.getElementById('cmdSection');
-      if (isOn) el.classList.add('strike');
-      else el.classList.remove('strike');
+        // Закрытие смены
+        const closeInp = document.createElement('input');
+        closeInp.type = "datetime-local";
+        closeInp.value = pair.close || "";
+        closeInp.className = "datetime-input";
+        closeInp.style = "margin-right:6px;margin-bottom:4px;";
+        closeInp.oninput = e => { cmdPairsData[idx].close = e.target.value; calcCmdAll(); };
+
+        // Открытие смены
+        const openInp = document.createElement('input');
+        openInp.type = "datetime-local";
+        openInp.value = pair.open || "";
+        openInp.className = "datetime-input";
+        openInp.style = "margin-right:6px;margin-bottom:4px;";
+        openInp.oninput = e => { cmdPairsData[idx].open = e.target.value; calcCmdAll(); };
+
+        pairDiv.appendChild(document.createTextNode('Закрытие смены по прилёту:'));
+        pairDiv.appendChild(closeInp);
+
+        pairDiv.appendChild(document.createTextNode('Открытие смены при вылете:'));
+        pairDiv.appendChild(openInp);
+
+        // Кнопка удалить, если не первая пара
+        if (cmdPairsData.length > 1) {
+          const delBtn = document.createElement('button');
+          delBtn.type = "button";
+          delBtn.textContent = "–";
+          delBtn.title = "Удалить";
+          delBtn.style = "background:#e44444;color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:1.3em;cursor:pointer;vertical-align:middle;margin-left:4px;";
+          delBtn.onclick = () => { cmdPairsData.splice(idx, 1); renderCmdPairs(); calcCmdAll(); };
+          pairDiv.appendChild(delBtn);
+        }
+        container.appendChild(pairDiv);
+      });
     }
-    document.getElementById('multiBase2').addEventListener('change', function(){
-      setCmdSectionStrike(this.checked);
-      updatePreTime('pretime_cmd', this.checked ? 0 : calcCmd());
-    });
+    // Расчёт общего времени по всем парам командировок
+    function calcCmdAll() {
+      if (document.getElementById('multiBase2').checked) {
+        document.getElementById('pretime_cmd').textContent = '';
+        setCmdSectionStrike(true);
+        return 0;
+      }
+      setCmdSectionStrike(false);
+      let totalMins = 0;
+      cmdPairsData.forEach(pair => {
+        if (pair.close && pair.open) {
+          let dClose = new Date(pair.close);
+          let dOpen = new Date(pair.open);
+          let diff = (dOpen - dClose) / 60000;
+          if (diff < 0) diff += 24*60*7;
+          totalMins += Math.floor(diff / 4);
+        }
+      });
+      document.getElementById('pretime_cmd').textContent = totalMins > 0 ? `Предварительное время: ${toTimeString(totalMins)}` : '';
+      return totalMins;
+    }
+    // Плюсик — добавить пару
+    document.getElementById('addCmdPairBtn').onclick = function() {
+      cmdPairsData.push({close:'', open:''});
+      renderCmdPairs();
+    };
+    // Переключатель многобазовости
+    document.getElementById('multiBase2').addEventListener('change', calcCmdAll);
+    // Инициализация пары при запуске
+    cmdPairsData.push({close:'', open:''});
+    renderCmdPairs();
 
     // Дополнительный план
     function calcExtraPlan() {
@@ -589,6 +596,13 @@
     }
     document.getElementById('extraPlanH').addEventListener('input', calcExtraPlan);
     document.getElementById('extraPlanM').addEventListener('input', calcExtraPlan);
+
+    // Вычёркиваем командировки, если включена многобазовость
+    function setCmdSectionStrike(isOn) {
+      let el = document.getElementById('cmdSection');
+      if (isOn) el.classList.add('strike');
+      else el.classList.remove('strike');
+    }
 
     // -------------------- КНОПКА РАССЧИТАТЬ --------------------
     document.getElementById('mainForm').onsubmit = function() {
@@ -600,7 +614,7 @@
       result += calcExtraDays();
       result += calcVlek();
       result += calcTraining();
-      if (!document.getElementById('multiBase2').checked) result += calcCmd();
+      if (!document.getElementById('multiBase2').checked) result += calcCmdAll();
       result += calcExtraPlan();
       // Фонд
       const fondRaw = fondData[document.getElementById('monthPicker').value] || 0;
