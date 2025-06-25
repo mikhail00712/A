@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Рабочее время</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts: Inter & Montserrat (как на markwiz) -->
+  <!-- Google Fonts: Montserrat & Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -14,7 +14,7 @@
       --header-bg: #747b8e;
       --white: #fff;
       --block-radius: 21px;
-      --input-radius: 14px;
+      --input-radius: 15px;
       --shadow: 0 4px 32px #b3bacb22;
       --accent-dark: #111827;
       --font-main: 'Montserrat', 'Inter', Arial, sans-serif;
@@ -39,7 +39,7 @@
       flex-direction: column;
       align-items: center;
     }
-    /* --- FIXED HEADER-FG/FONT --- */
+    /* --- FIXED HEADER-BG + FG --- */
     .header-bg {
       position: fixed;
       top: 0; left: 0;
@@ -49,6 +49,7 @@
       height: 108px;
       border-radius: 0 0 24px 24px;
       box-shadow: var(--shadow);
+      user-select: none;
     }
     .header-fg {
       position: fixed;
@@ -60,7 +61,6 @@
       align-items: center;
       justify-content: center;
       pointer-events: none;
-      /* transparent for blocks */
     }
     .header-fg h1 {
       color: var(--white);
@@ -77,7 +77,7 @@
     .wrapper {
       margin: 0 auto;
       width: 100vw;
-      max-width: 420px;
+      max-width: 440px;
       z-index: 10;
       background: none;
       padding-bottom: 32px;
@@ -89,12 +89,12 @@
       border-radius: var(--block-radius);
       box-shadow: var(--shadow);
       margin-bottom: 20px;
-      padding: 20px 18px 14px 18px;
+      padding: 18px 18px 13px 18px;
       width: 100%;
       z-index: 10;
     }
     .section-title {
-      font-size: 1.16em;
+      font-size: 1.17em;
       font-weight: 800;
       font-family: var(--font-main);
       margin-bottom: 10px;
@@ -104,7 +104,7 @@
     .divider {
       width: 100%;
       border-bottom: 2px dashed #bbc5da;
-      margin: 18px 0 17px 0;
+      margin: 15px 0 17px 0;
     }
     .row {
       display: flex;
@@ -113,107 +113,109 @@
       flex-wrap: wrap;
     }
     .row label {
-      min-width: 148px;
+      min-width: 144px;
       font-size: 1em;
-      margin-right: 13px;
+      margin-right: 10px;
       color: #23273b;
-      font-weight: 600;
+      font-weight: 700;
       font-family: var(--font-main);
     }
-    /* --- BUTTONS --- */
+    /* --- MARKVIZ FILE-LABEL --- */
     .file-label {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 360px;
+      max-width: 370px;
       margin: 0 auto 12px auto;
-      padding: 20px 0 18px 0;
-      background: var(--white);
-      color: #101928;
+      padding: 19px 0 17px 0;
+      background: var(--main-grey);
+      color: #fff;
       font-family: var(--font-main);
       font-weight: 800;
-      font-size: 1.19em;
-      border-radius: 24px;
-      box-shadow: 0 3px 14px #b3bacb14;
-      border: 2.2px solid #e7eaf2;
+      font-size: 1.09em;
+      border-radius: 22px;
       letter-spacing: 0.01em;
       cursor: pointer;
       transition: background 0.19s, box-shadow 0.22s;
       text-align: center;
       user-select: none;
+      border: none;
+      box-shadow: 0 4px 12px #aab3bc28;
+      overflow: hidden;
+      white-space: nowrap;
     }
     .file-label:active, .file-label:hover {
-      background: #e6e9f4;
-      color: var(--main-blue);
-      border-color: var(--main-blue);
-      box-shadow: 0 4px 24px #b3bacb32;
+      background: #5d6578;
+      color: #fff;
+      box-shadow: 0 8px 20px #b3bacb34;
     }
     input[type="file"] { display: none; }
 
-    #calculateBtn {
+    #calculateBtn, #backBtn {
       display: block;
       margin: 33px auto 0 auto;
       padding: 22px 44px;
       border-radius: 32px;
-      background: var(--main-blue);
-      color: #fff;
+      background: var(--white);
+      color: var(--main-grey);
       font-family: var(--font-main);
-      font-size: 1.29em;
+      font-size: 1.27em;
       font-weight: 800;
       border: none;
       letter-spacing: 0.01em;
-      box-shadow: 0 4px 16px #b3bacb20;
+      box-shadow: 0 2px 8px #bbc5da33;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background 0.15s, color 0.13s;
+      outline: none;
+      border: 2.5px solid var(--main-grey);
+      text-align: center;
     }
-    #calculateBtn:hover, #backBtn:hover {
-      background: #19337a;
+    #calculateBtn:active, #calculateBtn:hover,
+    #backBtn:active, #backBtn:hover {
+      background: var(--main-grey);
       color: #fff;
-    }
-    #backBtn {
-      background: var(--main-blue);
-      color: #fff;
-      font-family: var(--font-main);
-      font-size: 1.08em;
-      border-radius: 15px;
-      border: none;
-      margin-top: 23px;
-      padding: 13px 44px;
-      cursor: pointer;
-      font-weight: 800;
-      box-shadow: 0 2px 8px #bbc5da44;
+      border-color: #222c48;
     }
     /* --- INPUTS --- */
     .input-short {
-      width: 54px;
-      font-size: 1.11em;
+      width: 55px;
+      font-size: 1em;
       border-radius: var(--input-radius);
-      border: 1.7px solid #ccd1e2;
+      border: 1.5px solid #ccd1e2;
       background: #f3f4f9;
       color: #23273b;
       font-weight: 700;
-      padding: 7px 8px;
+      padding: 7px 7px;
       text-align: center;
-      margin-right: 7px;
+      margin-right: 6px;
       margin-bottom: 2px;
       box-shadow: 0 1px 3px #d2d6e8aa;
       outline: none;
       font-family: var(--font-main);
+      transition: border-color 0.14s;
     }
     .input-short:focus {
       border-color: var(--main-blue);
       background: #eef3fd;
       color: var(--main-blue);
     }
+    .input-dual {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: nowrap;
+    }
+    .input-dual input { width: 49px; margin-right: 3px; }
     /* --- CUSTOM SWITCH --- */
     .switch-row {
       display: flex;
       align-items: center;
       margin-bottom: 10px;
+      margin-top: 7px;
     }
     .switch-label {
-      margin-left: 14px;
+      margin-left: 13px;
       font-weight: 800;
       color: #234ad8;
       font-family: var(--font-main);
@@ -222,8 +224,8 @@
     }
     .switch {
       position: relative;
-      width: 52px;
-      height: 28px;
+      width: 46px;
+      height: 25px;
       display: inline-block;
     }
     .switch input { opacity: 0; width: 0; height: 0; }
@@ -233,37 +235,37 @@
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: #e0e4ee;
       transition: .3s;
-      border-radius: 17px;
-      border: 1.4px solid #bbc5da;
+      border-radius: 15px;
+      border: 1.2px solid #bbc5da;
     }
     .slider:before {
       position: absolute;
       content: "";
-      height: 21px; width: 21px;
+      height: 17px; width: 17px;
       left: 4px; bottom: 3px;
       background-color: #fff;
       transition: .3s;
       border-radius: 50%;
-      border: 1.6px solid #234ad8;
+      border: 1.5px solid #234ad8;
     }
     input:checked + .slider {
       background-color: #3dd68c;
       border-color: #23bb56;
     }
     input:checked + .slider:before {
-      transform: translateX(22px);
+      transform: translateX(16px);
       border-color: #23bb56;
     }
     .strike { text-decoration: line-through wavy #b43d3d; color: #bcbfc7; opacity: 0.57; }
     /* --- PRETIME --- */
     .pretime {
       margin: 9px 0 0 5px;
-      font-size: 1.01em;
+      font-size: 1em;
       font-weight: 700;
       color: #4672bb;
       font-family: var(--font-main);
       letter-spacing: 0.01em;
-      min-height: 24px;
+      min-height: 22px;
     }
     /* --- FOND ROW --- */
     .fond-row {
@@ -282,6 +284,7 @@
       border-radius: 0 0 24px 24px;
       z-index: 2;
       box-shadow: var(--shadow);
+      user-select: none;
     }
     .result-fg {
       position: fixed;
@@ -296,9 +299,9 @@
     }
     .result-fg h1 {
       color: var(--white);
-      font-family: var(--font-result);
+      font-family: var(--font-main);
       font-weight: 800;
-      font-size: 2.1em;
+      font-size: 2em;
       letter-spacing: 0.01em;
       margin: 0;
       user-select: none;
@@ -310,8 +313,8 @@
       background: #fff;
       border-radius: 19px;
       box-shadow: 0 4px 24px #bbc5da29;
-      padding: 36px 14px 25px 14px;
-      font-size: 1.23em;
+      padding: 34px 14px 21px 14px;
+      font-size: 1.21em;
       text-align: center;
       font-weight: 700;
       color: #234ad8;
@@ -319,25 +322,25 @@
       width: 100%;
       max-width: 420px;
       margin-left: auto; margin-right: auto;
-      font-family: var(--font-result);
+      font-family: var(--font-main);
     }
     .sum-block .main {
-      font-size: 2.11em;
-      font-family: var(--font-result);
+      font-size: 2.03em;
+      font-family: var(--font-main);
       font-weight: 800;
       color: #234ad8;
       margin: 18px 0 10px 0;
     }
     .sum-block .fond {
-      font-size: 1.21em;
+      font-size: 1.16em;
       color: #204499;
       font-weight: 800;
       margin: 7px 0 18px 0;
     }
     .sum-block .delta {
-      font-size: 1.15em;
+      font-size: 1.12em;
       margin-top: 13px;
-      font-family: var(--font-result);
+      font-family: var(--font-main);
       font-weight: 800;
     }
     .sum-block .delta.positive { color: #23bb56; }
@@ -347,8 +350,8 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 9px;
+      gap: 9px;
+      margin-bottom: 6px;
       flex-wrap: wrap;
     }
     .cmd-row-wrap .cmd-delete {
@@ -356,10 +359,10 @@
       border: none;
       color: #e44848;
       font-size: 1.9em;
-      margin-left: 7px;
+      margin-left: 4px;
       cursor: pointer;
       font-weight: 800;
-      transition: color 0.19s;
+      transition: color 0.17s;
       line-height: 1;
     }
     .cmd-row-wrap .cmd-delete:hover { color: #c23b3b; }
@@ -368,7 +371,7 @@
       border-radius: 50%;
       border: 2px solid #c5c9d9;
       color: #234ad8;
-      font-size: 2.1em;
+      font-size: 2em;
       font-family: var(--font-main);
       font-weight: 900;
       background: #f3f4f9;
@@ -378,21 +381,42 @@
       transition: background 0.18s, border 0.18s;
     }
     .cmd-add-btn:hover { background: #dde6fc; border-color: #234ad8; }
+    /* --- GIF RULETKA --- */
+    .gif-overlay {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(85,88,99, 0.10);
+      align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .gif-overlay img {
+      width: 88vw; max-width: 440px;
+      max-height: 85vh;
+      display: block;
+      margin: 0 auto;
+      border-radius: 23px;
+      box-shadow: 0 8px 60px #363d4d50;
+      background: #fff;
+      object-fit: contain;
+    }
     /* --- RESPONSIVE --- */
     @media (max-width: 680px) {
-      .header-fg h1, .result-fg h1 { font-size: 1.15em;}
+      .header-fg h1, .result-fg h1 { font-size: 1.16em;}
       .wrapper, .sum-block { max-width: 99vw; }
-      .section { padding: 13px 3vw 11px 3vw;}
-      .sum-block { margin-top: 108px;}
+      .section { padding: 13px 3vw 10px 3vw;}
+      .sum-block { margin-top: 110px;}
     }
-    @media (max-width: 410px) {
-      .header-fg h1, .result-fg h1 { font-size: 0.98em;}
-      .sum-block { font-size: 1em; }
-      .file-label { font-size: 0.98em; padding: 13px 0 13px 0;}
+    @media (max-width: 420px) {
+      .header-fg h1, .result-fg h1 { font-size: 1em;}
+      .sum-block { font-size: 0.98em; }
+      .file-label { font-size: 0.97em; padding: 13px 0 13px 0;}
     }
   </style>
 </head>
 <body>
+  <!-- FIXED BG-HEADER, FG-HEADER -->
   <div class="header-bg"></div>
   <div class="header-fg"><h1>Рабочее время</h1></div>
   <form class="wrapper" id="mainForm" autocomplete="off" onsubmit="return false">
@@ -404,10 +428,12 @@
       <span id="progress"></span>
       <div class="row" style="margin-top:13px;">
         <label style="min-width:168px;">Или ввести время вручную:</label>
-        <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
-        <span>ч</span>
-        <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
-        <span>мин</span>
+        <div class="input-dual">
+          <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
       </div>
       <div class="pretime" id="pretime_main"></div>
     </div>
@@ -416,17 +442,21 @@
       <div class="section-title">Полет пассажиром</div>
       <div class="row">
         <label>Время вылета:</label>
-        <input type="number" min="0" max="23" id="flyOutH" placeholder="ч." class="input-short">
-        <span>ч</span>
-        <input type="number" min="0" max="59" id="flyOutM" placeholder="м." class="input-short">
-        <span>мин</span>
+        <div class="input-dual">
+          <input type="number" min="0" max="23" id="flyOutH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="flyOutM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
       </div>
       <div class="row">
         <label>Время прилёта:</label>
-        <input type="number" min="0" max="23" id="flyInH" placeholder="ч." class="input-short">
-        <span>ч</span>
-        <input type="number" min="0" max="59" id="flyInM" placeholder="м." class="input-short">
-        <span>мин</span>
+        <div class="input-dual">
+          <input type="number" min="0" max="23" id="flyInH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="flyInM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
       </div>
       <div class="pretime" id="pretime_fly"></div>
     </div>
@@ -434,18 +464,22 @@
     <div class="section">
       <div class="row">
         <label>Резерв домашний:</label>
-        <input type="number" min="0" id="reserveHomeH" placeholder="ч." class="input-short">
-        <span>ч</span>
-        <input type="number" min="0" max="59" id="reserveHomeM" placeholder="м." class="input-short">
-        <span>мин</span>
+        <div class="input-dual">
+          <input type="number" min="0" id="reserveHomeH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="reserveHomeM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
       </div>
       <div class="pretime" id="pretime_rhome"></div>
       <div class="row">
         <label>Резерв гостиница:</label>
-        <input type="number" min="0" id="reserveHotelH" placeholder="ч." class="input-short">
-        <span>ч</span>
-        <input type="number" min="0" max="59" id="reserveHotelM" placeholder="м." class="input-short">
-        <span>мин</span>
+        <div class="input-dual">
+          <input type="number" min="0" id="reserveHotelH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="reserveHotelM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
       </div>
       <div class="pretime" id="pretime_rhotel"></div>
     </div>
@@ -471,10 +505,12 @@
     <div class="section">
       <div class="row">
         <label>Тренажёр/CRM/ПП и т.д.:</label>
-        <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
-        <span>ч</span>
-        <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
-        <span>мин</span>
+        <div class="input-dual">
+          <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
       </div>
       <div class="pretime" id="pretime_training"></div>
     </div>
@@ -496,10 +532,12 @@
     <div class="section">
       <div class="row">
         <label>Рейсы, которые ещё осталось отлетать:</label>
-        <input type="number" min="0" id="extraPlanH" placeholder="ч." class="input-short">
-        <span>ч</span>
-        <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
-        <span>мин</span>
+        <div class="input-dual">
+          <input type="number" min="0" id="extraPlanH" placeholder="ч." class="input-short">
+          <span>ч</span>
+          <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
+          <span>мин</span>
+        </div>
       </div>
       <div class="pretime" id="pretime_extraplan"></div>
     </div>
@@ -525,6 +563,10 @@
     </div>
     <button id="calculateBtn" type="submit">Рассчитать</button>
   </form>
+  <!-- АНИМАЦИЯ RULETKA GIF -->
+  <div class="gif-overlay" id="gifOverlay">
+    <img src="ruletka .GIF" alt="Рулетка">
+  </div>
   <!-- Итоговая страница -->
   <div class="result-header-bg" style="display:none;"></div>
   <div class="result-fg" style="display:none;"><h1>Результаты</h1></div>
@@ -538,6 +580,7 @@
       <button id="backBtn">Назад</button>
     </div>
   </div>
+  <audio id="casinoAudio" src="casino.mp3" preload="auto"></audio>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
     // --- Фонд рабочего времени (36ч неделя)
@@ -660,12 +703,12 @@
       cmdBlocks.forEach((cmd, i) => {
         el.innerHTML += `
         <div class="cmd-row-wrap">
-          <label style="min-width:166px;font-weight:600;color:#222;">Закрытие смены по прилёту:</label>
+          <label style="min-width:164px;font-weight:600;color:#222;">Закрытие смены по прилёту:</label>
           <input type="datetime-local" class="input-short" style="width:180px" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
-          <button class="cmd-delete" type="button" onclick="deleteCmdBlock(${i})">&times;</button>
+          ${(i !== 0) ? `<button class="cmd-delete" type="button" onclick="deleteCmdBlock(${i})">&times;</button>` : ''}
         </div>
         <div class="cmd-row-wrap">
-          <label style="min-width:166px;font-weight:600;color:#222;">Открытие смены при вылете:</label>
+          <label style="min-width:164px;font-weight:600;color:#222;">Открытие смены при вылете:</label>
           <input type="datetime-local" class="input-short" style="width:180px" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
         </div>
         `;
@@ -715,35 +758,54 @@
     }
     document.getElementById('extraPlanH').addEventListener('input', calcExtraPlan);
     document.getElementById('extraPlanM').addEventListener('input', calcExtraPlan);
+
+    // --- RULETKA + AUDIO ---
+    function showRuletkaGifAndSound(callback) {
+      const overlay = document.getElementById('gifOverlay');
+      const audio = document.getElementById('casinoAudio');
+      overlay.style.display = "flex";
+      overlay.style.pointerEvents = "all";
+      audio.currentTime = 0;
+      audio.play();
+      setTimeout(() => {
+        overlay.style.display = "none";
+        overlay.style.pointerEvents = "none";
+        audio.pause();
+        if (callback) callback();
+      }, 5000);
+    }
+
     // -------------------- КНОПКА РАССЧИТАТЬ --------------------
     document.getElementById('mainForm').onsubmit = function() {
-      let result = (inputMode === "screenshot") ? mainMinutes :
-        toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
-      result += calcFlyTime();
-      result += calcReserveHome();
-      result += calcReserveHotel();
-      result += calcExtraDays();
-      result += calcVlek();
-      result += calcTraining();
-      if (!document.getElementById('multiBase').checked) result += calcCmd();
-      result += calcExtraPlan();
-      // Фонд
-      const fondRaw = fondData[document.getElementById('monthPicker').value] || 0;
-      const fondMin = Math.round(fondRaw * 60);
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-      document.getElementById('mainForm').style.display = "none";
-      document.querySelector('.result-header-bg').style.display = "block";
-      document.querySelector('.result-fg').style.display = "flex";
-      document.getElementById('resultPage').style.display = "block";
-      document.getElementById('myWorkTime').textContent = toTimeString(result);
-      document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
-      let deltaBlock = document.getElementById('deltaBlock');
-      if (result > fondMin) {
-        deltaBlock.innerHTML = `<span class="delta negative">Переработка: ${toTimeString(result - fondMin)}</span>`;
-      } else {
-        deltaBlock.innerHTML = `<span class="delta positive">Остаток до фонда: ${toTimeString(fondMin - result)}</span>`;
-      }
+      showRuletkaGifAndSound(() => {
+        let result = (inputMode === "screenshot") ? mainMinutes :
+          toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
+        result += calcFlyTime();
+        result += calcReserveHome();
+        result += calcReserveHotel();
+        result += calcExtraDays();
+        result += calcVlek();
+        result += calcTraining();
+        if (!document.getElementById('multiBase').checked) result += calcCmd();
+        result += calcExtraPlan();
+        // Фонд
+        const fondRaw = fondData[document.getElementById('monthPicker').value] || 0;
+        const fondMin = Math.round(fondRaw * 60);
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        document.getElementById('mainForm').style.display = "none";
+        document.querySelector('.result-header-bg').style.display = "block";
+        document.querySelector('.result-fg').style.display = "flex";
+        document.getElementById('resultPage').style.display = "block";
+        document.getElementById('myWorkTime').textContent = toTimeString(result);
+        document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
+        let deltaBlock = document.getElementById('deltaBlock');
+        if (result > fondMin) {
+          deltaBlock.innerHTML = `<span class="delta negative">Переработка: ${toTimeString(result - fondMin)}</span>`;
+        } else {
+          deltaBlock.innerHTML = `<span class="delta positive">Остаток до фонда: ${toTimeString(fondMin - result)}</span>`;
+        }
+      });
       return false;
     };
     document.getElementById('backBtn').onclick = function() {
