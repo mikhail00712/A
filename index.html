@@ -2,199 +2,204 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Сумма рабочего времени</title>
+  <title>Рабочее время</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
+      background: #e4e7ee;
     }
     body {
       min-height: 100vh;
-      min-width: 100vw;
-      width: 100vw;
-      height: 100vh;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       margin: 0;
-      color: #fff;
-      position: relative;
-      z-index: 1;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #24273b;
+      letter-spacing: 0.01em;
     }
-    /* Фоновая гифка без затемнения */
-    #matrix-bg {
-      position: fixed;
-      z-index: 0;
-      top: 0; left: 0; right: 0; bottom: 0;
+    header {
       width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      object-position: center;
-      min-width: 100vw;
-      min-height: 100vh;
-      opacity: 1;
-      pointer-events: none;
-    }
-    h2 {
-      margin-bottom: 30px;
+      padding: 32px 0 0 0;
       text-align: center;
-      color: #baff39;
-      font-size: 2em;
-      text-shadow: 0 0 10px #000, 0 0 3px #baff39;
-      z-index: 2;
+      font-size: 2.35em;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      color: #fff;
+      background: #6d758f;
+      margin-bottom: 32px;
+      border-radius: 0 0 22px 22px;
+      box-shadow: 0 2px 16px #a9adc4bb;
     }
     #fond {
+      width: 100vw;
       text-align: center;
-      margin-top: 30px;
-      font-size: 1.3em;
-      color: #fff;
-      font-weight: 700;
-      text-shadow: 0 0 10px #000, 0 0 3px #baff39;
-      z-index: 2;
-    }
-    #monthPicker {
-      margin-bottom: 10px;
-      font-size: 1.1em;
-      border-radius: 8px;
-      padding: 6px 18px;
-      border: 1px solid #baff39;
-      background: rgba(10,25,5,0.72);
-      color: #fff;
+      margin: 0 0 16px 0;
+      font-size: 1.22em;
+      color: #333a50;
       font-weight: 600;
-      text-shadow: 0 0 2px #000;
-      box-shadow: 0 0 10px #000;
-      display: block;
+      background: #fff;
+      border-radius: 13px;
+      box-shadow: 0 3px 15px #e6e6ef33;
+      padding: 18px 0 14px 0;
+      max-width: 480px;
       margin-left: auto;
       margin-right: auto;
-      z-index: 2;
+    }
+    #monthPicker {
+      margin: 0 auto 18px auto;
+      font-size: 1.13em;
+      border-radius: 8px;
+      padding: 6px 18px;
+      border: 1.5px solid #d5d7e2;
+      background: #f9f9fd;
+      color: #24273b;
+      font-weight: 500;
+      display: block;
+      box-shadow: 0 1px 6px #c7cad6b2;
+      outline: none;
+    }
+    h2 {
+      margin: 10px 0 28px 0;
+      text-align: center;
+      color: #24273b;
+      font-size: 1.56em;
+      font-weight: 700;
+      letter-spacing: 0.01em;
     }
     #extra-block {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      width: 320px;
-      margin: 10px 0 0 0;
-      font-size: 1.06em;
-      color: #fff;
-      z-index: 2;
-      text-shadow: 0 0 7px #000;
+      margin: 0 0 22px 0;
+      font-size: 1.08em;
+      color: #24273b;
+      background: #fff;
+      padding: 14px 16px 10px 16px;
+      border-radius: 11px;
+      box-shadow: 0 3px 15px #e6e6ef44;
       font-weight: 600;
+      max-width: 430px;
     }
     #extra-block label {
       margin-right: 12px;
-      min-width: 170px;
+      min-width: 178px;
       text-align: left;
+      font-size: 1em;
     }
     #extraDays {
-      width: 55px;
-      font-size: 1em;
-      border-radius: 6px;
-      border: 1px solid #baff39;
-      padding: 4px 8px;
-      margin-right: 7px;
-      background: rgba(25,50,10,0.9);
-      color: #fff;
+      width: 62px;
+      font-size: 1.08em;
+      border-radius: 8px;
+      border: 1.5px solid #bfc2d6;
+      padding: 6px 9px;
+      background: #f3f4f9;
+      color: #24273b;
       font-weight: 600;
       text-align: center;
-      box-shadow: 0 0 4px #baff39;
+      box-shadow: 0 1px 3px #d2d6e8aa;
+      outline: none;
     }
     .file-label {
       display: inline-block;
-      padding: 16px 36px;
-      background: #222;
-      color: #baff39;
-      border-radius: 24px;
-      font-size: 1.3em;
+      padding: 17px 38px;
+      background: #234ad8;
+      color: #fff;
+      border-radius: 20px;
+      font-size: 1.28em;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      margin-top: 10px;
-      box-shadow: 0 0 12px #000;
-      z-index: 2;
-      border: 2px solid #baff39;
-      letter-spacing: 1px;
+      transition: background 0.19s;
+      margin-top: 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 12px #b5b8c9a0;
+      border: none;
+      letter-spacing: 0.01em;
     }
     .file-label:hover {
-      background: #baff39;
-      color: #222;
-      border-color: #fff;
+      background: #1e3ca7;
     }
     input[type="file"] {
       display: none;
     }
     #progress {
-      font-size: 1.2em;
-      color: #fff;
-      margin-top: 20px;
+      font-size: 1.09em;
+      color: #234ad8;
+      margin-top: 10px;
+      margin-bottom: 8px;
       text-align: center;
-      text-shadow: 0 0 6px #000;
-      z-index: 2;
       font-weight: 600;
+      letter-spacing: 0.01em;
     }
     #calc-table {
       margin-top: 30px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      background: rgba(0,0,0,0.7);
+      background: #fff;
       border-radius: 12px;
       padding: 18px 32px 18px 28px;
-      box-shadow: 0 2px 12px #0f0a, 0 0 2px #000;
-      font-size: 1.16em;
+      box-shadow: 0 3px 16px #e6e6ef33;
+      font-size: 1.14em;
       min-width: 260px;
-      z-index: 2;
+      margin-bottom: 38px;
     }
     .calc-row {
       display: flex;
       align-items: center;
-      font-size: 1.18em;
+      font-size: 1.13em;
       margin-bottom: 2px;
+      color: #24273b;
+      font-weight: 500;
     }
     .calc-row .sign {
       width: 32px;
-      font-size: 1.3em;
+      font-size: 1.2em;
       font-weight: bold;
-      color: #baff39;
+      color: #234ad8;
       display: inline-block;
       text-align: center;
     }
     .calc-row .caption {
       width: 170px;
       min-width: 130px;
-      color: #fff;
+      color: #61677c;
       margin-right: 10px;
       text-align: right;
-      text-shadow: 0 0 6px #000;
-      font-weight: 700;
+      font-weight: 600;
+      font-size: 1.03em;
     }
     .calc-row .value {
       font-weight: bold;
-      color: #fff;
-      font-size: 1.18em;
+      color: #234ad8;
+      font-size: 1.13em;
       margin-left: 6px;
       min-width: 75px;
       text-align: left;
-      text-shadow: 0 0 6px #000;
     }
     .calc-row.sum {
-      font-size: 1.23em;
+      font-size: 1.17em;
       font-weight: bold;
-      margin-top: 10px;
-      color: #baff39;
-      text-shadow: 0 0 8px #000, 0 0 2px #baff39;
+      margin-top: 13px;
+      color: #19bb86;
+      letter-spacing: 0.01em;
     }
-    @media (max-width: 500px) {
-      #extra-block, #calc-table { width: 99vw; min-width: 0; padding: 10px 5vw 10px 3vw;}
-      #calc-table { font-size: 0.98em;}
-      .calc-row .caption { width: 45vw; min-width: 0; }
+    @media (max-width: 600px) {
+      header { font-size: 1.3em; padding: 20px 0 0 0; }
+      #fond, #extra-block, #calc-table { max-width: 99vw; min-width: 0; }
+      #extra-block { font-size: 0.97em; }
+      .calc-row .caption { width: 35vw; min-width: 0; }
+      .file-label { font-size: 1em; padding: 13px 16px; }
     }
   </style>
 </head>
 <body>
-  <img id="matrix-bg" src="matrix.GIF" alt="matrix background gif">
+  <header>Рабочее время</header>
   <div id="fond"></div>
   <select id="monthPicker">
     <option value="2025-01">Январь 2025</option>
@@ -220,7 +225,6 @@
     <input type="file" id="imageInput" accept="image/*">
   </label>
   <div id="progress"></div>
-  
   <div id="calc-table" style="display:none;">
     <div class="calc-row">
       <span class="caption">По скриншоту:</span>
@@ -238,7 +242,6 @@
       <span class="value" id="val-sum"></span>
     </div>
   </div>
-  
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
     // Фонды рабочего времени (36-часовая неделя) по месяцам (актуально на 2025)
@@ -272,7 +275,7 @@
       const minutes = Math.round((fond - hours) * 60);
       const [year, month] = val.split("-");
       fondDiv.innerHTML =
-        `Фонд рабочего времени ${monthNames[month]} ${year} года: <span style="font-size:1.25em;">${hours} часов ${minutes} минут</span>`;
+        `Фонд рабочего времени ${monthNames[month]} ${year} года: <span style="font-size:1.15em;">${hours} часов ${minutes} минут</span>`;
     }
     document.getElementById("monthPicker").addEventListener("change", updateFondDisplay);
     updateFondDisplay();
