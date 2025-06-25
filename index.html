@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Рабочее время</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts: Montserrat & Inter -->
+  <!-- Шрифты markwiz: Montserrat+Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -14,7 +14,7 @@
       --header-bg: #747b8e;
       --white: #fff;
       --block-radius: 21px;
-      --input-radius: 15px;
+      --input-radius: 14px;
       --shadow: 0 4px 32px #b3bacb22;
       --accent-dark: #111827;
       --font-main: 'Montserrat', 'Inter', Arial, sans-serif;
@@ -39,7 +39,7 @@
       flex-direction: column;
       align-items: center;
     }
-    /* --- FIXED HEADER-BG + FG --- */
+    /* --- Фиксированный заголовок только на фоне --- */
     .header-bg {
       position: fixed;
       top: 0; left: 0;
@@ -49,7 +49,7 @@
       height: 108px;
       border-radius: 0 0 24px 24px;
       box-shadow: var(--shadow);
-      user-select: none;
+      display: block;
     }
     .header-fg {
       position: fixed;
@@ -61,6 +61,8 @@
       align-items: center;
       justify-content: center;
       pointer-events: none;
+      user-select: none;
+      /* Заголовок только на фоне */
     }
     .header-fg h1 {
       color: var(--white);
@@ -73,11 +75,11 @@
       pointer-events: none;
       text-shadow: 0 1px 9px #31365344;
     }
-    /* --- FORM BLOCKS --- */
+    /* --- Основной контент --- */
     .wrapper {
       margin: 0 auto;
       width: 100vw;
-      max-width: 440px;
+      max-width: 420px;
       z-index: 10;
       background: none;
       padding-bottom: 32px;
@@ -89,12 +91,12 @@
       border-radius: var(--block-radius);
       box-shadow: var(--shadow);
       margin-bottom: 20px;
-      padding: 18px 18px 13px 18px;
+      padding: 20px 18px 14px 18px;
       width: 100%;
       z-index: 10;
     }
     .section-title {
-      font-size: 1.17em;
+      font-size: 1.16em;
       font-weight: 800;
       font-family: var(--font-main);
       margin-bottom: 10px;
@@ -104,7 +106,7 @@
     .divider {
       width: 100%;
       border-bottom: 2px dashed #bbc5da;
-      margin: 15px 0 17px 0;
+      margin: 18px 0 17px 0;
     }
     .row {
       display: flex;
@@ -113,42 +115,73 @@
       flex-wrap: wrap;
     }
     .row label {
-      min-width: 144px;
+      min-width: 148px;
       font-size: 1em;
-      margin-right: 10px;
+      margin-right: 13px;
       color: #23273b;
-      font-weight: 700;
+      font-weight: 600;
       font-family: var(--font-main);
     }
-    /* --- MARKVIZ FILE-LABEL --- */
+    /* --- Поля в линию --- */
+    .input-row, .row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 13px;
+    }
+    .input-short {
+      width: 95px;
+      min-width: 54px;
+      font-size: 1.11em;
+      border-radius: var(--input-radius);
+      border: 1.7px solid #ccd1e2;
+      background: #f3f4f9;
+      color: #23273b;
+      font-weight: 700;
+      padding: 12px 8px;
+      text-align: center;
+      box-shadow: 0 1px 3px #d2d6e8aa;
+      outline: none;
+      font-family: var(--font-main);
+      margin-right: 2px;
+      margin-left: 0;
+    }
+    .input-short:focus {
+      border-color: var(--main-blue);
+      background: #eef3fd;
+      color: var(--main-blue);
+    }
+    /* --- Кнопки markwiz --- */
     .file-label {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 370px;
+      max-width: 360px;
       margin: 0 auto 12px auto;
-      padding: 19px 0 17px 0;
-      background: var(--main-grey);
+      padding: 20px 0 18px 0;
+      background: #969eb4;
       color: #fff;
       font-family: var(--font-main);
       font-weight: 800;
       font-size: 1.09em;
-      border-radius: 22px;
+      border-radius: 24px;
+      box-shadow: 0 3px 14px #b3bacb14;
+      border: 2.2px solid #e7eaf2;
       letter-spacing: 0.01em;
       cursor: pointer;
       transition: background 0.19s, box-shadow 0.22s;
       text-align: center;
       user-select: none;
-      border: none;
-      box-shadow: 0 4px 12px #aab3bc28;
       overflow: hidden;
-      white-space: nowrap;
+      word-break: break-all;
     }
     .file-label:active, .file-label:hover {
-      background: #5d6578;
+      background: #7d8598;
       color: #fff;
-      box-shadow: 0 8px 20px #b3bacb34;
+      border-color: #626b84;
+      box-shadow: 0 4px 24px #b3bacb32;
     }
     input[type="file"] { display: none; }
 
@@ -157,65 +190,98 @@
       margin: 33px auto 0 auto;
       padding: 22px 44px;
       border-radius: 32px;
-      background: var(--white);
-      color: var(--main-grey);
+      background: #747b8e;
+      color: #fff;
       font-family: var(--font-main);
-      font-size: 1.27em;
+      font-size: 1.22em;
       font-weight: 800;
       border: none;
       letter-spacing: 0.01em;
-      box-shadow: 0 2px 8px #bbc5da33;
+      box-shadow: 0 4px 16px #b3bacb20;
       cursor: pointer;
-      transition: background 0.15s, color 0.13s;
-      outline: none;
-      border: 2.5px solid var(--main-grey);
-      text-align: center;
+      transition: background 0.15s;
+      width: 90%;
+      max-width: 380px;
     }
-    #calculateBtn:active, #calculateBtn:hover,
-    #backBtn:active, #backBtn:hover {
-      background: var(--main-grey);
+    #calculateBtn:hover, #backBtn:hover {
+      background: #234ad8;
       color: #fff;
-      border-color: #222c48;
     }
-    /* --- INPUTS --- */
-    .input-short {
-      width: 55px;
+    /* --- Селект --- */
+    select {
+      font-family: var(--font-main);
       font-size: 1em;
-      border-radius: var(--input-radius);
-      border: 1.5px solid #ccd1e2;
+      border-radius: 12px;
+      border: 1.7px solid #ccd1e2;
       background: #f3f4f9;
       color: #23273b;
-      font-weight: 700;
-      padding: 7px 7px;
-      text-align: center;
-      margin-right: 6px;
-      margin-bottom: 2px;
-      box-shadow: 0 1px 3px #d2d6e8aa;
+      font-weight: 600;
+      padding: 6px 9px;
       outline: none;
+    }
+    /* --- Доп инфо --- */
+    .pretime {
+      margin: 9px 0 0 5px;
+      font-size: 1.01em;
+      font-weight: 700;
+      color: #4672bb;
       font-family: var(--font-main);
-      transition: border-color 0.14s;
+      letter-spacing: 0.01em;
+      min-height: 24px;
     }
-    .input-short:focus {
-      border-color: var(--main-blue);
-      background: #eef3fd;
-      color: var(--main-blue);
-    }
-    .input-dual {
+    .fond-row {
       display: flex;
       align-items: center;
-      gap: 9px;
-      flex-wrap: nowrap;
+      justify-content: space-between;
+      font-size: 1.13em;
+      font-family: var(--font-main);
+      gap: 16px;
     }
-    .input-dual input { width: 49px; margin-right: 3px; }
-    /* --- CUSTOM SWITCH --- */
+    /* --- Командировки --- */
+    .cmd-row-wrap {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 9px;
+      flex-wrap: wrap;
+    }
+    .cmd-row-wrap .cmd-delete {
+      background: none;
+      border: none;
+      color: #e44848;
+      font-size: 1.6em;
+      margin-left: 7px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: color 0.19s;
+      line-height: 1;
+      margin-right: 2px;
+    }
+    .cmd-row-wrap .cmd-delete:hover { color: #c23b3b; }
+    .cmd-add-btn {
+      width: 39px; height: 39px;
+      border-radius: 50%;
+      border: 2px solid #c5c9d9;
+      color: #234ad8;
+      font-size: 2.1em;
+      font-family: var(--font-main);
+      font-weight: 900;
+      background: #f3f4f9;
+      cursor: pointer;
+      margin: 0 auto 13px auto;
+      display: block;
+      transition: background 0.18s, border 0.18s;
+    }
+    .cmd-add-btn:hover { background: #dde6fc; border-color: #234ad8; }
+    /* --- Переключатель --- */
     .switch-row {
       display: flex;
       align-items: center;
       margin-bottom: 10px;
-      margin-top: 7px;
     }
     .switch-label {
-      margin-left: 13px;
+      margin-left: 14px;
       font-weight: 800;
       color: #234ad8;
       font-family: var(--font-main);
@@ -224,8 +290,8 @@
     }
     .switch {
       position: relative;
-      width: 46px;
-      height: 25px;
+      width: 52px;
+      height: 28px;
       display: inline-block;
     }
     .switch input { opacity: 0; width: 0; height: 0; }
@@ -235,47 +301,29 @@
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: #e0e4ee;
       transition: .3s;
-      border-radius: 15px;
-      border: 1.2px solid #bbc5da;
+      border-radius: 17px;
+      border: 1.4px solid #bbc5da;
     }
     .slider:before {
       position: absolute;
       content: "";
-      height: 17px; width: 17px;
+      height: 21px; width: 21px;
       left: 4px; bottom: 3px;
       background-color: #fff;
       transition: .3s;
       border-radius: 50%;
-      border: 1.5px solid #234ad8;
+      border: 1.6px solid #234ad8;
     }
     input:checked + .slider {
       background-color: #3dd68c;
       border-color: #23bb56;
     }
     input:checked + .slider:before {
-      transform: translateX(16px);
+      transform: translateX(22px);
       border-color: #23bb56;
     }
     .strike { text-decoration: line-through wavy #b43d3d; color: #bcbfc7; opacity: 0.57; }
-    /* --- PRETIME --- */
-    .pretime {
-      margin: 9px 0 0 5px;
-      font-size: 1em;
-      font-weight: 700;
-      color: #4672bb;
-      font-family: var(--font-main);
-      letter-spacing: 0.01em;
-      min-height: 22px;
-    }
-    /* --- FOND ROW --- */
-    .fond-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 1.13em;
-      font-family: var(--font-main);
-    }
-    /* --- RESULT PAGE --- */
+    /* --- Итоговая страница --- */
     .result-header-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw;
@@ -284,7 +332,7 @@
       border-radius: 0 0 24px 24px;
       z-index: 2;
       box-shadow: var(--shadow);
-      user-select: none;
+      display: block;
     }
     .result-fg {
       position: fixed;
@@ -296,12 +344,13 @@
       align-items: center;
       justify-content: center;
       pointer-events: none;
+      user-select: none;
     }
     .result-fg h1 {
       color: var(--white);
-      font-family: var(--font-main);
+      font-family: var(--font-result);
       font-weight: 800;
-      font-size: 2em;
+      font-size: 2.1em;
       letter-spacing: 0.01em;
       margin: 0;
       user-select: none;
@@ -313,110 +362,58 @@
       background: #fff;
       border-radius: 19px;
       box-shadow: 0 4px 24px #bbc5da29;
-      padding: 34px 14px 21px 14px;
-      font-size: 1.21em;
+      padding: 36px 14px 25px 14px;
+      font-size: 1.23em;
       text-align: center;
       font-weight: 700;
       color: #234ad8;
       letter-spacing: 0.01em;
-      width: 100%;
+      width: 94vw;
       max-width: 420px;
       margin-left: auto; margin-right: auto;
-      font-family: var(--font-main);
+      font-family: var(--font-result);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .sum-block .main {
-      font-size: 2.03em;
-      font-family: var(--font-main);
+      font-size: 2.11em;
+      font-family: var(--font-result);
       font-weight: 800;
       color: #234ad8;
       margin: 18px 0 10px 0;
     }
     .sum-block .fond {
-      font-size: 1.16em;
+      font-size: 1.21em;
       color: #204499;
       font-weight: 800;
       margin: 7px 0 18px 0;
     }
     .sum-block .delta {
-      font-size: 1.12em;
+      font-size: 1.15em;
       margin-top: 13px;
-      font-family: var(--font-main);
+      font-family: var(--font-result);
       font-weight: 800;
     }
     .sum-block .delta.positive { color: #23bb56; }
     .sum-block .delta.negative { color: #c23535; }
-    /* --- COMMANDER ADD --- */
-    .cmd-row-wrap {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 9px;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
-    .cmd-row-wrap .cmd-delete {
-      background: none;
-      border: none;
-      color: #e44848;
-      font-size: 1.9em;
-      margin-left: 4px;
-      cursor: pointer;
-      font-weight: 800;
-      transition: color 0.17s;
-      line-height: 1;
-    }
-    .cmd-row-wrap .cmd-delete:hover { color: #c23b3b; }
-    .cmd-add-btn {
-      width: 39px; height: 39px;
-      border-radius: 50%;
-      border: 2px solid #c5c9d9;
-      color: #234ad8;
-      font-size: 2em;
-      font-family: var(--font-main);
-      font-weight: 900;
-      background: #f3f4f9;
-      cursor: pointer;
-      margin: 0 auto 13px auto;
-      display: block;
-      transition: background 0.18s, border 0.18s;
-    }
-    .cmd-add-btn:hover { background: #dde6fc; border-color: #234ad8; }
-    /* --- GIF RULETKA --- */
-    .gif-overlay {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(85,88,99, 0.10);
-      align-items: center; justify-content: center;
-      pointer-events: none;
-    }
-    .gif-overlay img {
-      width: 88vw; max-width: 440px;
-      max-height: 85vh;
-      display: block;
-      margin: 0 auto;
-      border-radius: 23px;
-      box-shadow: 0 8px 60px #363d4d50;
-      background: #fff;
-      object-fit: contain;
-    }
     /* --- RESPONSIVE --- */
     @media (max-width: 680px) {
-      .header-fg h1, .result-fg h1 { font-size: 1.16em;}
+      .header-fg h1, .result-fg h1 { font-size: 1.15em;}
       .wrapper, .sum-block { max-width: 99vw; }
-      .section { padding: 13px 3vw 10px 3vw;}
-      .sum-block { margin-top: 110px;}
+      .section { padding: 13px 3vw 11px 3vw;}
+      .sum-block { margin-top: 108px;}
+      .file-label { font-size: 0.93em; }
     }
-    @media (max-width: 420px) {
-      .header-fg h1, .result-fg h1 { font-size: 1em;}
-      .sum-block { font-size: 0.98em; }
-      .file-label { font-size: 0.97em; padding: 13px 0 13px 0;}
+    @media (max-width: 410px) {
+      .header-fg h1, .result-fg h1 { font-size: 0.98em;}
+      .sum-block { font-size: 1em; }
+      .file-label { font-size: 0.88em; padding: 13px 0 13px 0;}
     }
   </style>
 </head>
 <body>
-  <!-- FIXED BG-HEADER, FG-HEADER -->
   <div class="header-bg"></div>
   <div class="header-fg"><h1>Рабочее время</h1></div>
   <form class="wrapper" id="mainForm" autocomplete="off" onsubmit="return false">
@@ -426,66 +423,56 @@
         <input type="file" id="imageInput" accept="image/*">
       </label>
       <span id="progress"></span>
-      <div class="row" style="margin-top:13px;">
+      <div class="input-row">
         <label style="min-width:168px;">Или ввести время вручную:</label>
-        <div class="input-dual">
-          <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
+        <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
+        <span>мин</span>
       </div>
       <div class="pretime" id="pretime_main"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
       <div class="section-title">Полет пассажиром</div>
-      <div class="row">
+      <div class="input-row">
         <label>Время вылета:</label>
-        <div class="input-dual">
-          <input type="number" min="0" max="23" id="flyOutH" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="flyOutM" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
+        <input type="number" min="0" max="23" id="flyOutH" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="flyOutM" placeholder="м." class="input-short">
+        <span>мин</span>
       </div>
-      <div class="row">
+      <div class="input-row">
         <label>Время прилёта:</label>
-        <div class="input-dual">
-          <input type="number" min="0" max="23" id="flyInH" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="flyInM" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
+        <input type="number" min="0" max="23" id="flyInH" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="flyInM" placeholder="м." class="input-short">
+        <span>мин</span>
       </div>
       <div class="pretime" id="pretime_fly"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="row">
+      <div class="input-row">
         <label>Резерв домашний:</label>
-        <div class="input-dual">
-          <input type="number" min="0" id="reserveHomeH" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="reserveHomeM" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
+        <input type="number" min="0" id="reserveHomeH" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="reserveHomeM" placeholder="м." class="input-short">
+        <span>мин</span>
       </div>
       <div class="pretime" id="pretime_rhome"></div>
-      <div class="row">
+      <div class="input-row">
         <label>Резерв гостиница:</label>
-        <div class="input-dual">
-          <input type="number" min="0" id="reserveHotelH" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="reserveHotelM" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
+        <input type="number" min="0" id="reserveHotelH" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="reserveHotelM" placeholder="м." class="input-short">
+        <span>мин</span>
       </div>
       <div class="pretime" id="pretime_rhotel"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="row">
+      <div class="input-row">
         <label>Отпуск/больничный<br>
           <span style="font-size:0.92em;font-weight:400;color:#697084;">(не на выходные и праздники)</span>:
         </label>
@@ -495,7 +482,7 @@
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="row">
+      <div class="input-row">
         <label>ВЛЭК (кол-во дней):</label>
         <input type="number" min="0" id="vlekDays" placeholder="Кол-во дней" class="input-short">
       </div>
@@ -503,14 +490,12 @@
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="row">
+      <div class="input-row">
         <label>Тренажёр/CRM/ПП и т.д.:</label>
-        <div class="input-dual">
-          <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
+        <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
+        <span>мин</span>
       </div>
       <div class="pretime" id="pretime_training"></div>
     </div>
@@ -530,14 +515,12 @@
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="row">
+      <div class="input-row">
         <label>Рейсы, которые ещё осталось отлетать:</label>
-        <div class="input-dual">
-          <input type="number" min="0" id="extraPlanH" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
+        <input type="number" min="0" id="extraPlanH" placeholder="ч." class="input-short">
+        <span>ч</span>
+        <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
+        <span>мин</span>
       </div>
       <div class="pretime" id="pretime_extraplan"></div>
     </div>
@@ -563,10 +546,6 @@
     </div>
     <button id="calculateBtn" type="submit">Рассчитать</button>
   </form>
-  <!-- АНИМАЦИЯ RULETKA GIF -->
-  <div class="gif-overlay" id="gifOverlay">
-    <img src="ruletka .GIF" alt="Рулетка">
-  </div>
   <!-- Итоговая страница -->
   <div class="result-header-bg" style="display:none;"></div>
   <div class="result-fg" style="display:none;"><h1>Результаты</h1></div>
@@ -580,14 +559,23 @@
       <button id="backBtn">Назад</button>
     </div>
   </div>
-  <audio id="casinoAudio" src="casino.mp3" preload="auto"></audio>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
-    // --- Фонд рабочего времени (36ч неделя)
+    // --- АКТУАЛЬНЫЙ ФОНД РАБОЧЕГО ВРЕМЕНИ (примерно, для 36-часовой недели 2025):
+    // Вписывай нужные значения, если у тебя есть точные
     const fondData = {
-      "2025-01": 143.6, "2025-02": 140.4, "2025-03": 148.8, "2025-04": 151.2,
-      "2025-05": 151.2, "2025-06": 135.8, "2025-07": 151.2, "2025-08": 151.2,
-      "2025-09": 151.2, "2025-10": 151.2, "2025-11": 143.6, "2025-12": 143.6
+      "2025-01": 143 * 60 + 36,  // 143 ч 36 мин
+      "2025-02": 140 * 60 + 24,  // 140 ч 24 мин
+      "2025-03": 147 * 60 + 36,  // 147 ч 36 мин
+      "2025-04": 144 * 60 + 0,   // 144 ч 0 мин
+      "2025-05": 129 * 60 + 36,  // 129 ч 36 мин  <-- Пример из твоего скрина, май
+      "2025-06": 135 * 60 + 48,  // 135 ч 48 мин
+      "2025-07": 151 * 60 + 12,  // 151 ч 12 мин
+      "2025-08": 151 * 60 + 12,  // 151 ч 12 мин
+      "2025-09": 151 * 60 + 12,  // 151 ч 12 мин
+      "2025-10": 151 * 60 + 12,  // 151 ч 12 мин
+      "2025-11": 143 * 60 + 36,  // 143 ч 36 мин
+      "2025-12": 143 * 60 + 36   // 143 ч 36 мин
     };
     function toTimeString(mins) {
       let h = Math.floor(mins / 60);
@@ -690,7 +678,11 @@
     // --- Командировки: динамические поля + расчёты
     let cmdBlocks = [];
     function addCmdBlock() {
-      cmdBlocks.push({ close: '', open: '' });
+      if (cmdBlocks.length === 0) {
+        cmdBlocks.push({ close: '', open: '', base: true });
+      } else {
+        cmdBlocks.push({ close: '', open: '', base: false });
+      }
       renderCmdBlocks();
     }
     function deleteCmdBlock(idx) {
@@ -703,12 +695,12 @@
       cmdBlocks.forEach((cmd, i) => {
         el.innerHTML += `
         <div class="cmd-row-wrap">
-          <label style="min-width:164px;font-weight:600;color:#222;">Закрытие смены по прилёту:</label>
+          <label style="min-width:166px;font-weight:600;color:#222;">Закрытие смены по прилёту:</label>
           <input type="datetime-local" class="input-short" style="width:180px" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
-          ${(i !== 0) ? `<button class="cmd-delete" type="button" onclick="deleteCmdBlock(${i})">&times;</button>` : ''}
+          ${i !== 0 ? `<button class="cmd-delete" type="button" onclick="deleteCmdBlock(${i})">&times;</button>` : ""}
         </div>
         <div class="cmd-row-wrap">
-          <label style="min-width:164px;font-weight:600;color:#222;">Открытие смены при вылете:</label>
+          <label style="min-width:166px;font-weight:600;color:#222;">Открытие смены при вылете:</label>
           <input type="datetime-local" class="input-short" style="width:180px" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
         </div>
         `;
@@ -758,54 +750,34 @@
     }
     document.getElementById('extraPlanH').addEventListener('input', calcExtraPlan);
     document.getElementById('extraPlanM').addEventListener('input', calcExtraPlan);
-
-    // --- RULETKA + AUDIO ---
-    function showRuletkaGifAndSound(callback) {
-      const overlay = document.getElementById('gifOverlay');
-      const audio = document.getElementById('casinoAudio');
-      overlay.style.display = "flex";
-      overlay.style.pointerEvents = "all";
-      audio.currentTime = 0;
-      audio.play();
-      setTimeout(() => {
-        overlay.style.display = "none";
-        overlay.style.pointerEvents = "none";
-        audio.pause();
-        if (callback) callback();
-      }, 5000);
-    }
-
     // -------------------- КНОПКА РАССЧИТАТЬ --------------------
     document.getElementById('mainForm').onsubmit = function() {
-      showRuletkaGifAndSound(() => {
-        let result = (inputMode === "screenshot") ? mainMinutes :
-          toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
-        result += calcFlyTime();
-        result += calcReserveHome();
-        result += calcReserveHotel();
-        result += calcExtraDays();
-        result += calcVlek();
-        result += calcTraining();
-        if (!document.getElementById('multiBase').checked) result += calcCmd();
-        result += calcExtraPlan();
-        // Фонд
-        const fondRaw = fondData[document.getElementById('monthPicker').value] || 0;
-        const fondMin = Math.round(fondRaw * 60);
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-        document.getElementById('mainForm').style.display = "none";
-        document.querySelector('.result-header-bg').style.display = "block";
-        document.querySelector('.result-fg').style.display = "flex";
-        document.getElementById('resultPage').style.display = "block";
-        document.getElementById('myWorkTime').textContent = toTimeString(result);
-        document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
-        let deltaBlock = document.getElementById('deltaBlock');
-        if (result > fondMin) {
-          deltaBlock.innerHTML = `<span class="delta negative">Переработка: ${toTimeString(result - fondMin)}</span>`;
-        } else {
-          deltaBlock.innerHTML = `<span class="delta positive">Остаток до фонда: ${toTimeString(fondMin - result)}</span>`;
-        }
-      });
+      let result = (inputMode === "screenshot") ? mainMinutes :
+        toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
+      result += calcFlyTime();
+      result += calcReserveHome();
+      result += calcReserveHotel();
+      result += calcExtraDays();
+      result += calcVlek();
+      result += calcTraining();
+      if (!document.getElementById('multiBase').checked) result += calcCmd();
+      result += calcExtraPlan();
+      // Фонд
+      const fondMin = fondData[document.getElementById('monthPicker').value] || 0;
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.getElementById('mainForm').style.display = "none";
+      document.querySelector('.result-header-bg').style.display = "block";
+      document.querySelector('.result-fg').style.display = "flex";
+      document.getElementById('resultPage').style.display = "block";
+      document.getElementById('myWorkTime').textContent = toTimeString(result);
+      document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
+      let deltaBlock = document.getElementById('deltaBlock');
+      if (result > fondMin) {
+        deltaBlock.innerHTML = `<span class="delta negative">Переработка: ${toTimeString(result - fondMin)}</span>`;
+      } else {
+        deltaBlock.innerHTML = `<span class="delta positive">Остаток до фонда: ${toTimeString(fondMin - result)}</span>`;
+      }
       return false;
     };
     document.getElementById('backBtn').onclick = function() {
