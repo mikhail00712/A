@@ -20,7 +20,7 @@
       color: #1373b2;
       font-size: 2em;
     }
-    #result {
+    #result, #final {
       font-size: 2.2em;
       font-weight: bold;
       color: #1a2c4a;
@@ -68,6 +68,37 @@
       margin-left: auto;
       margin-right: auto;
     }
+    #extra-block {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 320px;
+      margin: 10px 0 0 0;
+      font-size: 1.06em;
+      color: #0c416b;
+    }
+    #extra-block label {
+      margin-right: 12px;
+      min-width: 170px;
+      text-align: left;
+    }
+    #extraDays {
+      width: 55px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: 1px solid #1373b2;
+      padding: 4px 8px;
+      margin-right: 7px;
+    }
+    #final {
+      color: #297399;
+      margin-top: 8px;
+      font-size: 1.6em;
+    }
+    @media (max-width: 500px) {
+      #extra-block { width: 95vw; font-size: 1em;}
+      #final { font-size: 1.2em; }
+    }
   </style>
 </head>
 <body>
@@ -87,12 +118,17 @@
     <option value="2025-12">Декабрь 2025</option>
   </select>
   <h2>Сумма рабочего времени по скриншоту</h2>
+  <div id="extra-block">
+    <label for="extraDays">Больничный/отпуск (количество дней):</label>
+    <input type="number" id="extraDays" min="0" step="1" value="0">
+  </div>
   <label class="file-label">
     Загрузить скриншот
     <input type="file" id="imageInput" accept="image/*">
   </label>
   <div id="progress"></div>
   <div id="result"></div>
+  <div id="final"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
@@ -132,6 +168,28 @@
     document.getElementById("monthPicker").addEventListener("change", updateFondDisplay);
     updateFondDisplay();
 
+    // --- Складываем рабочее время и дни отпуска/больничного ---
+    let mainMinutes = 0; // сумма из скриншота
+
+    function toTimeString(minutes) {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      return h + ' ч ' + m + ' мин';
+    }
+
+    function updateFinalSum() {
+      const extraDays = parseInt(document.getElementById('extraDays').value) || 0;
+      const extraMinutes = extraDays * (7 * 60 + 12);
+      const total = mainMinutes + extraMinutes;
+      let txt = '';
+      if (extraDays > 0) {
+        txt = 'Сумма с учётом больничного/отпуска: ' + toTimeString(total);
+      }
+      document.getElementById('final').textContent = txt;
+    }
+
+    document.getElementById('extraDays').addEventListener('input', updateFinalSum);
+
     // --- Твой исходный функционал (не менялся) ---
     function sumTimes(text) {
       const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi;
@@ -141,9 +199,9 @@
         let m = parseInt(match[2]);
         totalMinutes += h * 60 + m;
       }
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-      return hours + ' ч ' + minutes + ' мин';
+      mainMinutes = totalMinutes;
+      updateFinalSum();
+      return toTimeString(totalMinutes);
     }
 
     document.getElementById('imageInput').addEventListener('change', async function(e) {
@@ -152,6 +210,7 @@
 
       document.getElementById('progress').textContent = 'Распознаём...';
       document.getElementById('result').textContent = '';
+      document.getElementById('final').textContent = '';
 
       const { data: { text } } = await Tesseract.recognize(
         file,
