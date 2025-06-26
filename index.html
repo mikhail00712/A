@@ -137,6 +137,7 @@
       gap: 8px;
       flex-wrap: wrap;
       margin-bottom: 13px;
+      justify-content: center;
     }
     .input-short {
       width: 58px;
@@ -159,7 +160,7 @@
     .input-short:focus {
       border-color: var(--main-blue);
       background: #eef3fd;
-      color: var(--main-blue);
+      color: #234ad8;
     }
     .pretime {
       margin: 7px 0 0 4px;
@@ -169,6 +170,7 @@
       font-family: var(--font-main);
       letter-spacing: 0.01em;
       min-height: 24px;
+      text-align: center;
     }
     .add-btn, .remove-btn {
       background: #e8ebf4;
@@ -239,7 +241,6 @@
       background: #182d7a;
       color: #fff;
     }
-    /* Переключатель */
     .switch {
       position: relative; display: inline-block;
       width: 54px; height: 32px; vertical-align: middle;
@@ -266,7 +267,6 @@
       transform: translateX(22px);
       background: #fff;
     }
-    /* Для мобильных: стили блоков, чтобы ничего не уезжало */
     @media (max-width: 440px) {
       .input-row { gap: 4px; flex-wrap: wrap; }
       .input-short { width: 44px; min-width: 25px; font-size:0.98em; padding: 7px 4px;}
@@ -293,12 +293,10 @@
         <input type="file" id="imageInput" accept="image/*">
       </label>
       <span id="progress"></span>
-      <div class="input-row" style="justify-content:center;">
-        <label style="min-width:110px;">Или ввести время вручную:</label>
+      <div class="input-row">
+        <label style="min-width:150px;">Или ввести время вручную:</label>
         <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
-        <span>ч</span>
         <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
-        <span>мин</span>
       </div>
       <div id="preManual" class="pretime"></div>
     </div>
@@ -314,12 +312,10 @@
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="input-row" style="justify-content:center;">
+      <div class="input-row">
         <label>Резерв домашний:</label>
         <input type="number" min="0" id="reserveHomeH0" placeholder="ч." class="input-short">
-        <span>ч</span>
         <input type="number" min="0" max="59" id="reserveHomeM0" placeholder="м." class="input-short">
-        <span>мин</span>
       </div>
       <div id="preHome" class="pretime"></div>
       <div id="reserveHomeBlocks"></div>
@@ -327,12 +323,10 @@
         <button type="button" class="add-btn" onclick="addReserveBlock('home')">+</button>
       </div>
       <div style="height:5px"></div>
-      <div class="input-row" style="justify-content:center;">
+      <div class="input-row">
         <label>Резерв гостиница:</label>
         <input type="number" min="0" id="reserveHotelH0" placeholder="ч." class="input-short">
-        <span>ч</span>
         <input type="number" min="0" max="59" id="reserveHotelM0" placeholder="м." class="input-short">
-        <span>мин</span>
       </div>
       <div id="preHotel" class="pretime"></div>
       <div id="reserveHotelBlocks"></div>
@@ -342,7 +336,7 @@
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="input-row" style="justify-content:center;">
+      <div class="input-row">
         <label>Отпуск/больничный<br>
           <span style="font-size:0.92em;font-weight:400;color:#697084;">(не на выходные и праздники)</span>:
         </label>
@@ -352,7 +346,7 @@
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="input-row" style="justify-content:center;">
+      <div class="input-row">
         <label>ВЛЭК (кол-во дней):</label>
         <input type="number" min="0" id="vlekDays" placeholder="Кол-во дней" class="input-short">
       </div>
@@ -360,12 +354,10 @@
     </div>
     <div class="divider"></div>
     <div class="section">
-      <div class="input-row" style="justify-content:center;">
+      <div class="input-row">
         <label>Работа на земле:</label>
         <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
-        <span>ч</span>
         <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
-        <span>мин</span>
       </div>
       <div id="preTraining" class="pretime"></div>
     </div>
@@ -442,19 +434,15 @@
       flyDiv.innerHTML = '';
       flyBlocks.forEach((b, i) => {
         flyDiv.innerHTML += `
-          <div class="input-row" style="margin-bottom:4px;flex-wrap:nowrap;">
+          <div class="input-row" style="margin-bottom:4px;">
             <label style="min-width:105px;">Время вылета:</label>
             <input type="number" min="0" max="23" id="flyOutH${i}" placeholder="ч." class="input-short" value="${b.outH || ''}">
-            <span>ч</span>
             <input type="number" min="0" max="59" id="flyOutM${i}" placeholder="м." class="input-short" value="${b.outM || ''}">
-            <span>мин</span>
           </div>
-          <div class="input-row" style="margin-bottom:2px;flex-wrap:nowrap;">
+          <div class="input-row" style="margin-bottom:2px;">
             <label style="min-width:105px;">Время прилёта:</label>
             <input type="number" min="0" max="23" id="flyInH${i}" placeholder="ч." class="input-short" value="${b.inH || ''}">
-            <span>ч</span>
             <input type="number" min="0" max="59" id="flyInM${i}" placeholder="м." class="input-short" value="${b.inM || ''}">
-            <span>мин</span>
             ${i > 0 ? `<button type="button" class="remove-btn" onclick="removeFlyBlock(${i})">−</button>` : ''}
           </div>
         `;
@@ -482,11 +470,9 @@
       wrap.innerHTML = '';
       arr.forEach((b, i) => {
         wrap.innerHTML += `
-          <div class="input-row" style="margin-top:4px;flex-wrap:nowrap;">
+          <div class="input-row" style="margin-top:4px;">
             <input type="number" min="0" id="${type}H${i+1}" placeholder="ч." class="input-short" value="${b.h || ''}">
-            <span>ч</span>
             <input type="number" min="0" max="59" id="${type}M${i+1}" placeholder="м." class="input-short" value="${b.m || ''}">
-            <span>мин</span>
             <button type="button" class="remove-btn" onclick="removeReserveBlock('${type}',${i})">−</button>
           </div>
         `;
@@ -515,14 +501,14 @@
       if (cmdBlocks.length === 0) cmdBlocks.push({ close: '', open: '' });
       cmdBlocks.forEach((cmd, i) => {
         el.innerHTML += `
-        <div class="input-row" style="flex-wrap:nowrap;">
+        <div class="input-row">
           <label style="min-width:120px;">Закрытие смены по прилёту:</label>
-          <input type="datetime-local" class="input-short" style="width:110px;max-width:110px;" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
+          <input type="datetime-local" class="input-short" style="width:120px;max-width:120px;" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
           ${i !== 0 ? `<button class="remove-btn" type="button" onclick="removeCmdBlock(${i})">&times;</button>` : ""}
         </div>
-        <div class="input-row" style="flex-wrap:nowrap;">
+        <div class="input-row">
           <label style="min-width:120px;">Открытие смены при вылете:</label>
-          <input type="datetime-local" class="input-short" style="width:110px;max-width:110px;" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
+          <input type="datetime-local" class="input-short" style="width:120px;max-width:120px;" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
         </div>
         `;
       });
