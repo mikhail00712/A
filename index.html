@@ -1,652 +1,97 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Рабочее время</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --main-blue: #234ad8;
-      --main-grey: #747b8e;
-      --soft-grey: #e4e7ee;
-      --header-bg: #747b8e;
-      --white: #fff;
-      --block-radius: 21px;
-      --input-radius: 14px;
-      --shadow: 0 4px 32px #b3bacb22;
-      --accent-dark: #111827;
-      --font-main: 'Montserrat', 'Inter', Arial, sans-serif;
-      --font-result: 'Montserrat', 'Inter', Arial, sans-serif;
-    }
-    html, body {
-      min-height: 100vh;
-      width: 100vw;
-      margin: 0; padding: 0;
-      background: var(--soft-grey);
-      font-family: var(--font-main);
-      color: #23273b;
-      overflow-x: hidden;
-    }
-    body {
-      margin: 0;
-      width: 100vw;
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .header-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      background: var(--header-bg);
-      z-index: 0;
-      height: 108px;
-      border-radius: 0 0 24px 24px;
-      box-shadow: var(--shadow);
-      display: block;
-    }
-    .header-fg {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      width: 100vw;
-      height: 108px;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      user-select: none;
-    }
-    .header-fg h1 {
-      color: var(--white);
-      font-family: var(--font-main);
-      font-weight: 800;
-      font-size: 2.5em;
-      letter-spacing: 0.01em;
-      margin: 0;
-      user-select: none;
-      pointer-events: none;
-      text-shadow: 0 1px 9px #31365344;
-    }
-    .wrapper {
-      margin: 0 auto;
-      width: 100vw;
-      max-width: 420px;
-      z-index: 10;
-      background: none;
-      padding-bottom: 32px;
-      margin-top: 116px;
-      position: relative;
-    }
-    .section {
-      background: #fff;
-      border-radius: var(--block-radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-      padding: 20px 18px 14px 18px;
-      width: 100%;
-      z-index: 10;
-    }
-    .file-label {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 360px;
-      margin: 0 auto 12px auto;
-      padding: 20px 0 14px 0;
-      background: #969eb4;
-      color: #fff;
-      font-family: var(--font-main);
-      font-weight: 800;
-      font-size: 1.09em;
-      border-radius: 24px;
-      box-shadow: 0 3px 14px #b3bacb14;
-      border: 2.2px solid #e7eaf2;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-      transition: background 0.19s, box-shadow 0.22s;
-      text-align: center;
-      user-select: none;
-      overflow: hidden;
-      word-break: break-all;
-    }
-    .file-label span {
-      display: block;
-      width: 100%;
-    }
-    .file-label .split {
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
-    .file-label:active, .file-label:hover {
-      background: #7d8598;
-      color: #fff;
-      border-color: #626b84;
-      box-shadow: 0 4px 24px #b3bacb32;
-    }
-    input[type="file"] { display: none; }
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 13px;
-      justify-content: center;
-    }
-    .input-short {
-      width: 58px;
-      min-width: 38px;
-      font-size: 1em;
-      border-radius: var(--input-radius);
-      border: 1.7px solid #ccd1e2;
-      background: #f3f4f9;
-      color: #23273b;
-      font-weight: 700;
-      padding: 10px 7px;
-      text-align: center;
-      box-shadow: 0 1px 3px #d2d6e8aa;
-      outline: none;
-      font-family: var(--font-main);
-      margin-right: 2px;
-      margin-left: 0;
-      box-sizing: border-box;
-    }
-    .input-short:focus {
-      border-color: var(--main-blue);
-      background: #eef3fd;
-      color: #234ad8;
-    }
-    .pretime {
-      margin: 7px 0 0 4px;
-      font-size: 0.99em;
-      font-weight: 700;
-      color: #4672bb;
-      font-family: var(--font-main);
-      letter-spacing: 0.01em;
-      min-height: 24px;
-      text-align: center;
-    }
-    .add-btn, .remove-btn {
-      background: #e8ebf4;
-      border: 1.4px solid #c2c9db;
-      border-radius: 50%;
-      color: #234ad8;
-      width: 32px; height: 32px;
-      font-size: 1.5em;
-      font-weight: 900;
-      cursor: pointer;
-      margin-left: 8px;
-      margin-right: 3px;
-      transition: background 0.13s, border 0.13s;
-      vertical-align: middle;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      outline: none;
-      padding: 0;
-    }
-    .add-btn:hover { background: #dde6fc; border-color: #234ad8; }
-    .remove-btn { color: #e44848; margin-left: 5px;}
-    .remove-btn:hover { background: #f5e4e6; border-color: #e44848;}
-    .strike { text-decoration: line-through wavy #b43d3d; color: #bcbfc7; opacity: 0.57; }
-    .fond-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 1.13em;
-      font-family: var(--font-main);
-      gap: 16px;
-      flex-wrap: nowrap;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .fond-row > div:first-child {
-      min-width: 1px;
-      max-width: 70%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .fond-row select {
-      flex-shrink: 1;
-      min-width: 90px;
-      max-width: 130px;
-      width: 100%;
-    }
-    #calculateBtn, #backBtn {
-      display: block;
-      margin: 33px auto 0 auto;
-      padding: 22px 44px;
-      border-radius: 32px;
-      background: #234ad8;
-      color: #fff;
-      font-family: var(--font-main);
-      font-size: 1.22em;
-      font-weight: 800;
-      border: none;
-      letter-spacing: 0.01em;
-      box-shadow: 0 4px 16px #b3bacb20;
-      cursor: pointer;
-      transition: background 0.15s;
-      width: 90%;
-      max-width: 420px;
-    }
-    #calculateBtn:hover, #backBtn:hover {
-      background: #182d7a;
-      color: #fff;
-    }
-    .switch {
-      position: relative; display: inline-block;
-      width: 54px; height: 32px; vertical-align: middle;
-    }
-    .switch input { display: none; }
-    .slider {
-      position: absolute; cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: #d3dbed; border-radius: 28px;
-      transition: .28s;
-      box-shadow: 0 2px 6px #b3bacb22;
-    }
-    .slider:before {
-      position: absolute; content: "";
-      height: 26px; width: 26px; left: 3px; bottom: 3px;
-      background: #fff; border-radius: 50%;
-      box-shadow: 0 1px 7px #a2a7b933;
-      transition: .23s;
-    }
-    input:checked + .slider {
-      background: #23bb56;
-    }
-    input:checked + .slider:before {
-      transform: translateX(22px);
-      background: #fff;
-    }
-    @media (max-width: 440px) {
-      .input-row { gap: 4px; flex-wrap: wrap; }
-      .input-short { width: 44px; min-width: 25px; font-size:0.98em; padding: 7px 4px;}
-      .file-label { font-size: 0.99em; }
-      .fond-row > div:first-child { max-width: 54vw; font-size:0.97em;}
-      .fond-row select { min-width: 76px; max-width: 98px; font-size:0.97em;}
-    }
-    @media (max-width: 370px) {
-      .file-label { font-size: 0.82em;}
-      .input-row label { font-size: 0.96em; }
-      .fond-row > div:first-child { font-size:0.92em;}
-      .fond-row select { font-size:0.90em;}
-      .input-short { width: 34px; min-width: 17px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="header-bg" id="headerBg"></div>
-  <div class="header-fg" id="headerFg"><h1>Рабочее время</h1></div>
-  <form class="wrapper" id="mainForm" autocomplete="off" onsubmit="return false">
-    <div class="section">
-      <label class="file-label" id="labelScreenshot">
-        <span class="split">Загрузить скрин полетных смен<br>Аккорд</span>
-        <input type="file" id="imageInput" accept="image/*">
-      </label>
-      <span id="progress"></span>
-      <div class="input-row">
-        <label style="min-width:150px;">Или ввести время вручную:</label>
-        <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
+// Добавляем в начало скрипта
+function debounce(func, timeout = 300) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { func.apply(this, args); }, timeout);
+  };
+}
+
+// Модифицируем showPretimes
+const optimizedShowPretimes = debounce(showPretimes);
+
+// Обновляем все обработчики событий с showPretimes на optimizedShowPretimes
+
+// Добавляем валидацию минут
+function validateMinutes(input) {
+  if (input.value > 59) input.value = 59;
+  if (input.value < 0) input.value = 0;
+}
+
+// Обновляем рендер блоков (например, для flyBlocks)
+function renderFlyBlocks() {
+  let flyDiv = document.getElementById('flyBlocks');
+  flyDiv.innerHTML = '';
+  flyBlocks.forEach((b, i) => {
+    flyDiv.innerHTML += `
+      <div class="input-row" style="margin-bottom:4px;">
+        <label style="min-width:105px;">Время вылета:</label>
+        <input type="number" min="0" max="23" id="flyOutH${i}" placeholder="ч." class="input-short" value="${b.outH || ''}"
+          oninput="validateMinutes(this); optimizedShowPretimes()">
+        <input type="number" min="0" max="59" id="flyOutM${i}" placeholder="м." class="input-short" value="${b.outM || ''}"
+          oninput="validateMinutes(this); optimizedShowPretimes()">
       </div>
-      <div id="preManual" class="pretime"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="section-title" style="display:flex;align-items:center;gap:10px;justify-content:space-between;">
-        <span>Полет пассажиром</span>
+      <div class="input-row" style="margin-bottom:2px;">
+        <label style="min-width:105px;">Время прилёта:</label>
+        <input type="number" min="0" max="23" id="flyInH${i}" placeholder="ч." class="input-short" value="${b.inH || ''}"
+          oninput="validateMinutes(this); optimizedShowPretimes()">
+        <input type="number" min="0" max="59" id="flyInM${i}" placeholder="м." class="input-short" value="${b.inM || ''}"
+          oninput="validateMinutes(this); optimizedShowPretimes()">
+        ${i > 0 ? `<button type="button" class="remove-btn" onclick="removeFlyBlock(${i})">−</button>` : ''}
       </div>
-      <div id="flyBlocks"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" onclick="addFlyBlock()">+</button>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>Резерв домашний:</label>
-        <input type="number" min="0" id="reserveHomeH0" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="reserveHomeM0" placeholder="м." class="input-short">
-      </div>
-      <div id="preHome" class="pretime"></div>
-      <div id="reserveHomeBlocks"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" onclick="addReserveBlock('home')">+</button>
-      </div>
-      <div style="height:5px"></div>
-      <div class="input-row">
-        <label>Резерв гостиница:</label>
-        <input type="number" min="0" id="reserveHotelH0" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="reserveHotelM0" placeholder="м." class="input-short">
-      </div>
-      <div id="preHotel" class="pretime"></div>
-      <div id="reserveHotelBlocks"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" onclick="addReserveBlock('hotel')">+</button>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>Отпуск/больничный<br>
-          <span style="font-size:0.92em;font-weight:400;color:#697084;">(не на выходные и праздники)</span>:
-        </label>
-        <input type="number" min="0" id="extraDays" placeholder="Кол-во дней" class="input-short">
-      </div>
-      <div id="preExtra" class="pretime"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>ВЛЭК (кол-во дней):</label>
-        <input type="number" min="0" id="vlekDays" placeholder="Кол-во дней" class="input-short">
-      </div>
-      <div id="preVlek" class="pretime"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>Работа на земле:</label>
-        <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
-      </div>
-      <div id="preTraining" class="pretime"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="section" id="cmdSection">
-      <div class="section-title" style="margin-bottom:8px;display:flex;flex-direction:column;align-items:center;">
-        <span style="text-align:center;">Командировки (включая<br>разделённые полётные смены)</span>
-      </div>
-      <div id="cmdBlocks"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" id="addCmdBtn">+</button>
-      </div>
-      <div id="preCmd" class="pretime" style="text-align:center;"></div>
-      <div class="input-row" style="justify-content:center;gap:13px;flex-wrap:nowrap;margin-top:8px;">
-        <label class="switch">
-          <input type="checkbox" id="multiBase">
-          <span class="slider"></span>
-        </label>
-        <span class="switch-label" style="font-size:1.15em;font-weight:800;color:#234ad8;">Многобазовость</span>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div class="section fond-row">
-      <div>Фонд рабочего времени</div>
-      <div>
-        <select id="monthPicker">
-          <option value="2025-01">Январь 2025</option>
-          <option value="2025-02">Февраль 2025</option>
-          <option value="2025-03">Март 2025</option>
-          <option value="2025-04">Апрель 2025</option>
-          <option value="2025-05">Май 2025</option>
-          <option value="2025-06" selected>Июнь 2025</option>
-          <option value="2025-07">Июль 2025</option>
-          <option value="2025-08">Август 2025</option>
-          <option value="2025-09">Сентябрь 2025</option>
-          <option value="2025-10">Октябрь 2025</option>
-          <option value="2025-11">Ноябрь 2025</option>
-          <option value="2025-12">Декабрь 2025</option>
-        </select>
-      </div>
-    </div>
-    <button id="calculateBtn" type="submit">Рассчитать</button>
-  </form>
-  <div class="result-fg" style="display:none;" id="resultFg"><h1>Результаты</h1></div>
-  <div id="resultPage" style="display:none;">
-    <div class="sum-block">
-      <div>Моё рабочее время:</div>
-      <div id="myWorkTime" class="main"></div>
-      <div>Фонд рабочего времени:</div>
-      <div id="fondWorkTime" class="fond"></div>
-      <div id="deltaBlock" class="delta"></div>
-      <button id="backBtn">Назад</button>
-    </div>
-  </div>
-  <script>
-    // Фонд рабочего времени
-    const fondData = {
-      "2025-01": 122 * 60 + 24,    "2025-02": 144 * 60 + 0,     "2025-03": 150 * 60 + 12,
-      "2025-04": 157 * 60 + 24,    "2025-05": 129 * 60 + 36,    "2025-06": 135 * 60 + 48,
-      "2025-07": 165 * 60 + 36,    "2025-08": 151 * 60 + 12,    "2025-09": 158 * 60 + 24,
-      "2025-10": 165 * 60 + 36,    "2025-11": 135 * 60 + 48,    "2025-12": 158 * 60 + 24
-    };
-    function toTimeString(mins) {
-      let h = Math.floor(mins / 60), m = mins % 60;
-      return `${h} ч ${m} мин`;
-    }
-    function toMinutes(h, m) {
-      h = parseInt(h) || 0; m = parseInt(m) || 0; return h * 60 + m;
-    }
-    // ------------------ Fly Blocks --------------------
-    let flyBlocks = [{ outH: '', outM: '', inH: '', inM: '' }];
-    function renderFlyBlocks() {
-      let flyDiv = document.getElementById('flyBlocks');
-      flyDiv.innerHTML = '';
-      flyBlocks.forEach((b, i) => {
-        flyDiv.innerHTML += `
-          <div class="input-row" style="margin-bottom:4px;">
-            <label style="min-width:105px;">Время вылета:</label>
-            <input type="number" min="0" max="23" id="flyOutH${i}" placeholder="ч." class="input-short" value="${b.outH || ''}">
-            <input type="number" min="0" max="59" id="flyOutM${i}" placeholder="м." class="input-short" value="${b.outM || ''}">
-          </div>
-          <div class="input-row" style="margin-bottom:2px;">
-            <label style="min-width:105px;">Время прилёта:</label>
-            <input type="number" min="0" max="23" id="flyInH${i}" placeholder="ч." class="input-short" value="${b.inH || ''}">
-            <input type="number" min="0" max="59" id="flyInM${i}" placeholder="м." class="input-short" value="${b.inM || ''}">
-            ${i > 0 ? `<button type="button" class="remove-btn" onclick="removeFlyBlock(${i})">−</button>` : ''}
-          </div>
-        `;
-      });
-      flyBlocks.forEach((b, i) => {
-        ['flyOutH', 'flyOutM', 'flyInH', 'flyInM'].forEach(field => {
-          let el = document.getElementById(field + i);
-          if (el) el.oninput = function() {
-            flyBlocks[i][field.endsWith('H') ? (field.includes('Out') ? 'outH':'inH') : (field.includes('Out')?'outM':'inM')] = this.value;
-            showPretimes();
-          }
-        });
-      });
-      showPretimes();
-    }
-    function addFlyBlock() { flyBlocks.push({ outH: '', outM: '', inH: '', inM: '' }); renderFlyBlocks(); }
-    function removeFlyBlock(idx) { flyBlocks.splice(idx, 1); renderFlyBlocks(); }
-    renderFlyBlocks();
-    // ----------- Резервы ----------
-    let reserveHomeBlocks = [];
-    let reserveHotelBlocks = [];
-    function renderReserveBlocks(type) {
-      let arr = (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks);
-      let wrap = document.getElementById(type === 'home' ? 'reserveHomeBlocks' : 'reserveHotelBlocks');
-      wrap.innerHTML = '';
-      arr.forEach((b, i) => {
-        wrap.innerHTML += `
-          <div class="input-row" style="margin-top:4px;">
-            <input type="number" min="0" id="${type}H${i+1}" placeholder="ч." class="input-short" value="${b.h || ''}">
-            <input type="number" min="0" max="59" id="${type}M${i+1}" placeholder="м." class="input-short" value="${b.m || ''}">
-            <button type="button" class="remove-btn" onclick="removeReserveBlock('${type}',${i})">−</button>
-          </div>
-        `;
-      });
-      arr.forEach((b, i) => {
-        let elH = document.getElementById(type+'H'+(i+1)), elM = document.getElementById(type+'M'+(i+1));
-        if (elH) elH.oninput = function() { arr[i].h = this.value; showPretimes(); }
-        if (elM) elM.oninput = function() { arr[i].m = this.value; showPretimes(); }
-      });
-      showPretimes();
-    }
-    function addReserveBlock(type) {
-      (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks).push({h:'', m:''});
-      renderReserveBlocks(type);
-    }
-    function removeReserveBlock(type, idx) {
-      (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks).splice(idx,1);
-      renderReserveBlocks(type);
-    }
-    renderReserveBlocks('home'); renderReserveBlocks('hotel');
-    // ----------- Командировки ----------
-    let cmdBlocks = [];
-    function renderCmdBlocks() {
-      const el = document.getElementById('cmdBlocks');
-      el.innerHTML = '';
-      if (cmdBlocks.length === 0) cmdBlocks.push({ close: '', open: '' });
-      cmdBlocks.forEach((cmd, i) => {
-        el.innerHTML += `
-        <div class="input-row">
-          <label style="min-width:120px;">Закрытие смены по прилёту:</label>
-          <input type="datetime-local" class="input-short" style="width:120px;max-width:120px;" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
-          ${i !== 0 ? `<button class="remove-btn" type="button" onclick="removeCmdBlock(${i})">&times;</button>` : ""}
-        </div>
-        <div class="input-row">
-          <label style="min-width:120px;">Открытие смены при вылете:</label>
-          <input type="datetime-local" class="input-short" style="width:120px;max-width:120px;" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
-        </div>
-        `;
-      });
-      showPretimes();
-    }
-    function updateCmdBlock(idx, key, val) { cmdBlocks[idx][key] = val; showPretimes(); }
-    function addCmdBlock() { cmdBlocks.push({ close: '', open: '' }); renderCmdBlocks(); }
-    function removeCmdBlock(idx) { cmdBlocks.splice(idx, 1); renderCmdBlocks(); }
-    renderCmdBlocks();
-    document.getElementById('addCmdBtn').onclick = addCmdBlock;
-    // ----------- Предварительные расчеты ------------------
-    function showPretimes() {
-      // Manual
-      let mH = document.getElementById('manualHours').value,
-          mM = document.getElementById('manualMinutes').value;
-      let mins = toMinutes(mH, mM);
-      document.getElementById('preManual').textContent = mins ? 'Итого: ' + toTimeString(mins) : '';
-      // Home reserve
-      let home0h = document.getElementById('reserveHomeH0').value,
-          home0m = document.getElementById('reserveHomeM0').value;
-      let home = (toMinutes(home0h, home0m) / 4);
-      reserveHomeBlocks.forEach(b => { home += (toMinutes(b.h, b.m) / 4); });
-      document.getElementById('preHome').textContent = home ? 'Итого: ' + toTimeString(Math.floor(home)) : '';
-      // Hotel reserve
-      let hotel0h = document.getElementById('reserveHotelH0').value,
-          hotel0m = document.getElementById('reserveHotelM0').value;
-      let hotel = toMinutes(hotel0h, hotel0m);
-      reserveHotelBlocks.forEach(b => { hotel += toMinutes(b.h, b.m); });
-      document.getElementById('preHotel').textContent = hotel ? 'Итого: ' + toTimeString(hotel) : '';
-      // Extra Days
-      let d = parseInt(document.getElementById('extraDays').value) || 0;
-      let extr = d * (7 * 60 + 12);
-      document.getElementById('preExtra').textContent = extr ? 'Итого: ' + toTimeString(extr) : '';
-      // VLEK
-      let vd = parseInt(document.getElementById('vlekDays').value) || 0;
-      let vlek = vd * (7 * 60 + 12);
-      document.getElementById('preVlek').textContent = vlek ? 'Итого: ' + toTimeString(vlek) : '';
-      // Training
-      let trH = document.getElementById('trainingH').value,
-          trM = document.getElementById('trainingM').value;
-      let tr = toMinutes(trH, trM);
-      document.getElementById('preTraining').textContent = tr ? 'Итого: ' + toTimeString(tr) : '';
-      // Cmd
-      let mb = document.getElementById('multiBase').checked;
-      let cmdMin = 0;
-      if (!mb) {
-        for (let cmd of cmdBlocks) {
-          if (cmd.close && cmd.open) {
-            let close = new Date(cmd.close), open = new Date(cmd.open);
-            let diff = (close - open) / 60000;
-            if (diff < 0) diff += 24 * 60;
-            cmdMin += Math.max(0, Math.round(diff));
-          }
+    `;
+  });
+  // ... остальной код
+}
+
+// Улучшаем обработку командировок
+function calculateCmdMinutes() {
+  let cmdMin = 0;
+  const mb = document.getElementById('multiBase').checked;
+  
+  if (!mb) {
+    for (let cmd of cmdBlocks) {
+      if (cmd.close && cmd.open) {
+        try {
+          let close = new Date(cmd.close);
+          let open = new Date(cmd.open);
+          // Получаем разницу в днях, а не только в минутах
+          let diff = (close.getTime() - open.getTime()) / (1000 * 60);
+          // Убираем проверку на отрицательные значения - работаем с абсолютной разницей
+          cmdMin += Math.abs(Math.round(diff));
+        } catch (e) {
+          console.error("Ошибка обработки даты командировки:", e);
         }
       }
-      document.getElementById('preCmd').textContent = mb ? '' : (cmdMin ? 'Итого: ' + toTimeString(cmdMin) : '');
-      // Зачёркивание блока
-      let section = document.getElementById('cmdSection');
-      if (mb) section.classList.add('strike');
-      else section.classList.remove('strike');
     }
-    // --- Инпуты --- (main)
-    document.getElementById('manualHours').addEventListener('input', showPretimes);
-    document.getElementById('manualMinutes').addEventListener('input', showPretimes);
-    document.getElementById('reserveHomeH0').addEventListener('input', showPretimes);
-    document.getElementById('reserveHomeM0').addEventListener('input', showPretimes);
-    document.getElementById('reserveHotelH0').addEventListener('input', showPretimes);
-    document.getElementById('reserveHotelM0').addEventListener('input', showPretimes);
-    document.getElementById('extraDays').addEventListener('input', showPretimes);
-    document.getElementById('vlekDays').addEventListener('input', showPretimes);
-    document.getElementById('trainingH').addEventListener('input', showPretimes);
-    document.getElementById('trainingM').addEventListener('input', showPretimes);
-    document.getElementById('multiBase').addEventListener('change', showPretimes);
-    // ------------- Рассчитать ---------------
-    document.getElementById('mainForm').onsubmit = function() {
-      document.getElementById('headerBg').style.display = "none";
-      document.getElementById('headerFg').style.display = "none";
-      let result = toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
-      // Флай
-      let totalFly = 0;
-      flyBlocks.forEach((b) => {
-        let out = toMinutes(b.outH, b.outM), inn = toMinutes(b.inH, b.inM);
-        if (out && inn) {
-          let diff = inn - out; if (diff < 0) diff += 24 * 60;
-          diff += 40;
-          totalFly += diff;
-        }
-      });
-      result += totalFly;
-      // Резервы
-      let sumHome = toMinutes(document.getElementById('reserveHomeH0').value, document.getElementById('reserveHomeM0').value) / 4;
-      reserveHomeBlocks.forEach((b, i) => { sumHome += toMinutes(b.h, b.m) / 4; });
-      result += Math.floor(sumHome);
-      let sumHotel = toMinutes(document.getElementById('reserveHotelH0').value, document.getElementById('reserveHotelM0').value);
-      reserveHotelBlocks.forEach((b, i) => { sumHotel += toMinutes(b.h, b.m); });
-      result += sumHotel;
-      // Дни
-      let days = parseInt(document.getElementById('extraDays').value) || 0;
-      result += days * (7 * 60 + 12);
-      let vlekDays = parseInt(document.getElementById('vlekDays').value) || 0;
-      result += vlekDays * (7 * 60 + 12);
-      // Тренинг
-      result += toMinutes(document.getElementById('trainingH').value, document.getElementById('trainingM').value);
-      // Командировки
-      if (!document.getElementById('multiBase').checked) {
-        for (let cmd of cmdBlocks) {
-          if (cmd.close && cmd.open) {
-            let close = new Date(cmd.close), open = new Date(cmd.open);
-            let diff = (close - open) / 60000;
-            if (diff < 0) diff += 24 * 60;
-            result += Math.max(0, Math.round(diff));
-          }
-        }
-      }
-      // Фонд
-      const fondMin = fondData[document.getElementById('monthPicker').value] || 0;
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-      document.getElementById('mainForm').style.display = "none";
-      document.getElementById('resultFg').style.display = "flex";
-      document.getElementById('resultPage').style.display = "block";
-      document.getElementById('myWorkTime').textContent = toTimeString(result);
-      document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
-      let deltaBlock = document.getElementById('deltaBlock');
-      if (result > fondMin) {
-        deltaBlock.innerHTML = `<span class="delta negative">Переработка: ${toTimeString(result - fondMin)}</span>`;
-      } else {
-        deltaBlock.innerHTML = `<span class="delta positive">Остаток до фонда: ${toTimeString(fondMin - result)}</span>`;
-      }
-      return false;
-    };
-    document.getElementById('backBtn').onclick = function() {
-      document.getElementById('mainForm').style.display = "block";
-      document.getElementById('headerBg').style.display = "block";
-      document.getElementById('headerFg').style.display = "flex";
-      document.getElementById('resultFg').style.display = "none";
-      document.getElementById('resultPage').style.display = "none";
-    };
-  </script>
-</body>
-</html>
+  }
+  return cmdMin;
+}
+
+// Добавляем CSS для валидации
+<style>
+  .input-short.invalid {
+    border-color: #e44848;
+    background-color: #f5e4e6;
+  }
+  .delta.negative {
+    color: #e44848;
+    font-weight: 800;
+  }
+  .delta.positive {
+    color: #23bb56;
+    font-weight: 800;
+  }
+  .loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
