@@ -109,27 +109,23 @@
       gap: 8px;
       flex-wrap: wrap;
       margin-bottom: 13px;
-      flex-direction: row;
-      flex-shrink: 1;
     }
     .input-short {
-      width: 64px;
-      min-width: 38px;
-      max-width: 88px;
+      width: 60px;
+      min-width: 34px;
       font-size: 1em;
       border-radius: var(--input-radius);
       border: 1.7px solid #ccd1e2;
       background: #f3f4f9;
       color: #23273b;
       font-weight: 700;
-      padding: 10px 8px;
+      padding: 10px 6px;
       text-align: center;
       box-shadow: 0 1px 3px #d2d6e8aa;
       outline: none;
       font-family: var(--font-main);
       margin-right: 2px;
       margin-left: 0;
-      box-sizing: border-box;
     }
     .input-short:focus {
       border-color: var(--main-blue);
@@ -173,21 +169,21 @@
       margin: 33px auto 0 auto;
       padding: 22px 44px;
       border-radius: 32px;
-      background: #747b8e;
+      background: #234ad8;
       color: #fff;
       font-family: var(--font-main);
-      font-size: 1.22em;
+      font-size: 2em;
       font-weight: 800;
       border: none;
       letter-spacing: 0.01em;
       box-shadow: 0 4px 16px #b3bacb20;
       cursor: pointer;
       transition: background 0.15s;
-      width: 90%;
-      max-width: 380px;
+      width: 92%;
+      max-width: 540px;
     }
     #calculateBtn:hover, #backBtn:hover {
-      background: #234ad8;
+      background: #16347c;
       color: #fff;
     }
     select {
@@ -201,10 +197,9 @@
       padding: 6px 9px;
       outline: none;
       margin-left: 8px;
-      min-width: 86px;
-      max-width: 125px;
+      min-width: 84px;
+      max-width: 110px;
       width: auto;
-      box-sizing: border-box;
     }
     .fond-row {
       display: flex;
@@ -212,8 +207,19 @@
       justify-content: space-between;
       font-size: 1.13em;
       font-family: var(--font-main);
-      gap: 16px;
+      gap: 10px;
       flex-wrap: wrap;
+      width: 100%;
+    }
+    .pretime {
+      margin: 2px 0 0 0;
+      font-size: 1.03em;
+      font-weight: 700;
+      color: #4672bb;
+      font-family: var(--font-main);
+      letter-spacing: 0.01em;
+      min-height: 20px;
+      padding-left: 2px;
     }
     .add-btn, .remove-btn {
       background: #e8ebf4;
@@ -237,13 +243,6 @@
     .add-btn:hover { background: #dde6fc; border-color: #234ad8; }
     .remove-btn { color: #e44848; margin-left: 5px;}
     .remove-btn:hover { background: #f5e4e6; border-color: #e44848;}
-    .plus-center {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 7px 0 2px 0;
-      width: 100%;
-    }
     .strike { text-decoration: line-through wavy #b43d3d; color: #bcbfc7; opacity: 0.57; }
     .sum-block {
       margin-top: 116px;
@@ -286,70 +285,65 @@
     }
     .sum-block .delta.positive { color: #23bb56; }
     .sum-block .delta.negative { color: #c23535; }
-    .pretime {
-      margin: 7px 0 0 1px;
-      font-size: 1.01em;
-      font-weight: 700;
-      color: #4672bb;
-      font-family: var(--font-main);
-      letter-spacing: 0.01em;
-      min-height: 22px;
-      text-align: left;
-      width: 100%;
-      display: block;
-      word-break: break-all;
-      transition: color 0.19s;
-    }
-    /* Switch — стиль iOS-переключателя */
     .switch-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-      margin-bottom: 2px;
+      justify-content: center;
+      margin-top: 10px;
+      gap: 12px;
+    }
+    .switch-label {
+      font-size: 1.14em;
+      color: #234ad8;
+      font-weight: 800;
+      margin-left: 6px;
+      margin-top: 2px;
+      user-select: none;
     }
     .switch {
       position: relative;
       display: inline-block;
-      width: 54px;
-      height: 30px;
+      width: 57px;
+      height: 35px;
       vertical-align: middle;
+      margin: 0;
     }
-    .switch input { display: none; }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
     .slider {
       position: absolute;
       cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #dde1ea;
-      border-radius: 30px;
-      transition: background 0.21s;
-      box-shadow: 0 2px 6px #bcc8e466;
+      top: 3px; left: 0; right: 0; bottom: 0;
+      background-color: #e3e7ef;
+      border-radius: 32px;
+      transition: .3s;
+      border: 2.2px solid #aac4f1;
+      box-shadow: 0 0 6px #bdd8f755;
     }
     .slider:before {
       position: absolute;
       content: "";
-      height: 24px;
-      width: 24px;
-      left: 4px; bottom: 3px;
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 2.5px;
       background-color: #fff;
       border-radius: 50%;
-      transition: .2s;
-      box-shadow: 0 2px 7px #b3bacb22;
+      box-shadow: 0 0 5px #31428b22;
+      transition: .3s;
+      border: 2.5px solid #a4b9df;
     }
     .switch input:checked + .slider {
-      background-color: #23bb56;
+      background-color: #3edb76;
+      border: 2.2px solid #23bb56;
+      box-shadow: 0 0 6px #22ff97a1;
     }
     .switch input:checked + .slider:before {
-      transform: translateX(22px);
-      background-color: #fff;
-    }
-    .switch-label {
-      font-weight: 800;
-      font-size: 1.13em;
-      color: #234ad8;
-      margin-left: 2px;
-      user-select: none;
-      transition: text-decoration 0.19s, opacity 0.19s;
+      transform: translateX(19px);
+      border: 2.5px solid #3edb76;
     }
     @media (max-width: 680px) {
       .header-fg h1, .result-fg h1 { font-size: 1.15em;}
@@ -357,16 +351,14 @@
       .section { padding: 13px 3vw 11px 3vw;}
       .sum-block { margin-top: 108px;}
       .file-label { font-size: 0.93em; }
-      .fond-row select { min-width: 80px; max-width: 100px; }
-      .input-short { width: 51px; min-width:32px; }
-      .pretime { font-size: 0.96em; }
+      .fond-row select { min-width: 62px; max-width: 95px;}
     }
     @media (max-width: 410px) {
       .header-fg h1, .result-fg h1 { font-size: 0.98em;}
       .sum-block { font-size: 1em; }
       .file-label { font-size: 0.88em; padding: 13px 0 13px 0;}
-      .fond-row select { min-width: 62px; max-width: 90px; }
-      .input-short { width: 43px; min-width:22px; }
+      .fond-row select { min-width: 56px; max-width: 80px; }
+      .input-short { width: 48px; font-size: 0.99em;}
     }
   </style>
 </head>
@@ -381,20 +373,22 @@
       </label>
       <span id="progress"></span>
       <div class="input-row">
-        <label style="min-width:120px;">Или ввести время вручную:</label>
+        <label style="min-width:128px;">Или ввести время вручную:</label>
         <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
         <span>ч</span>
         <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
-      <span id="pretimeMain" class="pretime"></span>
+      <div class="pretime" id="pretimeManual"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
       <div class="section-title">Полет пассажиром</div>
       <div id="flyBlocks"></div>
-      <div class="plus-center"><button type="button" class="add-btn" onclick="addFlyBlock()">+</button></div>
-      <span id="pretimeFly" class="pretime"></span>
+      <div style="display:flex;justify-content:center;">
+        <button type="button" class="add-btn" onclick="addFlyBlock()">+</button>
+      </div>
+      <div class="pretime" id="pretimeFly"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -405,9 +399,11 @@
         <input type="number" min="0" max="59" id="reserveHomeM0" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
-      <div class="plus-center"><button type="button" class="add-btn" onclick="addReserveBlock('home')">+</button></div>
+      <div style="display:flex;justify-content:center;">
+        <button type="button" class="add-btn" onclick="addReserveBlock('home')">+</button>
+      </div>
       <div id="reserveHomeBlocks"></div>
-      <span id="pretimeReserveHome" class="pretime"></span>
+      <div class="pretime" id="pretimeReserveHome"></div>
       <div class="input-row">
         <label>Резерв гостиница:</label>
         <input type="number" min="0" id="reserveHotelH0" placeholder="ч." class="input-short">
@@ -415,9 +411,11 @@
         <input type="number" min="0" max="59" id="reserveHotelM0" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
-      <div class="plus-center"><button type="button" class="add-btn" onclick="addReserveBlock('hotel')">+</button></div>
+      <div style="display:flex;justify-content:center;">
+        <button type="button" class="add-btn" onclick="addReserveBlock('hotel')">+</button>
+      </div>
       <div id="reserveHotelBlocks"></div>
-      <span id="pretimeReserveHotel" class="pretime"></span>
+      <div class="pretime" id="pretimeReserveHotel"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -427,7 +425,7 @@
         </label>
         <input type="number" min="0" id="extraDays" placeholder="Кол-во дней" class="input-short">
       </div>
-      <span id="pretimeExtraDays" class="pretime"></span>
+      <div class="pretime" id="pretimeExtraDays"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -435,7 +433,7 @@
         <label>ВЛЭК (кол-во дней):</label>
         <input type="number" min="0" id="vlekDays" placeholder="Кол-во дней" class="input-short">
       </div>
-      <span id="pretimeVlek" class="pretime"></span>
+      <div class="pretime" id="pretimeVlek"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -446,40 +444,29 @@
         <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
         <span>мин</span>
       </div>
-      <span id="pretimeTraining" class="pretime"></span>
+      <div class="pretime" id="pretimeTraining"></div>
     </div>
     <div class="divider"></div>
     <div class="section" id="cmdSection">
       <div class="section-title">Командировки (включая разделённые полётные смены)</div>
       <div id="cmdBlocks"></div>
-      <div class="plus-center"><button type="button" class="add-btn" onclick="addCmdBlock()">+</button></div>
+      <div style="display:flex;justify-content:center;">
+        <button type="button" class="add-btn" onclick="addCmdBlock()">+</button>
+      </div>
       <div class="switch-row">
         <label class="switch">
           <input type="checkbox" id="multiBase">
           <span class="slider"></span>
         </label>
-        <span class="switch-label" id="multiBaseLabel">Многобазовость</span>
+        <span class="switch-label">Многобазовость</span>
       </div>
-      <span id="pretimeCmd" class="pretime"></span>
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row" style="flex-direction:column; align-items: flex-start;">
-        <div style="font-weight: 800;">Рейсы, которые ещё осталось отлетать для предварительного расчёта:</div>
-        <div style="display: flex; align-items: center; margin-top:6px; width:100%;">
-          <input type="number" min="0" id="extraPlanH" placeholder="ч." class="input-short">
-          <span>ч</span>
-          <input type="number" min="0" max="59" id="extraPlanM" placeholder="м." class="input-short">
-          <span>мин</span>
-        </div>
-      </div>
-      <span id="pretimeExtraPlan" class="pretime"></span>
+      <div class="pretime" id="pretimeCmd"></div>
     </div>
     <div class="divider"></div>
     <div class="section fond-row">
-      <div>Фонд рабочего времени</div>
-      <div>
-        <select id="monthPicker" style="font-size:1em;">
+      <div style="flex:1;min-width:140px;">Фонд рабочего времени</div>
+      <div style="flex-shrink:1;">
+        <select id="monthPicker">
           <option value="2025-01">Январь 2025</option>
           <option value="2025-02">Февраль 2025</option>
           <option value="2025-03">Март 2025</option>
@@ -533,15 +520,15 @@
       flyDiv.innerHTML = '';
       flyBlocks.forEach((b, i) => {
         flyDiv.innerHTML += `
-          <div class="input-row" style="margin-bottom:6px;">
-            <label style="min-width:90px;">Вылет:</label>
+          <div class="input-row" style="margin-bottom:5px;">
+            <label style="min-width:108px;">Время вылета:</label>
             <input type="number" min="0" max="23" id="flyOutH${i}" placeholder="ч." class="input-short" value="${b.outH || ''}">
             <span>ч</span>
             <input type="number" min="0" max="59" id="flyOutM${i}" placeholder="м." class="input-short" value="${b.outM || ''}">
             <span>мин</span>
           </div>
-          <div class="input-row" style="margin-bottom:7px;">
-            <label style="min-width:90px;">Прилёт:</label>
+          <div class="input-row" style="margin-bottom:10px;">
+            <label style="min-width:108px;">Время прилёта:</label>
             <input type="number" min="0" max="23" id="flyInH${i}" placeholder="ч." class="input-short" value="${b.inH || ''}">
             <span>ч</span>
             <input type="number" min="0" max="59" id="flyInM${i}" placeholder="м." class="input-short" value="${b.inM || ''}">
@@ -555,13 +542,13 @@
           let el = document.getElementById(field + i);
           if (el) el.oninput = function() {
             flyBlocks[i][field.endsWith('H') ? (field.includes('Out') ? 'outH':'inH') : (field.includes('Out')?'outM':'inM')] = this.value;
-            calcPretimes();
+            updatePretime();
           }
         });
       });
     }
-    function addFlyBlock() { flyBlocks.push({ outH: '', outM: '', inH: '', inM: '' }); renderFlyBlocks(); calcPretimes();}
-    function removeFlyBlock(idx) { flyBlocks.splice(idx, 1); renderFlyBlocks(); calcPretimes();}
+    function addFlyBlock() { flyBlocks.push({ outH: '', outM: '', inH: '', inM: '' }); renderFlyBlocks(); updatePretime();}
+    function removeFlyBlock(idx) { flyBlocks.splice(idx, 1); renderFlyBlocks(); updatePretime();}
     renderFlyBlocks();
 
     // ----------- Резерв домашний/гостиница — динамические блоки ----------
@@ -584,17 +571,17 @@
       });
       arr.forEach((b, i) => {
         let elH = document.getElementById(type+'H'+(i+1)), elM = document.getElementById(type+'M'+(i+1));
-        if (elH) elH.oninput = function() { arr[i].h = this.value; calcPretimes(); }
-        if (elM) elM.oninput = function() { arr[i].m = this.value; calcPretimes(); }
+        if (elH) elH.oninput = function() { arr[i].h = this.value; updatePretime();}
+        if (elM) elM.oninput = function() { arr[i].m = this.value; updatePretime();}
       });
     }
     function addReserveBlock(type) {
       (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks).push({h:'', m:''});
-      renderReserveBlocks(type); calcPretimes();
+      renderReserveBlocks(type); updatePretime();
     }
     function removeReserveBlock(type, idx) {
       (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks).splice(idx,1);
-      renderReserveBlocks(type); calcPretimes();
+      renderReserveBlocks(type); updatePretime();
     }
     renderReserveBlocks('home'); renderReserveBlocks('hotel');
 
@@ -604,30 +591,29 @@
       if (cmdBlocks.length === 0) { cmdBlocks.push({ close: '', open: '', base: true });
       } else { cmdBlocks.push({ close: '', open: '', base: false }); }
       renderCmdBlocks();
-      calcPretimes();
     }
-    function deleteCmdBlock(idx) { cmdBlocks.splice(idx, 1); renderCmdBlocks(); calcPretimes();}
+    function deleteCmdBlock(idx) { cmdBlocks.splice(idx, 1); renderCmdBlocks(); }
     function renderCmdBlocks() {
       const el = document.getElementById('cmdBlocks');
       el.innerHTML = '';
       cmdBlocks.forEach((cmd, i) => {
         el.innerHTML += `
         <div class="cmd-row-wrap" style="display:flex;gap:12px;align-items:center;">
-          <label style="min-width:145px;font-weight:600;color:#222;">Закрытие смены по прилёту:</label>
-          <input type="datetime-local" class="input-short" style="width:130px" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
+          <label style="min-width:126px;font-weight:600;color:#222;">Закрытие смены по прилёту:</label>
+          <input type="datetime-local" class="input-short" style="width:140px" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
           ${i !== 0 ? `<button class="remove-btn" type="button" onclick="deleteCmdBlock(${i})">&times;</button>` : ""}
         </div>
         <div class="cmd-row-wrap" style="display:flex;gap:12px;align-items:center;">
-          <label style="min-width:145px;font-weight:600;color:#222;">Открытие смены при вылете:</label>
-          <input type="datetime-local" class="input-short" style="width:130px" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
+          <label style="min-width:126px;font-weight:600;color:#222;">Открытие смены при вылете:</label>
+          <input type="datetime-local" class="input-short" style="width:140px" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
         </div>
         `;
       });
     }
-    function updateCmdBlock(idx, key, val) { cmdBlocks[idx][key] = val; calcPretimes(); }
+    function updateCmdBlock(idx, key, val) { cmdBlocks[idx][key] = val; updatePretime();}
     addCmdBlock();
 
-    // --- Калькуляции ---
+    // --------------------- Калькуляции ---------------------
     function calcFlyTime() {
       let total = 0;
       flyBlocks.forEach((b) => {
@@ -653,10 +639,10 @@
     function calcExtraDays() { let days = parseInt(document.getElementById('extraDays').value) || 0; return days * (7 * 60 + 12); }
     function calcVlek() { let days = parseInt(document.getElementById('vlekDays').value) || 0; return days * (7 * 60 + 12); }
     function calcTraining() { return toMinutes(document.getElementById('trainingH').value, document.getElementById('trainingM').value); }
-    function calcCmd() { return 0; } // пока не реализовано (не меняем)
-    function calcExtraPlan() { return toMinutes(document.getElementById('extraPlanH').value, document.getElementById('extraPlanM').value); }
+    function calcCmd() { return 0; }
+    function calcExtraPlan() { return 0; } // в этом коде блок убран, если надо - вернуть
 
-    // ---------- Скриншот/ручное время + предварительный расчёт ----------
+    // Скриншот/ручное время
     let mainMinutes = 0, inputMode = "screenshot";
     document.getElementById('imageInput').addEventListener('change', async function(e) {
       inputMode = "screenshot";
@@ -673,75 +659,70 @@
       const re = /(\d+)\s*ч\s*(\d+)\s*мин/gi; let match;
       while ((match = re.exec(text)) !== null) total += toMinutes(match[1], match[2]);
       mainMinutes = total;
-      calcPretimes();
+      updatePretime();
     });
     document.getElementById('manualHours').addEventListener('input', function(){
       inputMode = "manual";
       document.getElementById('imageInput').value = '';
       let mins = toMinutes(this.value, document.getElementById('manualMinutes').value);
-      mainMinutes = mins; calcPretimes();
+      mainMinutes = mins;
+      updatePretime();
     });
     document.getElementById('manualMinutes').addEventListener('input', function(){
       inputMode = "manual";
       document.getElementById('imageInput').value = '';
       let mins = toMinutes(document.getElementById('manualHours').value, this.value);
-      mainMinutes = mins; calcPretimes();
+      mainMinutes = mins;
+      updatePretime();
     });
 
-    // ----------- Предварительный расчет для каждого блока --------------
-    function calcPretimes() {
-      // Скриншот/ручное
-      document.getElementById('pretimeMain').textContent = mainMinutes > 0 ? `Время: ${toTimeString(mainMinutes)}` : '';
-      // Полет пассажиром
-      let fly = calcFlyTime();
-      document.getElementById('pretimeFly').textContent = fly > 0 ? `Время полёта пассажиром: ${toTimeString(fly)}` : '';
+    // --------- Предварительные расчёты под блоками ---------
+    function updatePretime() {
+      // Ручное/скан рабочее время
+      document.getElementById('pretimeManual').textContent =
+        mainMinutes > 0 ? `Введено: ${toTimeString(mainMinutes)}` : '';
+      // Полёт пассажиром
+      let flyTime = calcFlyTime();
+      document.getElementById('pretimeFly').textContent =
+        flyTime > 0 ? `Засчитывается: ${toTimeString(flyTime)}` : '';
       // Резерв домашний
-      let rh = calcReserveHome();
-      document.getElementById('pretimeReserveHome').textContent = rh > 0 ? `Резерв домашний (учтено 1/4): ${toTimeString(rh)}` : '';
+      let reserveHome = calcReserveHome();
+      document.getElementById('pretimeReserveHome').textContent =
+        reserveHome > 0 ? `Засчитывается: ${toTimeString(reserveHome)}` : '';
       // Резерв гостиница
-      let rh2 = calcReserveHotel();
-      document.getElementById('pretimeReserveHotel').textContent = rh2 > 0 ? `Резерв гостиница: ${toTimeString(rh2)}` : '';
+      let reserveHotel = calcReserveHotel();
+      document.getElementById('pretimeReserveHotel').textContent =
+        reserveHotel > 0 ? `Засчитывается: ${toTimeString(reserveHotel)}` : '';
       // Отпуск/больничный
-      let ed = calcExtraDays();
-      document.getElementById('pretimeExtraDays').textContent = ed > 0 ? `Отпуск/больничный: ${toTimeString(ed)}` : '';
+      let extraDays = calcExtraDays();
+      document.getElementById('pretimeExtraDays').textContent =
+        extraDays > 0 ? `Засчитывается: ${toTimeString(extraDays)}` : '';
       // ВЛЭК
       let vlek = calcVlek();
-      document.getElementById('pretimeVlek').textContent = vlek > 0 ? `ВЛЭК: ${toTimeString(vlek)}` : '';
+      document.getElementById('pretimeVlek').textContent =
+        vlek > 0 ? `Засчитывается: ${toTimeString(vlek)}` : '';
       // Работа на земле
-      let tr = calcTraining();
-      document.getElementById('pretimeTraining').textContent = tr > 0 ? `Работа на земле: ${toTimeString(tr)}` : '';
-      // Командировки
+      let training = calcTraining();
+      document.getElementById('pretimeTraining').textContent =
+        training > 0 ? `Засчитывается: ${toTimeString(training)}` : '';
+      // Командировки (пока 0)
       document.getElementById('pretimeCmd').textContent = '';
-      // Рейсы, которые осталось отлетать
-      let ep = calcExtraPlan();
-      document.getElementById('pretimeExtraPlan').textContent = ep > 0 ? `Осталось отлетать: ${toTimeString(ep)}` : '';
     }
-    // навешиваем на все поля
-    ['reserveHomeH0','reserveHomeM0','reserveHotelH0','reserveHotelM0',
-     'extraDays','vlekDays','trainingH','trainingM','extraPlanH','extraPlanM'
-    ].forEach(id=>{
-      let el = document.getElementById(id); if(el) el.oninput = calcPretimes;
-    });
+    updatePretime();
 
-    // --- Многобазовость — зачеркивание и зеленый свет
-    const multiBase = document.getElementById('multiBase');
-    const multiBaseLabel = document.getElementById('multiBaseLabel');
-    multiBase.addEventListener('change', function() {
-      if (this.checked) {
-        multiBaseLabel.style.textDecoration = "line-through wavy #23bb56";
-        multiBaseLabel.style.opacity = "0.65";
-      } else {
-        multiBaseLabel.style.textDecoration = "";
-        multiBaseLabel.style.opacity = "1";
-      }
+    // ----------- Повесить oninput для updatePretime ----------
+    [
+      'manualHours','manualMinutes','reserveHomeH0','reserveHomeM0','reserveHotelH0','reserveHotelM0',
+      'extraDays','vlekDays','trainingH','trainingM'
+    ].forEach(id=>{
+      let el = document.getElementById(id);
+      if(el) el.oninput = updatePretime;
     });
 
     // ------------- Рассчитать ---------------
     document.getElementById('mainForm').onsubmit = function() {
-      // Прячем фон и заголовок только на экране результатов
       document.getElementById('headerBg').style.display = "none";
       document.getElementById('headerFg').style.display = "none";
-
       let result = (inputMode === "screenshot") ? mainMinutes :
         toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
       result += calcFlyTime();
@@ -751,7 +732,6 @@
       result += calcVlek();
       result += calcTraining();
       // if (!document.getElementById('multiBase').checked) result += calcCmd();
-      result += calcExtraPlan();
 
       // Фонд
       const fondMin = fondData[document.getElementById('monthPicker').value] || 0;
@@ -777,9 +757,6 @@
       document.getElementById('resultFg').style.display = "none";
       document.getElementById('resultPage').style.display = "none";
     };
-
-    // Авто-расчет при старте
-    setTimeout(calcPretimes, 500);
   </script>
 </body>
 </html>
