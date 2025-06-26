@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Рабочее время</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Шрифты markwiz: Montserrat+Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -40,6 +39,9 @@
       align-items: center;
     }
     /* --- Фиксированный заголовок только на фоне --- */
+    .header-bg, .header-fg {
+      transition: opacity 0.18s;
+    }
     .header-bg {
       position: fixed;
       top: 0; left: 0;
@@ -62,7 +64,6 @@
       justify-content: center;
       pointer-events: none;
       user-select: none;
-      /* Заголовок только на фоне */
     }
     .header-fg h1 {
       color: var(--white);
@@ -108,49 +109,47 @@
       border-bottom: 2px dashed #bbc5da;
       margin: 18px 0 17px 0;
     }
-    .row {
+    .input-row {
       display: flex;
       align-items: center;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 13px;
+      flex-wrap: nowrap;
     }
-    .row label {
-      min-width: 148px;
+    .input-row label {
+      min-width: 112px;
       font-size: 1em;
-      margin-right: 13px;
+      margin-right: 7px;
       color: #23273b;
       font-weight: 600;
       font-family: var(--font-main);
-    }
-    /* --- Поля в линию --- */
-    .input-row, .row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 13px;
+      flex-shrink: 0;
     }
     .input-short {
-      width: 95px;
-      min-width: 54px;
-      font-size: 1.11em;
+      width: 54px;
+      min-width: 42px;
+      font-size: 1.02em;
       border-radius: var(--input-radius);
       border: 1.7px solid #ccd1e2;
       background: #f3f4f9;
       color: #23273b;
       font-weight: 700;
-      padding: 12px 8px;
+      padding: 7px 5px;
       text-align: center;
       box-shadow: 0 1px 3px #d2d6e8aa;
       outline: none;
       font-family: var(--font-main);
-      margin-right: 2px;
-      margin-left: 0;
+      margin-right: 1px;
     }
     .input-short:focus {
       border-color: var(--main-blue);
       background: #eef3fd;
       color: var(--main-blue);
+    }
+    .input-row span {
+      font-size: 0.98em;
+      font-family: var(--font-main);
+      margin-right: 3px;
     }
     /* --- Кнопки markwiz --- */
     .file-label {
@@ -160,12 +159,12 @@
       width: 100%;
       max-width: 360px;
       margin: 0 auto 12px auto;
-      padding: 20px 0 18px 0;
+      padding: 16px 0 14px 0;
       background: #969eb4;
       color: #fff;
       font-family: var(--font-main);
       font-weight: 800;
-      font-size: 1.09em;
+      font-size: 1.02em;
       border-radius: 24px;
       box-shadow: 0 3px 14px #b3bacb14;
       border: 2.2px solid #e7eaf2;
@@ -184,16 +183,15 @@
       box-shadow: 0 4px 24px #b3bacb32;
     }
     input[type="file"] { display: none; }
-
     #calculateBtn, #backBtn {
       display: block;
       margin: 33px auto 0 auto;
-      padding: 22px 44px;
-      border-radius: 32px;
+      padding: 17px 36px;
+      border-radius: 28px;
       background: #747b8e;
       color: #fff;
       font-family: var(--font-main);
-      font-size: 1.22em;
+      font-size: 1.12em;
       font-weight: 800;
       border: none;
       letter-spacing: 0.01em;
@@ -207,7 +205,6 @@
       background: #234ad8;
       color: #fff;
     }
-    /* --- Селект --- */
     select {
       font-family: var(--font-main);
       font-size: 1em;
@@ -219,7 +216,6 @@
       padding: 6px 9px;
       outline: none;
     }
-    /* --- Доп инфо --- */
     .pretime {
       margin: 9px 0 0 5px;
       font-size: 1.01em;
@@ -324,41 +320,9 @@
     }
     .strike { text-decoration: line-through wavy #b43d3d; color: #bcbfc7; opacity: 0.57; }
     /* --- Итоговая страница --- */
-    .result-header-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100vw;
-      background: var(--header-bg);
-      height: 108px;
-      border-radius: 0 0 24px 24px;
-      z-index: 2;
-      box-shadow: var(--shadow);
-      display: block;
-    }
-    .result-fg {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      width: 100vw;
-      height: 108px;
-      z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      user-select: none;
-    }
-    .result-fg h1 {
-      color: var(--white);
-      font-family: var(--font-result);
-      font-weight: 800;
-      font-size: 2.1em;
-      letter-spacing: 0.01em;
-      margin: 0;
-      user-select: none;
-      pointer-events: none;
-      text-shadow: 0 1px 7px #31365344;
-    }
+    .result-header-bg, .result-fg { display: none !important; }
     .sum-block {
-      margin-top: 116px;
+      margin-top: 35px;
       background: #fff;
       border-radius: 19px;
       box-shadow: 0 4px 24px #bbc5da29;
@@ -400,16 +364,20 @@
     .sum-block .delta.negative { color: #c23535; }
     /* --- RESPONSIVE --- */
     @media (max-width: 680px) {
-      .header-fg h1, .result-fg h1 { font-size: 1.15em;}
+      .header-fg h1 { font-size: 1.11em;}
       .wrapper, .sum-block { max-width: 99vw; }
       .section { padding: 13px 3vw 11px 3vw;}
-      .sum-block { margin-top: 108px;}
+      .sum-block { margin-top: 20px;}
       .file-label { font-size: 0.93em; }
+      .input-row label { font-size: 0.96em; min-width: 82px;}
+      .input-short { font-size: 0.92em; width: 40px; }
     }
     @media (max-width: 410px) {
-      .header-fg h1, .result-fg h1 { font-size: 0.98em;}
+      .header-fg h1 { font-size: 0.98em;}
       .sum-block { font-size: 1em; }
       .file-label { font-size: 0.88em; padding: 13px 0 13px 0;}
+      .input-row label { font-size: 0.88em; min-width: 62px;}
+      .input-short { font-size: 0.82em; width: 32px;}
     }
   </style>
 </head>
@@ -424,7 +392,7 @@
       </label>
       <span id="progress"></span>
       <div class="input-row">
-        <label style="min-width:168px;">Или ввести время вручную:</label>
+        <label style="min-width:120px;">Или ввести время вручную:</label>
         <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
         <span>ч</span>
         <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
@@ -547,8 +515,8 @@
     <button id="calculateBtn" type="submit">Рассчитать</button>
   </form>
   <!-- Итоговая страница -->
-  <div class="result-header-bg" style="display:none;"></div>
-  <div class="result-fg" style="display:none;"><h1>Результаты</h1></div>
+  <div class="result-header-bg"></div>
+  <div class="result-fg"><h1>Результаты</h1></div>
   <div id="resultPage" style="display:none;">
     <div class="sum-block">
       <div>Моё рабочее время:</div>
@@ -561,22 +529,21 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
-    // --- АКТУАЛЬНЫЙ ФОНД РАБОЧЕГО ВРЕМЕНИ (примерно, для 36-часовой недели 2025):
-    // Вписывай нужные значения, если у тебя есть точные
+    // --- АКТУАЛЬНЫЙ ФОНД РАБОЧЕГО ВРЕМЕНИ (36 ч/неделя 2025):
     const fondData = {
-  "2025-01": 122 * 60 + 24,    // 122 ч 24 мин
-  "2025-02": 144 * 60 + 0,     // 144 ч 0 мин
-  "2025-03": 150 * 60 + 12,    // 150 ч 12 мин
-  "2025-04": 157 * 60 + 24,    // 157 ч 24 мин
-  "2025-05": 129 * 60 + 36,    // 129 ч 36 мин
-  "2025-06": 135 * 60 + 48,    // 135 ч 48 мин
-  "2025-07": 165 * 60 + 36,    // 165 ч 36 мин
-  "2025-08": 151 * 60 + 12,    // 151 ч 12 мин
-  "2025-09": 158 * 60 + 24,    // 158 ч 24 мин
-  "2025-10": 165 * 60 + 36,    // 165 ч 36 мин
-  "2025-11": 135 * 60 + 48,    // 135 ч 48 мин
-  "2025-12": 158 * 60 + 24     // 158 ч 24 мин
-};
+      "2025-01": 122 * 60 + 24,
+      "2025-02": 144 * 60 + 0,
+      "2025-03": 150 * 60 + 12,
+      "2025-04": 157 * 60 + 24,
+      "2025-05": 129 * 60 + 36,
+      "2025-06": 135 * 60 + 48,
+      "2025-07": 165 * 60 + 36,
+      "2025-08": 151 * 60 + 12,
+      "2025-09": 158 * 60 + 24,
+      "2025-10": 165 * 60 + 36,
+      "2025-11": 135 * 60 + 48,
+      "2025-12": 158 * 60 + 24
+    };
     function toTimeString(mins) {
       let h = Math.floor(mins / 60);
       let m = mins % 60;
@@ -696,12 +663,12 @@
         el.innerHTML += `
         <div class="cmd-row-wrap">
           <label style="min-width:166px;font-weight:600;color:#222;">Закрытие смены по прилёту:</label>
-          <input type="datetime-local" class="input-short" style="width:180px" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
+          <input type="datetime-local" class="input-short" style="width:110px" value="${cmd.close || ''}" onchange="updateCmdBlock(${i}, 'close', this.value)">
           ${i !== 0 ? `<button class="cmd-delete" type="button" onclick="deleteCmdBlock(${i})">&times;</button>` : ""}
         </div>
         <div class="cmd-row-wrap">
           <label style="min-width:166px;font-weight:600;color:#222;">Открытие смены при вылете:</label>
-          <input type="datetime-local" class="input-short" style="width:180px" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
+          <input type="datetime-local" class="input-short" style="width:110px" value="${cmd.open || ''}" onchange="updateCmdBlock(${i}, 'open', this.value)">
         </div>
         `;
       });
@@ -740,7 +707,6 @@
       else el.classList.remove('strike');
       calcCmd();
     });
-    // Сразу первая пара
     addCmdBlock();
     // --- Доп. план
     function calcExtraPlan() {
@@ -751,6 +717,10 @@
     document.getElementById('extraPlanH').addEventListener('input', calcExtraPlan);
     document.getElementById('extraPlanM').addEventListener('input', calcExtraPlan);
     // -------------------- КНОПКА РАССЧИТАТЬ --------------------
+    function toggleHeader(show) {
+      document.querySelector('.header-bg').style.display = show ? "block" : "none";
+      document.querySelector('.header-fg').style.display = show ? "flex" : "none";
+    }
     document.getElementById('mainForm').onsubmit = function() {
       let result = (inputMode === "screenshot") ? mainMinutes :
         toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
@@ -767,8 +737,7 @@
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
       document.getElementById('mainForm').style.display = "none";
-      document.querySelector('.result-header-bg').style.display = "block";
-      document.querySelector('.result-fg').style.display = "flex";
+      toggleHeader(false); // Убираем шапку и фон на странице результатов
       document.getElementById('resultPage').style.display = "block";
       document.getElementById('myWorkTime').textContent = toTimeString(result);
       document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
@@ -782,8 +751,7 @@
     };
     document.getElementById('backBtn').onclick = function() {
       document.getElementById('mainForm').style.display = "block";
-      document.querySelector('.result-header-bg').style.display = "none";
-      document.querySelector('.result-fg').style.display = "none";
+      toggleHeader(true); // Показываем шапку обратно
       document.getElementById('resultPage').style.display = "none";
     };
   </script>
