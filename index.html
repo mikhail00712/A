@@ -296,7 +296,7 @@
       font-size: 1.5em;
       font-weight: 800;
       margin: 10px 0 20px;
-      color: var(--main-blue);
+      color: #234ad8;
     }
     .delta {
       font-size: 1.3em;
@@ -503,6 +503,11 @@
     // ------------------ Fly Blocks --------------------
     let flyBlocks = [{ outH: '', outM: '', inH: '', inM: '' }];
 
+    function updateFlyBlock(idx, field, value) {
+      flyBlocks[idx][field] = value;
+      optimizedShowPretimes();
+    }
+
     function renderFlyBlocks() {
       let flyDiv = document.getElementById('flyBlocks');
       flyDiv.innerHTML = '';
@@ -510,17 +515,17 @@
         flyDiv.innerHTML += `
           <div class="input-row" style="margin-bottom:4px;">
             <label style="min-width:105px;">Время вылета:</label>
-            <input type="number" min="0" max="23" id="flyOutH${i}" placeholder="ч." class="input-short" value="${b.outH || ''}" 
-              oninput="validateMinutes(this); optimizedShowPretimes()">
+            <input type="number" min="0" max="23" id="flyOutH${i}" placeholder="ч." class="input-short" value="${b.outH || ''}"
+              oninput="updateFlyBlock(${i}, 'outH', this.value)">
             <input type="number" min="0" max="59" id="flyOutM${i}" placeholder="м." class="input-short" value="${b.outM || ''}"
-              oninput="validateMinutes(this); optimizedShowPretimes()">
+              oninput="updateFlyBlock(${i}, 'outM', this.value)">
           </div>
           <div class="input-row" style="margin-bottom:2px;">
             <label style="min-width:105px;">Время прилёта:</label>
             <input type="number" min="0" max="23" id="flyInH${i}" placeholder="ч." class="input-short" value="${b.inH || ''}"
-              oninput="validateMinutes(this); optimizedShowPretimes()">
+              oninput="updateFlyBlock(${i}, 'inH', this.value)">
             <input type="number" min="0" max="59" id="flyInM${i}" placeholder="м." class="input-short" value="${b.inM || ''}"
-              oninput="validateMinutes(this); optimizedShowPretimes()">
+              oninput="updateFlyBlock(${i}, 'inM', this.value)">
             ${i > 0 ? `<button type="button" class="remove-btn" onclick="removeFlyBlock(${i})">−</button>` : ''}
           </div>
         `;
