@@ -5,6 +5,7 @@
   <title>Рабочее время</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/tesseract.js@v5.0.4/dist/tesseract.min.js"></script>
   <style>
     :root {
       --main-blue: #234ad8;
@@ -345,6 +346,7 @@
         <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
       </div>
       <div id="preManual" class="pretime"></div>
+      <div id="preScreenshot" class="pretime"></div>
     </div>
     <div class="divider"></div>
     <div class="section">
@@ -619,14 +621,57 @@
       renderCmdBlocks(); 
     }
 
+    // --- ДОБАВЛЕНО ДЛЯ РАСПОЗНАВАНИЯ СКРИНШОТА --- //
+    let screenshotTime = null; // null если не было загрузки или не удалось распознать
+
+    document.getElementById('imageInput').addEventListener('change', function(e) {
+      screenshotTime = null;
+      document.getElementById('preScreenshot').textContent = '';
+      if (!e.target.files[0]) {
+        showPretimes();
+        return;
+      }
+      document.getElementById('progress').textContent = 'Распознаём...';
+      Tesseract.recognize(
+        e.target.files[0],
+        'rus',
+        { logger: m => { if (m.status === "recognizing text") document.getElementById('progress').textContent = `Распознано: ${Math.round(m.progress*100)}%`; } }
+      ).then(({ data: { text } }) => {
+        // Находим все строки вида "4 ч 26 мин"
+        let matches = [...text.matchAll(/(\d+)\s*ч\s*(\d+)\s*мин/gi)];
+        let totalMin = 0;
+        for (let m of matches) {
+          totalMin += parseInt(m[1]||0)*60 + parseInt(m[2]||0);
+        }
+        if (totalMin>0) {
+          screenshotTime = totalMin;
+          document.getElementById('preScreenshot').textContent = `Время с картинки: ${toShortTimeString(screenshotTime)}`;
+        } else {
+          screenshotTime = null;
+          document.getElementById('preScreenshot').textContent = 'Не удалось распознать время на скриншоте';
+        }
+        document.getElementById('progress').textContent = '';
+        showPretimes();
+      }).catch(()=>{
+        document.getElementById('progress').textContent = 'Ошибка распознавания';
+        screenshotTime = null;
+        document.getElementById('preScreenshot').textContent = '';
+        showPretimes();
+      });
+    });
+
     // ----------- Предварительные расчеты ------------------
     function showPretimes() {
       // Manual
       let mH = document.getElementById('manualHours').value,
           mM = document.getElementById('manualMinutes').value;
       let mins = toMinutes(mH, mM);
-      document.getElementById('preManual').textContent = mins ? toShortTimeString(mins) : '';
-      
+      document.getElementById('preManual').textContent = (!screenshotTime && mins) ? toShortTimeString(mins) : '';
+
+      // Скриншот
+      document.getElementById('preScreenshot').style.display = screenshotTime !== null ? 'block' : 'none';
+
+      // --- Остальное не трогал, вывод других блоков ---
       // Fly
       let totalFly = 0;
       flyBlocks.forEach((b) => {
@@ -716,8 +761,14 @@
       document.getElementById('headerBg').style.display = "none";
       document.getElementById('headerFg').style.display = "none";
       
-      let result = toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
-      
+      // ---- ВАЖНО: Используем только скриншот или ручной ввод ----
+      let result = 0;
+      if (screenshotTime !== null) {
+        result = screenshotTime;
+      } else {
+        result = toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
+      }
+      // ---- Остальной расчет как был ----
       // Флай
       let totalFly = 0;
       flyBlocks.forEach((b) => {
