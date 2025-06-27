@@ -267,7 +267,6 @@
       transform: translateX(22px);
       background: #fff;
     }
-    /* Новые стили */
     .datetime-input {
       display: flex;
       gap: 5px;
@@ -473,18 +472,21 @@
       return `${h} ч ${m} мин`;
     }
 
+    function toShortTimeString(mins) {
+      let h = Math.floor(mins / 60), m = mins % 60;
+      return `${h}:${m.toString().padStart(2, '0')}`;
+    }
+
     function toMinutes(h, m) {
       h = parseInt(h) || 0; m = parseInt(m) || 0; 
       return h * 60 + m;
     }
 
-    // Валидация минут
     function validateMinutes(input) {
       if (input.value > 59) input.value = 59;
       if (input.value < 0) input.value = 0;
     }
 
-    // Оптимизация частых вызовов
     function debounce(func, timeout = 300) {
       let timer;
       return (...args) => {
@@ -533,42 +535,46 @@
       renderFlyBlocks(); 
     }
 
-    renderFlyBlocks();
-
     // ----------- Резервы ----------
-    let reserveHomeBlocks = [];
-    let reserveHotelBlocks = [];
+    let reserveHomeBlocks = [{ h: '', m: '' }];
+    let reserveHotelBlocks = [{ h: '', m: '' }];
 
     function renderReserveBlocks(type) {
-      let arr = (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks);
-      let wrap = document.getElementById(type === 'home' ? 'reserveHomeBlocks' : 'reserveHotelBlocks');
-      wrap.innerHTML = '';
-      arr.forEach((b, i) => {
-        wrap.innerHTML += `
-          <div class="input-row" style="margin-top:4px;">
-            <input type="number" min="0" id="${type}H${i+1}" placeholder="ч." class="input-short" value="${b.h || ''}"
-              oninput="validateMinutes(this); optimizedShowPretimes()">
-            <input type="number" min="0" max="59" id="${type}M${i+1}" placeholder="м." class="input-short" value="${b.m || ''}"
-              oninput="validateMinutes(this); optimizedShowPretimes()">
-            <button type="button" class="remove-btn" onclick="removeReserveBlock('${type}',${i})">−</button>
+      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
+      let container = document.getElementById(`${type}Blocks`);
+      
+      container.innerHTML = '';
+      blocks.forEach((block, i) => {
+        container.innerHTML += `
+          <div class="input-row">
+            <input type="number" min="0" id="${type}H${i}" placeholder="ч." class="input-short" value="${block.h}" 
+                   oninput="updateReserveBlock('${type}', ${i}, 'h', this.value)">
+            <input type="number" min="0" max="59" id="${type}M${i}" placeholder="м." class="input-short" value="${block.m}"
+                   oninput="updateReserveBlock('${type}', ${i}, 'm', this.value)">
+            ${i > 0 ? `<button type="button" class="remove-btn" onclick="removeReserveBlock('${type}', ${i})">−</button>` : ''}
           </div>
         `;
       });
       showPretimes();
     }
 
+    function updateReserveBlock(type, index, field, value) {
+      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
+      blocks[index][field] = value;
+      showPretimes();
+    }
+
     function addReserveBlock(type) {
-      (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks).push({h:'', m:''});
+      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
+      blocks.push({ h: '', m: '' });
       renderReserveBlocks(type);
     }
 
     function removeReserveBlock(type, idx) {
-      (type === 'home' ? reserveHomeBlocks : reserveHotelBlocks).splice(idx,1);
+      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
+      blocks.splice(idx, 1);
       renderReserveBlocks(type);
     }
-
-    renderReserveBlocks('home'); 
-    renderReserveBlocks('hotel');
 
     // ----------- Командировки ----------
     let cmdBlocks = [];
@@ -612,47 +618,43 @@
       renderCmdBlocks(); 
     }
 
-    // Инициализация первой командировки
-    addCmdBlock();
-    document.getElementById('addCmdBtn').onclick = addCmdBlock;
-
     // ----------- Предварительные расчеты ------------------
     function showPretimes() {
       // Manual
       let mH = document.getElementById('manualHours').value,
           mM = document.getElementById('manualMinutes').value;
       let mins = toMinutes(mH, mM);
-      document.getElementById('preManual').textContent = mins ? 'Итого: ' + toTimeString(mins) : '';
+      document.getElementById('preManual').textContent = mins ? toShortTimeString(mins) : '';
       
       // Home reserve
       let home0h = document.getElementById('reserveHomeH0').value,
           home0m = document.getElementById('reserveHomeM0').value;
       let home = (toMinutes(home0h, home0m) / 4);
       reserveHomeBlocks.forEach(b => { home += (toMinutes(b.h, b.m) / 4); });
-      document.getElementById('preHome').textContent = home ? 'Итого: ' + toTimeString(Math.floor(home)) : '';
+      document.getElementById('preHome').textContent = home ? toShortTimeString(Math.floor(home)) : '';
       
       // Hotel reserve
       let hotel0h = document.getElementById('reserveHotelH0').value,
           hotel0m = document.getElementById('reserveHotelM0').value;
       let hotel = toMinutes(hotel0h, hotel0m);
       reserveHotelBlocks.forEach(b => { hotel += toMinutes(b.h, b.m); });
-      document.getElementById('preHotel').textContent = hotel ? 'Итого: ' + toTimeString(hotel) : '';
+      document.getElementById('preHotel').textContent = hotel ? toShortTimeString(hotel) : '';
       
       // Extra Days
       let d = parseInt(document.getElementById('extraDays').value) || 0;
       let extr = d * (7 * 60 + 12);
-      document.getElementById('preExtra').textContent = extr ? 'Итого: ' + toTimeString(extr) : '';
+      document.getElementById('preExtra').textContent = extr ? toShortTimeString(extr) : '';
       
       // VLEK
       let vd = parseInt(document.getElementById('vlekDays').value) || 0;
       let vlek = vd * (7 * 60 + 12);
-      document.getElementById('preVlek').textContent = vlek ? 'Итого: ' + toTimeString(vlek) : '';
+      document.getElementById('preVlek').textContent = vlek ? toShortTimeString(vlek) : '';
       
       // Training
       let trH = document.getElementById('trainingH').value,
           trM = document.getElementById('trainingM').value;
       let tr = toMinutes(trH, trM);
-      document.getElementById('preTraining').textContent = tr ? 'Итого: ' + toTimeString(tr) : '';
+      document.getElementById('preTraining').textContent = tr ? toShortTimeString(tr) : '';
       
       // Cmd
       let mb = document.getElementById('multiBase').checked;
@@ -664,8 +666,8 @@
             try {
               let close = new Date(cmd.close);
               let open = new Date(cmd.open);
-              let diff = (close - open) / (1000 * 60); // разница в минутах
-              cmdMin += Math.abs(Math.round(diff)); // абсолютное значение
+              let diff = (close - open) / (1000 * 60);
+              cmdMin += Math.abs(Math.round(diff));
             } catch (e) {
               console.error("Ошибка обработки даты командировки:", e);
             }
@@ -673,7 +675,7 @@
         }
       }
       
-      document.getElementById('preCmd').textContent = mb ? '' : (cmdMin ? 'Итого: ' + toTimeString(cmdMin) : '');
+      document.getElementById('preCmd').textContent = mb ? '' : (cmdMin ? toShortTimeString(cmdMin) : '');
       
       // Зачёркивание блока
       let section = document.getElementById('cmdSection');
@@ -708,7 +710,7 @@
         if (out && inn) {
           let diff = inn - out; 
           if (diff < 0) diff += 24 * 60;
-          diff += 40; // Добавляем 40 минут
+          diff += 40;
           totalFly += diff;
         }
       });
@@ -716,7 +718,7 @@
       
       // Резервы
       let sumHome = toMinutes(document.getElementById('reserveHomeH0').value, document.getElementById('reserveHomeM0').value) / 4;
-      reserveHomeBlocks.forEach(b => { sumHome += toMinutes(b.h, b.m) / 4; });
+      reserveHomeBlocks.forEach(b => { sumHome += (toMinutes(b.h, b.m) / 4); });
       result += Math.floor(sumHome);
       
       let sumHotel = toMinutes(document.getElementById('reserveHotelH0').value, document.getElementById('reserveHotelM0').value);
@@ -751,6 +753,7 @@
       
       // Фонд
       const fondMin = fondData[document.getElementById('monthPicker').value] || 0;
+      let monthName = document.getElementById('monthPicker').options[document.getElementById('monthPicker').selectedIndex].text;
       
       // Показываем результаты
       document.body.scrollTop = 0;
@@ -760,20 +763,20 @@
       document.getElementById('resultPage').style.display = "block";
       
       document.getElementById('myWorkTime').textContent = toTimeString(result);
-      document.getElementById('fondWorkTime').textContent = toTimeString(fondMin);
+      document.getElementById('fondWorkTime').textContent = `${monthName}: ${toTimeString(fondMin)}`;
       
       let deltaBlock = document.getElementById('deltaBlock');
       if (result > fondMin) {
         deltaBlock.className = 'delta negative';
-        deltaBlock.innerHTML = `Переработка: ${toTimeString(result - fondMin)}`;
+        deltaBlock.textContent = `Переработка: ${toTimeString(result - fondMin)}`;
       } else {
         deltaBlock.className = 'delta positive';
-        deltaBlock.innerHTML = `Остаток до фонда: ${toTimeString(fondMin - result)}`;
+        deltaBlock.textContent = `Недоработка: ${toTimeString(fondMin - result)}`;
       }
       
       return false;
     };
-j
+
     document.getElementById('backBtn').onclick = function() {
       document.getElementById('mainForm').style.display = "block";
       document.getElementById('headerBg').style.display = "block";
@@ -781,6 +784,15 @@ j
       document.getElementById('resultFg').style.display = "none";
       document.getElementById('resultPage').style.display = "none";
     };
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function() {
+      renderFlyBlocks();
+      renderReserveBlocks('home');
+      renderReserveBlocks('hotel');
+      addCmdBlock();
+      document.getElementById('addCmdBtn').onclick = addCmdBlock;
+    });
   </script>
 </body>
-</html>   
+</html>
