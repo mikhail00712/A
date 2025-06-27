@@ -352,6 +352,7 @@
         <span>Полет пассажиром</span>
       </div>
       <div id="flyBlocks"></div>
+      <div id="preFly" class="pretime"></div>
       <div style="display:flex;justify-content:center;">
         <button type="button" class="add-btn" onclick="addFlyBlock()">+</button>
       </div>
@@ -625,6 +626,20 @@
           mM = document.getElementById('manualMinutes').value;
       let mins = toMinutes(mH, mM);
       document.getElementById('preManual').textContent = mins ? toShortTimeString(mins) : '';
+      
+      // Fly
+      let totalFly = 0;
+      flyBlocks.forEach((b) => {
+        let out = toMinutes(b.outH, b.outM), 
+            inn = toMinutes(b.inH, b.inM);
+        if (out && inn) {
+          let diff = inn - out;
+          if (diff < 0) diff += 24 * 60;
+          diff += 40; // Добавляем 40 минут
+          totalFly += diff;
+        }
+      });
+      document.getElementById('preFly').textContent = totalFly ? toShortTimeString(totalFly) : '';
       
       // Home reserve
       let home0h = document.getElementById('reserveHomeH0').value,
