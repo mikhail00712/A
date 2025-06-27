@@ -671,21 +671,19 @@
       // Скриншот
       document.getElementById('preScreenshot').style.display = screenshotTime !== null ? 'block' : 'none';
 
-      // --- Остальное не трогал, вывод других блоков ---
-      // Fly
-      let totalFly = 0;
+      // ==== Пассажирский перелёт ====
+      let totalFlyPassenger = 0;
       flyBlocks.forEach((b) => {
-        let out = toMinutes(b.outH, b.outM), 
-            inn = toMinutes(b.inH, b.inM);
+        let out = toMinutes(b.outH, b.outM), inn = toMinutes(b.inH, b.inM);
         if (out && inn) {
           let diff = inn - out;
           if (diff < 0) diff += 24 * 60;
-          diff += 40; // Добавляем 40 минут
-          totalFly += diff;
+          diff += 40; // +40 минут
+          totalFlyPassenger += diff;
         }
       });
-      document.getElementById('preFly').textContent = totalFly ? toShortTimeString(totalFly) : '';
-      
+      document.getElementById('preFly').textContent = totalFlyPassenger ? toShortTimeString(totalFlyPassenger) : '';
+
       // Home reserve
       let home0h = document.getElementById('reserveHomeH0').value,
           home0m = document.getElementById('reserveHomeM0').value;
@@ -761,27 +759,26 @@
       document.getElementById('headerBg').style.display = "none";
       document.getElementById('headerFg').style.display = "none";
       
-      // ---- ВАЖНО: Используем только скриншот или ручной ввод ----
       let result = 0;
       if (screenshotTime !== null) {
         result = screenshotTime;
       } else {
         result = toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
       }
-      // ---- Остальной расчет как был ----
-      // Флай
-      let totalFly = 0;
+      
+      // ==== Добавлено: расчёт времени для пассажирских перелётов ====
+      let totalFlyPassenger = 0;
       flyBlocks.forEach((b) => {
         let out = toMinutes(b.outH, b.outM), inn = toMinutes(b.inH, b.inM);
         if (out && inn) {
           let diff = inn - out; 
           if (diff < 0) diff += 24 * 60;
           diff += 40;
-          totalFly += diff;
+          totalFlyPassenger += diff;
         }
       });
-      result += totalFly;
-      
+      result += totalFlyPassenger;
+
       // Резервы
       let sumHome = toMinutes(document.getElementById('reserveHomeH0').value, document.getElementById('reserveHomeM0').value) / 4;
       reserveHomeBlocks.forEach(b => { sumHome += (toMinutes(b.h, b.m) / 4); });
