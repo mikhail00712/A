@@ -47,7 +47,7 @@
       height: 108px;
       border-radius: 0 0 24px 24px;
       box-shadow: var(--shadow);
-      display: block;
+      display: none;
     }
     .header-fg {
       position: fixed;
@@ -55,7 +55,7 @@
       width: 100vw;
       height: 108px;
       z-index: 3;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       pointer-events: none;
@@ -79,7 +79,7 @@
       z-index: 10;
       background: none;
       padding-bottom: 32px;
-      margin-top: 116px;
+      margin-top: 100px;
       position: relative;
     }
     .section {
@@ -220,7 +220,7 @@
       max-width: 130px;
       width: 100%;
     }
-    #calculateBtn, #backBtn, #startCalcBtn {
+    .main-btn, #calculateBtn, #backBtn, #startCalcBtn {
       display: block;
       margin: 33px auto 0 auto;
       padding: 22px 44px;
@@ -238,7 +238,7 @@
       width: 90%;
       max-width: 420px;
     }
-    #calculateBtn:hover, #backBtn:hover, #startCalcBtn:hover {
+    .main-btn:hover, #calculateBtn:hover, #backBtn:hover, #startCalcBtn:hover {
       background: #182d7a;
       color: #fff;
     }
@@ -341,21 +341,12 @@
   </style>
 </head>
 <body>
-  <!-- Начальная страница -->
-  <div class="header-bg" id="welcomeHeaderBg"></div>
-  <div class="header-fg" id="welcomeHeaderFg"><h1>Рабочее время</h1></div>
-  
+  <!-- Упрощённая начальная страница: только кнопка -->
   <div class="wrapper" id="welcomePage">
-    <div class="section">
-      <div class="welcome-text">
-        Добро пожаловать в калькулятор рабочего времени для пилотов.<br><br>
-        Нажмите кнопку ниже, чтобы перейти к расчету.
-      </div>
-    </div>
     <button class="main-btn" id="startCalcBtn">Расчет рабочего времени</button>
   </div>
 
-  <!-- Страница калькулятора (изначально скрыта) -->
+  <!-- Заголовок и форма калькулятора (изначально скрыты) -->
   <div class="header-bg hidden" id="headerBg"></div>
   <div class="header-fg hidden" id="headerFg"><h1>Рабочее время</h1></div>
   
@@ -493,9 +484,6 @@
     // Функция для переключения между страницами
     function showCalculator() {
       document.getElementById('welcomePage').classList.add('hidden');
-      document.getElementById('welcomeHeaderBg').classList.add('hidden');
-      document.getElementById('welcomeHeaderFg').classList.add('hidden');
-      
       document.getElementById('headerBg').classList.remove('hidden');
       document.getElementById('headerFg').classList.remove('hidden');
       document.getElementById('mainForm').classList.remove('hidden');
