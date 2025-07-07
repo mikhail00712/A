@@ -2,898 +2,109 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Рабочее время</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/tesseract.js@v5.0.4/dist/tesseract.min.js"></script>
+  <title>Тест: Заправка A320</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root {
-      --main-blue: #234ad8;
-      --main-grey: #747b8e;
-      --soft-grey: #e4e7ee;
-      --header-bg: #747b8e;
-      --white: #fff;
-      --block-radius: 21px;
-      --input-radius: 14px;
-      --shadow: 0 4px 32px #b3bacb22;
-      --accent-dark: #111827;
-      --font-main: 'Montserrat', 'Inter', Arial, sans-serif;
-      --font-result: 'Montserrat', 'Inter', Arial, sans-serif;
-    }
-    html, body {
-      min-height: 100vh;
-      width: 100vw;
-      margin: 0; padding: 0;
-      background: var(--soft-grey);
-      font-family: var(--font-main);
-      color: #23273b;
-      overflow-x: hidden;
-    }
     body {
-      margin: 0;
-      width: 100vw;
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #222;
     }
-    .header-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      background: var(--header-bg);
-      z-index: 0;
-      height: 108px;
-      border-radius: 0 0 24px 24px;
-      box-shadow: var(--shadow);
-      display: none;
+    h1 {
+      text-align: center;
+      color: #234ad8;
     }
-    .header-fg {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      width: 100vw;
-      height: 108px;
-      z-index: 3;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      user-select: none;
-    }
-    .header-fg h1 {
-      color: var(--white);
-      font-family: var(--font-main);
-      font-weight: 800;
-      font-size: 2.5em;
-      letter-spacing: 0.01em;
-      margin: 0;
-      user-select: none;
-      pointer-events: none;
-      text-shadow: 0 1px 9px #31365344;
-    }
-    .wrapper {
-      margin: 0 auto;
-      width: 100vw;
-      max-width: 420px;
-      z-index: 10;
-      background: none;
-      padding-bottom: 32px;
-      margin-top: 100px;
-      position: relative;
-    }
-    .section {
+    .question-block {
       background: #fff;
-      border-radius: var(--block-radius);
-      box-shadow: var(--shadow);
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       margin-bottom: 20px;
-      padding: 20px 18px 14px 18px;
-      width: calc(100% - 36px);
-      z-index: 10;
+      padding: 15px 20px;
     }
-    .file-label {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 360px;
-      margin: 0 auto 12px auto;
-      padding: 20px 0 14px 0;
-      background: #969eb4;
-      color: #fff;
-      font-family: var(--font-main);
-      font-weight: 800;
-      font-size: 1.09em;
-      border-radius: 24px;
-      box-shadow: 0 3px 14px #b3bacb14;
-      border: 2.2px solid #e7eaf2;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-      transition: background 0.19s, box-shadow 0.22s;
-      text-align: center;
-      user-select: none;
-      overflow: hidden;
-      word-break: break-all;
+    .question-block h3 {
+      margin: 0 0 10px;
     }
-    .file-label span {
+    label {
       display: block;
-      width: 100%;
+      margin-bottom: 8px;
     }
-    .file-label .split {
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
-    .file-label:active, .file-label:hover {
-      background: #7d8598;
-      color: #fff;
-      border-color: #626b84;
-      box-shadow: 0 4px 24px #b3bacb32;
-    }
-    input[type="file"] { display: none; }
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 13px;
-      justify-content: center;
-    }
-    .input-short {
-      width: 58px;
-      min-width: 38px;
-      font-size: 1em;
-      border-radius: var(--input-radius);
-      border: 1.7px solid #ccd1e2;
-      background: #f3f4f9;
-      color: #23273b;
-      font-weight: 700;
-      padding: 10px 7px;
-      text-align: center;
-      box-shadow: 0 1px 3px #d2d6e8aa;
-      outline: none;
-      font-family: var(--font-main);
-      margin-right: 2px;
-      margin-left: 0;
-      box-sizing: border-box;
-    }
-    .input-short:focus {
-      border-color: var(--main-blue);
-      background: #eef3fd;
-      color: #234ad8;
-    }
-    .pretime {
-      margin: 7px 0 0 4px;
-      font-size: 0.99em;
-      font-weight: 700;
-      color: #4672bb;
-      font-family: var(--font-main);
-      letter-spacing: 0.01em;
-      min-height: 24px;
-      text-align: center;
-    }
-    .add-btn, .remove-btn {
-      background: #e8ebf4;
-      border: 1.4px solid #c2c9db;
-      border-radius: 50%;
-      color: #234ad8;
-      width: 32px; height: 32px;
-      font-size: 1.5em;
-      font-weight: 900;
-      cursor: pointer;
-      margin-left: 8px;
-      margin-right: 3px;
-      transition: background 0.13s, border 0.13s;
-      vertical-align: middle;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      outline: none;
-      padding: 0;
-    }
-    .add-btn:hover { background: #dde6fc; border-color: #234ad8; }
-    .remove-btn { color: #e44848; margin-left: 5px;}
-    .remove-btn:hover { background: #f5e4e6; border-color: #e44848;}
-    .strike { text-decoration: line-through wavy #b43d3d; color: #bcbfc7; opacity: 0.57; }
-    .fond-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 1.13em;
-      font-family: var(--font-main);
-      gap: 16px;
-      flex-wrap: nowrap;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .fond-row > div:first-child {
-      min-width: 1px;
-      max-width: 70%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .fond-row select {
-      flex-shrink: 1;
-      min-width: 90px;
-      max-width: 130px;
-      width: 100%;
-    }
-    .main-btn, #calculateBtn, #backBtn, #startCalcBtn {
-      display: block;
-      margin: 33px auto 0 auto;
-      padding: 22px 44px;
-      border-radius: 32px;
+    button {
       background: #234ad8;
-      color: #fff;
-      font-family: var(--font-main);
-      font-size: 1.22em;
-      font-weight: 800;
+      color: white;
       border: none;
-      letter-spacing: 0.01em;
-      box-shadow: 0 4px 16px #b3bacb20;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.15s;
-      width: 90%;
-      max-width: 420px;
+      margin-top: 10px;
     }
-    .main-btn:hover, #calculateBtn:hover, #backBtn:hover, #startCalcBtn:hover {
-      background: #182d7a;
-      color: #fff;
-    }
-    .switch {
-      position: relative; display: inline-block;
-      width: 54px; height: 32px; vertical-align: middle;
-    }
-    .switch input { display: none; }
-    .slider {
-      position: absolute; cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: #d3dbed; border-radius: 28px;
-      transition: .28s;
-      box-shadow: 0 2px 6px #b3bacb22;
-    }
-    .slider:before {
-      position: absolute; content: "";
-      height: 26px; width: 26px; left: 3px; bottom: 3px;
-      background: #fff; border-radius: 50%;
-      box-shadow: 0 1px 7px #a2a7b933;
-      transition: .23s;
-    }
-    input:checked + .slider {
-      background: #23bb56;
-    }
-    input:checked + .slider:before {
-      transform: translateX(22px);
-      background: #fff;
-    }
-    .datetime-input {
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .datetime-input input {
-      min-width: 120px;
-      padding: 8px;
-      border-radius: var(--input-radius);
-      border: 1.7px solid #ccd1e2;
-      font-family: var(--font-main);
-    }
-    .result-container {
-      background: #fff;
-      border-radius: var(--block-radius);
-      box-shadow: var(--shadow);
-      padding: 25px;
-      margin: 20px auto;
-      width: calc(100% - 50px);
-      max-width: 380px;
+    .result {
+      font-weight: bold;
+      font-size: 20px;
+      color: green;
+      margin-top: 20px;
       text-align: center;
-    }
-    .result-value {
-      font-size: 1.5em;
-      font-weight: 800;
-      margin: 10px 0 20px;
-      color: #234ad8;
-    }
-    .delta {
-      font-size: 1.3em;
-      margin: 20px 0;
-      padding: 10px;
-      border-radius: var(--input-radius);
-    }
-    .delta.positive {
-      color: #23bb56;
-      background-color: #e8f5ee;
-    }
-    .delta.negative {
-      color: #e44848;
-      background-color: #f5e4e6;
-    }
-    .welcome-text {
-      text-align: center;
-      font-size: 1.1em;
-      line-height: 1.5;
-      margin-bottom: 30px;
-      padding: 0 15px;
-    }
-    .hidden {
-      display: none;
-    }
-    @media (max-width: 440px) {
-      .input-row { gap: 4px; flex-wrap: wrap; }
-      .input-short { width: 44px; min-width: 25px; font-size:0.98em; padding: 7px 4px;}
-      .file-label { font-size: 0.99em; }
-      .fond-row > div:first-child { max-width: 54vw; font-size:0.97em;}
-      .fond-row select { min-width: 76px; max-width: 98px; font-size:0.97em;}
-      .datetime-input { flex-direction: column; gap: 5px; }
-      .datetime-input input { width: 100%; min-width: auto; }
-    }
-    @media (max-width: 370px) {
-      .file-label { font-size: 0.82em;}
-      .input-row label { font-size: 0.96em; }
-      .fond-row > div:first-child { font-size:0.92em;}
-      .fond-row select { font-size:0.90em;}
-      .input-short { width: 34px; min-width: 17px; }
     }
   </style>
 </head>
 <body>
-  <!-- Упрощённая начальная страница: только кнопка -->
-  <div class="wrapper" id="welcomePage">
-    <button class="main-btn" id="startCalcBtn">Расчет рабочего времени</button>
-  </div>
 
-  <!-- Заголовок и форма калькулятора (изначально скрыты) -->
-  <div class="header-bg hidden" id="headerBg"></div>
-  <div class="header-fg hidden" id="headerFg"><h1>Рабочее время</h1></div>
-  
-  <form class="wrapper hidden" id="mainForm" autocomplete="off" onsubmit="return false">
-    <div class="section">
-      <label class="file-label" id="labelScreenshot">
-        <span class="split">Загрузить скрин полетных смен<br>Аккорд</span>
-        <input type="file" id="imageInput" accept="image/*">
-      </label>
-      <span id="progress"></span>
-      <div class="input-row">
-        <label style="min-width:150px;">Или ввести время вручную:</label>
-        <input type="number" min="0" id="manualHours" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="manualMinutes" placeholder="м." class="input-short">
-      </div>
-      <div id="preManual" class="pretime"></div>
-      <div id="preScreenshot" class="pretime"></div>
+  <h1>Тест по заправке A320</h1>
+
+  <form id="quizForm">
+
+    <div class="question-block">
+      <h3>1. Можно ли заправлять самолёт при грозе?</h3>
+      <label><input type="radio" name="q1" value="0"> Да</label>
+      <label><input type="radio" name="q1" value="1"> Нет</label>
     </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="section-title" style="display:flex;align-items:center;gap:10px;justify-content:space-between;">
-        <span>Полет пассажиром</span>
-      </div>
-      <div id="flyBlocks"></div>
-      <div id="preFly" class="pretime"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" onclick="addFlyBlock()">+</button>
-      </div>
+
+    <div class="question-block">
+      <h3>2. Какое максимальное давление топлива допускается?</h3>
+      <label><input type="radio" name="q2" value="0"> 70 psi</label>
+      <label><input type="radio" name="q2" value="1"> 50 psi</label>
+      <label><input type="radio" name="q2" value="0"> 35 psi</label>
     </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>Резерв домашний:</label>
-        <input type="number" min="0" id="reserveHomeH0" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="reserveHomeM0" placeholder="м." class="input-short">
-      </div>
-      <div id="preHome" class="pretime"></div>
-      <div id="reserveHomeBlocks"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" onclick="addReserveBlock('home')">+</button>
-      </div>
-      <div style="height:5px"></div>
-      <div class="input-row">
-        <label>Резерв гостиница:</label>
-        <input type="number" min="0" id="reserveHotelH0" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="reserveHotelM0" placeholder="м." class="input-short">
-      </div>
-      <div id="preHotel" class="pretime"></div>
-      <div id="reserveHotelBlocks"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" onclick="addReserveBlock('hotel')">+</button>
-      </div>
+
+    <div class="question-block">
+      <h3>3. Какие огни можно оставить включенными при заправке?</h3>
+      <label><input type="radio" name="q3" value="1"> Только NAV и LOGO</label>
+      <label><input type="radio" name="q3" value="0"> Все наружные</label>
+      <label><input type="radio" name="q3" value="0"> Beacon, Strobe и Taxi</label>
     </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>Отпуск/больничный<br>
-          <span style="font-size:0.92em;font-weight:400;color:#697084;">(не на выходные и праздники)</span>:
-        </label>
-        <input type="number" min="0" id="extraDays" placeholder="Кол-во дней" class="input-short">
-      </div>
-      <div id="preExtra" class="pretime"></div>
+
+    <div class="question-block">
+      <h3>4. Сколько времени действует контрольный талон на топливо?</h3>
+      <label><input type="radio" name="q4" value="0"> 12 часов</label>
+      <label><input type="radio" name="q4" value="1"> 6 часов</label>
+      <label><input type="radio" name="q4" value="0"> 24 часа</label>
     </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>ВЛЭК (кол-во дней):</label>
-        <input type="number" min="0" id="vlekDays" placeholder="Кол-во дней" class="input-short">
-      </div>
-      <div id="preVlek" class="pretime"></div>
+
+    <div class="question-block">
+      <h3>5. В каком порядке подключается заземление?</h3>
+      <label><input type="radio" name="q5" value="1"> Сначала к земле, потом к ВС</label>
+      <label><input type="radio" name="q5" value="0"> Сначала к ВС, потом к земле</label>
     </div>
-    <div class="divider"></div>
-    <div class="section">
-      <div class="input-row">
-        <label>Работа на земле:</label>
-        <input type="number" min="0" id="trainingH" placeholder="ч." class="input-short">
-        <input type="number" min="0" max="59" id="trainingM" placeholder="м." class="input-short">
-      </div>
-      <div id="preTraining" class="pretime"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="section" id="cmdSection">
-      <div class="section-title" style="margin-bottom:8px;display:flex;flex-direction:column;align-items:center;">
-        <span style="text-align:center;">Командировки (включая<br>разделённые полётные смены)</span>
-      </div>
-      <div id="cmdBlocks"></div>
-      <div style="display:flex;justify-content:center;">
-        <button type="button" class="add-btn" id="addCmdBtn">+</button>
-      </div>
-      <div id="preCmd" class="pretime" style="text-align:center;"></div>
-      <div class="input-row" style="justify-content:center;gap:13px;flex-wrap:nowrap;margin-top:8px;">
-        <label class="switch">
-          <input type="checkbox" id="multiBase">
-          <span class="slider"></span>
-        </label>
-        <span class="switch-label" style="font-size:1.15em;font-weight:800;color:#234ad8;">Многобазовость</span>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div class="section fond-row">
-      <div>Фонд рабочего времени</div>
-      <div>
-        <select id="monthPicker">
-          <option value="2025-01">Январь 2025</option>
-          <option value="2025-02">Февраль 2025</option>
-          <option value="2025-03">Март 2025</option>
-          <option value="2025-04">Апрель 2025</option>
-          <option value="2025-05">Май 2025</option>
-          <option value="2025-06" selected>Июнь 2025</option>
-          <option value="2025-07">Июль 2025</option>
-          <option value="2025-08">Август 2025</option>
-          <option value="2025-09">Сентябрь 2025</option>
-          <option value="2025-10">Октябрь 2025</option>
-          <option value="2025-11">Ноябрь 2025</option>
-          <option value="2025-12">Декабрь 2025</option>
-        </select>
-      </div>
-    </div>
-    <button id="calculateBtn" type="submit">Рассчитать</button>
+
+    <button type="button" onclick="checkAnswers()">Проверить ответы</button>
   </form>
-  
-  <div class="result-fg hidden" style="display:none;" id="resultFg"><h1>Результаты</h1></div>
-  <div id="resultPage" style="display:none;">
-    <div class="result-container">
-      <div>Моё рабочее время:</div>
-      <div id="myWorkTime" class="result-value"></div>
-      <div>Фонд рабочего времени:</div>
-      <div id="fondWorkTime" class="result-value"></div>
-      <div id="deltaBlock" class="delta"></div>
-      <button id="backBtn">Назад</button>
-    </div>
-  </div>
+
+  <div class="result" id="result"></div>
 
   <script>
-    // Функция для переключения между страницами
-    function showCalculator() {
-      document.getElementById('welcomePage').classList.add('hidden');
-      document.getElementById('headerBg').classList.remove('hidden');
-      document.getElementById('headerFg').classList.remove('hidden');
-      document.getElementById('mainForm').classList.remove('hidden');
-      
-      // Инициализация калькулятора
-      initCalculator();
-    }
-    
-    // Обработчик кнопки "Расчет рабочего времени"
-    document.getElementById('startCalcBtn').addEventListener('click', showCalculator);
-
-    // Фонд рабочего времени
-    const fondData = {
-      "2025-01": 122 * 60 + 24,    "2025-02": 144 * 60 + 0,     "2025-03": 150 * 60 + 12,
-      "2025-04": 157 * 60 + 24,    "2025-05": 129 * 60 + 36,    "2025-06": 135 * 60 + 48,
-      "2025-07": 165 * 60 + 36,    "2025-08": 151 * 60 + 12,    "2025-09": 158 * 60 + 24,
-      "2025-10": 165 * 60 + 36,    "2025-11": 135 * 60 + 48,    "2025-12": 158 * 60 + 24
-    };
-
-    function toTimeString(mins) {
-      let h = Math.floor(mins / 60), m = mins % 60;
-      return `${h} ч ${m} мин`;
-    }
-
-    function toShortTimeString(mins) {
-      let h = Math.floor(mins / 60), m = mins % 60;
-      return `${h}:${m.toString().padStart(2, '0')}`;
-    }
-
-    function toMinutes(h, m) {
-      h = parseInt(h) || 0; m = parseInt(m) || 0; 
-      return h * 60 + m;
-    }
-
-    function validateMinutes(input) {
-      if (input.value > 59) input.value = 59;
-      if (input.value < 0) input.value = 0;
-    }
-
-    function debounce(func, timeout = 300) {
-      let timer;
-      return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => { func.apply(this, args); }, timeout);
-      };
-    }
-
-    const optimizedShowPretimes = debounce(showPretimes);
-
-    // ------------------ Fly Blocks --------------------
-    let flyBlocks = [{ outH: '', outM: '', inH: '', inM: '' }];
-
-    function updateFlyBlock(idx, field, value) {
-      flyBlocks[idx][field] = value;
-      optimizedShowPretimes();
-    }
-
-    function renderFlyBlocks() {
-      let flyDiv = document.getElementById('flyBlocks');
-      flyDiv.innerHTML = '';
-      flyBlocks.forEach((b, i) => {
-        flyDiv.innerHTML += `
-          <div class="input-row" style="margin-bottom:4px;">
-            <label style="min-width:105px;">Время вылета:</label>
-            <input type="number" min="0" max="23" id="flyOutH${i}" placeholder="ч." class="input-short" value="${b.outH || ''}"
-              oninput="updateFlyBlock(${i}, 'outH', this.value)">
-            <input type="number" min="0" max="59" id="flyOutM${i}" placeholder="м." class="input-short" value="${b.outM || ''}"
-              oninput="updateFlyBlock(${i}, 'outM', this.value)">
-          </div>
-          <div class="input-row" style="margin-bottom:2px;">
-            <label style="min-width:105px;">Время прилёта:</label>
-            <input type="number" min="0" max="23" id="flyInH${i}" placeholder="ч." class="input-short" value="${b.inH || ''}"
-              oninput="updateFlyBlock(${i}, 'inH', this.value)">
-            <input type="number" min="0" max="59" id="flyInM${i}" placeholder="м." class="input-short" value="${b.inM || ''}"
-              oninput="updateFlyBlock(${i}, 'inM', this.value)">
-            ${i > 0 ? `<button type="button" class="remove-btn" onclick="removeFlyBlock(${i})">−</button>` : ''}
-          </div>
-        `;
-      });
-      showPretimes();
-    }
-
-    function addFlyBlock() { 
-      flyBlocks.push({ outH: '', outM: '', inH: '', inM: '' }); 
-      renderFlyBlocks(); 
-    }
-
-    function removeFlyBlock(idx) { 
-      flyBlocks.splice(idx, 1); 
-      renderFlyBlocks(); 
-    }
-
-    // ----------- Резервы ----------
-    let reserveHomeBlocks = [{ h: '', m: '' }];
-    let reserveHotelBlocks = [{ h: '', m: '' }];
-
-    function renderReserveBlocks(type) {
-      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
-      let container = document.getElementById(`${type}Blocks`);
-      
-      container.innerHTML = '';
-      blocks.forEach((block, i) => {
-        container.innerHTML += `
-          <div class="input-row">
-            <input type="number" min="0" id="${type}H${i}" placeholder="ч." class="input-short" value="${block.h}" 
-                   oninput="updateReserveBlock('${type}', ${i}, 'h', this.value)">
-            <input type="number" min="0" max="59" id="${type}M${i}" placeholder="м." class="input-short" value="${block.m}"
-                   oninput="updateReserveBlock('${type}', ${i}, 'm', this.value)">
-            ${i > 0 ? `<button type="button" class="remove-btn" onclick="removeReserveBlock('${type}', ${i})">−</button>` : ''}
-          </div>
-        `;
-      });
-      showPretimes();
-    }
-
-    function updateReserveBlock(type, index, field, value) {
-      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
-      blocks[index][field] = value;
-      showPretimes();
-    }
-
-    function addReserveBlock(type) {
-      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
-      blocks.push({ h: '', m: '' });
-      renderReserveBlocks(type);
-    }
-
-    function removeReserveBlock(type, idx) {
-      let blocks = type === 'home' ? reserveHomeBlocks : reserveHotelBlocks;
-      blocks.splice(idx, 1);
-      renderReserveBlocks(type);
-    }
-
-    // ----------- Командировки ----------
-    let cmdBlocks = [];
-
-    function renderCmdBlocks() {
-      const el = document.getElementById('cmdBlocks');
-      el.innerHTML = '';
-      
-      cmdBlocks.forEach((cmd, i) => {
-        el.innerHTML += `
-          <div class="input-row" style="margin-bottom:8px;flex-direction:column;align-items:flex-start;">
-            <div style="margin-bottom:5px;width:100%;">Командировка ${i+1}:</div>
-            <div class="datetime-input">
-              <input type="datetime-local" id="cmdClose${i}" value="${cmd.close || ''}" 
-                onchange="updateCmdBlock(${i}, 'close', this.value)">
-              <span>→</span>
-              <input type="datetime-local" id="cmdOpen${i}" value="${cmd.open || ''}" 
-                onchange="updateCmdBlock(${i}, 'open', this.value)">
-              ${i !== 0 ? `<button class="remove-btn" type="button" onclick="removeCmdBlock(${i})">−</button>` : ""}
-            </div>
-          </div>
-        `;
-      });
-      
-      showPretimes();
-    }
-
-    function updateCmdBlock(idx, key, val) { 
-      if (!cmdBlocks[idx]) cmdBlocks[idx] = { close: '', open: '' };
-      cmdBlocks[idx][key] = val; 
-      showPretimes(); 
-    }
-
-    function addCmdBlock() { 
-      cmdBlocks.push({ close: '', open: '' }); 
-      renderCmdBlocks(); 
-    }
-
-    function removeCmdBlock(idx) { 
-      cmdBlocks.splice(idx, 1); 
-      renderCmdBlocks(); 
-    }
-
-    // --- ДОБАВЛЕНО ДЛЯ РАСПОЗНАВАНИЯ СКРИНШОТА --- //
-    let screenshotTime = null; // null если не было загрузки или не удалось распознать
-
-    document.getElementById('imageInput').addEventListener('change', function(e) {
-      screenshotTime = null;
-      document.getElementById('preScreenshot').textContent = '';
-      if (!e.target.files[0]) {
-        showPretimes();
-        return;
+    function checkAnswers() {
+      const form = document.forms['quizForm'];
+      let score = 0;
+      const total = 5;
+      for (let i = 1; i <= total; i++) {
+        const answer = form['q' + i].value;
+        if (answer === "1") score++;
       }
-      document.getElementById('progress').textContent = 'Распознаём...';
-      Tesseract.recognize(
-        e.target.files[0],
-        'rus',
-        { logger: m => { if (m.status === "recognizing text") document.getElementById('progress').textContent = `Распознано: ${Math.round(m.progress*100)}%`; } }
-      ).then(({ data: { text } }) => {
-        // Находим все строки вида "4 ч 26 мин"
-        let matches = [...text.matchAll(/(\d+)\s*ч\s*(\d+)\s*мин/gi)];
-        let totalMin = 0;
-        for (let m of matches) {
-          totalMin += parseInt(m[1]||0)*60 + parseInt(m[2]||0);
-        }
-        if (totalMin>0) {
-          screenshotTime = totalMin;
-          document.getElementById('preScreenshot').textContent = `Время с картинки: ${toShortTimeString(screenshotTime)}`;
-        } else {
-          screenshotTime = null;
-          document.getElementById('preScreenshot').textContent = 'Не удалось распознать время на скриншоте';
-        }
-        document.getElementById('progress').textContent = '';
-        showPretimes();
-      }).catch(()=>{
-        document.getElementById('progress').textContent = 'Ошибка распознавания';
-        screenshotTime = null;
-        document.getElementById('preScreenshot').textContent = '';
-        showPretimes();
-      });
-    });
-
-    // ----------- Предварительные расчеты ------------------
-    function showPretimes() {
-      // Manual
-      let mH = document.getElementById('manualHours').value,
-          mM = document.getElementById('manualMinutes').value;
-      let mins = toMinutes(mH, mM);
-      document.getElementById('preManual').textContent = (!screenshotTime && mins) ? toShortTimeString(mins) : '';
-
-      // Скриншот
-      document.getElementById('preScreenshot').style.display = screenshotTime !== null ? 'block' : 'none';
-
-      // ==== Пассажирский перелёт ====
-      let totalFlyPassenger = 0;
-      flyBlocks.forEach((b) => {
-        let out = toMinutes(b.outH, b.outM), inn = toMinutes(b.inH, b.inM);
-        if (out && inn) {
-          let diff = inn - out;
-          if (diff < 0) diff += 24 * 60;
-          diff += 40; // +40 минут
-          totalFlyPassenger += diff;
-        }
-      });
-      document.getElementById('preFly').textContent = totalFlyPassenger ? toShortTimeString(totalFlyPassenger) : '';
-
-      // Home reserve
-      let home0h = document.getElementById('reserveHomeH0').value,
-          home0m = document.getElementById('reserveHomeM0').value;
-      let home = (toMinutes(home0h, home0m) / 4);
-      reserveHomeBlocks.forEach(b => { home += (toMinutes(b.h, b.m) / 4); });
-      document.getElementById('preHome').textContent = home ? toShortTimeString(Math.floor(home)) : '';
-      
-      // Hotel reserve
-      let hotel0h = document.getElementById('reserveHotelH0').value,
-          hotel0m = document.getElementById('reserveHotelM0').value;
-      let hotel = toMinutes(hotel0h, hotel0m);
-      reserveHotelBlocks.forEach(b => { hotel += toMinutes(b.h, b.m); });
-      document.getElementById('preHotel').textContent = hotel ? toShortTimeString(hotel) : '';
-      
-      // Extra Days
-      let d = parseInt(document.getElementById('extraDays').value) || 0;
-      let extr = d * (7 * 60 + 12);
-      document.getElementById('preExtra').textContent = extr ? toShortTimeString(extr) : '';
-      
-      // VLEK
-      let vd = parseInt(document.getElementById('vlekDays').value) || 0;
-      let vlek = vd * (7 * 60 + 12);
-      document.getElementById('preVlek').textContent = vlek ? toShortTimeString(vlek) : '';
-      
-      // Training
-      let trH = document.getElementById('trainingH').value,
-          trM = document.getElementById('trainingM').value;
-      let tr = toMinutes(trH, trM);
-      document.getElementById('preTraining').textContent = tr ? toShortTimeString(tr) : '';
-      
-      // Cmd
-      let mb = document.getElementById('multiBase').checked;
-      let cmdMin = 0;
-      
-      if (!mb) {
-        for (let cmd of cmdBlocks) {
-          if (cmd.close && cmd.open) {
-            try {
-              let close = new Date(cmd.close);
-              let open = new Date(cmd.open);
-              let diff = (close - open) / (1000 * 60);
-              cmdMin += Math.abs(Math.round(diff));
-            } catch (e) {
-              console.error("Ошибка обработки даты командировки:", e);
-            }
-          }
-        }
-      }
-      
-      document.getElementById('preCmd').textContent = mb ? '' : (cmdMin ? toShortTimeString(cmdMin) : '');
-      
-      // Зачёркивание блока
-      let section = document.getElementById('cmdSection');
-      if (mb) section.classList.add('strike');
-      else section.classList.remove('strike');
-    }
-
-    // --- Обработчики событий ---
-    document.getElementById('manualHours').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('manualMinutes').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('reserveHomeH0').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('reserveHomeM0').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('reserveHotelH0').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('reserveHotelM0').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('extraDays').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('vlekDays').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('trainingH').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('trainingM').addEventListener('input', optimizedShowPretimes);
-    document.getElementById('multiBase').addEventListener('change', optimizedShowPretimes);
-
-    // ------------- Рассчитать ---------------
-    document.getElementById('mainForm').onsubmit = function() {
-      document.getElementById('headerBg').style.display = "none";
-      document.getElementById('headerFg').style.display = "none";
-      
-      let result = 0;
-      if (screenshotTime !== null) {
-        result = screenshotTime;
-      } else {
-        result = toMinutes(document.getElementById('manualHours').value, document.getElementById('manualMinutes').value);
-      }
-      
-      // ==== Добавлено: расчёт времени для пассажирских перелётов ====
-      let totalFlyPassenger = 0;
-      flyBlocks.forEach((b) => {
-        let out = toMinutes(b.outH, b.outM), inn = toMinutes(b.inH, b.inM);
-        if (out && inn) {
-          let diff = inn - out; 
-          if (diff < 0) diff += 24 * 60;
-          diff += 40;
-          totalFlyPassenger += diff;
-        }
-      });
-      result += totalFlyPassenger;
-
-      // Резервы
-      let sumHome = toMinutes(document.getElementById('reserveHomeH0').value, document.getElementById('reserveHomeM0').value) / 4;
-      reserveHomeBlocks.forEach(b => { sumHome += (toMinutes(b.h, b.m) / 4); });
-      result += Math.floor(sumHome);
-      
-      let sumHotel = toMinutes(document.getElementById('reserveHotelH0').value, document.getElementById('reserveHotelM0').value);
-      reserveHotelBlocks.forEach(b => { sumHotel += toMinutes(b.h, b.m); });
-      result += sumHotel;
-      
-      // Дни
-      let days = parseInt(document.getElementById('extraDays').value) || 0;
-      result += days * (7 * 60 + 12);
-      
-      let vlekDays = parseInt(document.getElementById('vlekDays').value) || 0;
-      result += vlekDays * (7 * 60 + 12);
-      
-      // Тренинг
-      result += toMinutes(document.getElementById('trainingH').value, document.getElementById('trainingM').value);
-      
-      // Командировки
-      if (!document.getElementById('multiBase').checked) {
-        for (let cmd of cmdBlocks) {
-          if (cmd.close && cmd.open) {
-            try {
-              let close = new Date(cmd.close);
-              let open = new Date(cmd.open);
-              let diff = (close - open) / (1000 * 60);
-              result += Math.abs(Math.round(diff));
-            } catch (e) {
-              console.error("Ошибка расчета командировки:", e);
-            }
-          }
-        }
-      }
-      
-      // Фонд
-      const fondMin = fondData[document.getElementById('monthPicker').value] || 0;
-      let monthName = document.getElementById('monthPicker').options[document.getElementById('monthPicker').selectedIndex].text;
-      
-      // Показываем результаты
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-      document.getElementById('mainForm').style.display = "none";
-      document.getElementById('resultFg').style.display = "flex";
-      document.getElementById('resultPage').style.display = "block";
-      
-      document.getElementById('myWorkTime').textContent = toTimeString(result);
-      document.getElementById('fondWorkTime').textContent = `${monthName}: ${toTimeString(fondMin)}`;
-      
-      let deltaBlock = document.getElementById('deltaBlock');
-      if (result > fondMin) {
-        deltaBlock.className = 'delta negative';
-        deltaBlock.textContent = `Переработка: ${toTimeString(result - fondMin)}`;
-      } else {
-        deltaBlock.className = 'delta positive';
-        deltaBlock.textContent = `Недоработка: ${toTimeString(fondMin - result)}`;
-      }
-      
-      return false;
-    };
-
-    document.getElementById('backBtn').onclick = function() {
-      document.getElementById('mainForm').style.display = "block";
-      document.getElementById('headerBg').style.display = "block";
-      document.getElementById('headerFg').style.display = "flex";
-      document.getElementById('resultFg').style.display = "none";
-      document.getElementById('resultPage').style.display = "none";
-    };
-
-    // Инициализация калькулятора
-    function initCalculator() {
-      renderFlyBlocks();
-      renderReserveBlocks('home');
-      renderReserveBlocks('hotel');
-      addCmdBlock();
-      document.getElementById('addCmdBtn').onclick = addCmdBlock;
+      document.getElementById("result").innerText =
+        `Результат: ${score} из ${total} правильных ответов`;
     }
   </script>
+
 </body>
 </html>
