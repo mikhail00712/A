@@ -174,20 +174,41 @@
                 return;
             }
 
-            // Примерный расчет — для быстрой оценки (точный расчет требует MOM, ARM)
-            let totalWeight = oew + payload + fuel;
-            let oewCG = configs[type].oew_cg; // CG OEW (%MAC) — справочное
+            // Кратко расчет
+            let zfw = oew + payload; // Zero Fuel Weight
+            let tow = zfw + fuel;    // Takeoff Weight
 
-            // payload и fuel смещают CG примерно на 1-3% MAC (упрощённо)
-            let payloadEffect = (payload / totalWeight) * 4.0;
-            let fuelEffect = (fuel / totalWeight) * 2.5;
+            // Центровка ZFW примерно равна CG OEW (очень упрощённо)
+            let mac = configs[type].mac;
+            let lemac = configs[type].lemac;
+            let oewCG = configs[type].oew_cg; // %MAC OEW
 
-            let cg = oewCG + payloadEffect - fuelEffect;
+            // MAC ZFW (оставляем как OEW, по-настоящему считается по моментам)
+            let mac_zfw = oewCG;
 
-            let cgStr = cg.toFixed(1);
+            // Takeoff CG с учётом влияния топлива (эмпирика — только для примерного вывода)
+            let payloadEffect = (payload / tow) * 4.0;
+            let fuelEffect = (fuel / tow) * 2.5;
+            let mac_tow = oewCG + payloadEffect - fuelEffect;
 
-            let result = `Расчёт CG (центровки):<br><b>${cgStr} %MAC</b><br>
-                <small>(Ориентировочно! Точный расчёт — только с учетом реальных моментов и схемы загрузки.)</small>`;
+            // Итоговые строки (округляем)
+            zfw = Math.round(zfw);
+            tow = Math.round(tow);
+            mac_zfw = mac_zfw.toFixed(1);
+            mac_tow = mac_tow.toFixed(1);
+
+            // Для наглядности также отобразим простой CG (старое)
+            let cgStr = mac_tow;
+
+            let result = `
+                <b>Zero Fuel Weight (ZFW):</b> ${zfw} кг<br>
+                <b>MAC Zero Fuel Weight (CG ZFW):</b> ${mac_zfw} %MAC<br>
+                <b>Takeoff Weight (TOW):</b> ${tow} кг<br>
+                <b>MAC Takeoff Weight (CG TOW):</b> ${mac_tow} %MAC<br>
+                <hr style="margin:16px 0;">
+                <b>CG (центровка на взлёте):</b> ${cgStr} %MAC<br>
+                <small>(Ориентировочно! Точный расчёт — только с учетом реальных моментов и схемы загрузки.)</small>
+            `;
 
             document.getElementById('result').style.display = 'block';
             document.getElementById('result').innerHTML = result;
