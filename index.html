@@ -11,18 +11,22 @@
             padding: 0;
         }
         .container {
-            max-width: 400px;
-            margin: 40px auto;
+            max-width: 420px;
+            margin: 48px auto 0 auto;
             padding: 32px 24px 28px 24px;
             background: #fff;
             border-radius: 14px;
             box-shadow: 0 4px 18px rgba(0,0,0,0.08);
         }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 4px;
+        }
         .top-button {
-            display: block;
             width: 100%;
             padding: 18px 0;
-            margin-bottom: 12px;
             background: #3366cc;
             color: #fff;
             border: none;
@@ -37,7 +41,7 @@
         .top-button:hover {
             background: #254a9a;
         }
-        /* Стили формы центровки */
+        /* Центровка */
         #cgBlock {
             margin-top: 18px;
             display: none;
@@ -104,7 +108,7 @@
 <body>
     <div class="container">
         <!-- Кнопки -->
-        <div id="mainMenu">
+        <div id="mainMenu" class="buttons">
             <button class="top-button" onclick="window.open('https://dispatch.simbrief.com', '_blank')">
                 OFP&nbsp;/&nbsp;Расчёт топлива
             </button>
@@ -147,7 +151,7 @@
             document.getElementById('cgForm').reset();
         }
         function showMenu() {
-            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('mainMenu').style.display = 'flex';
             document.getElementById('cgBlock').style.display = 'none';
         }
 
