@@ -1,110 +1,58 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Тест: Заправка A320</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f5f5f5;
-      color: #222;
-    }
-    h1 {
-      text-align: center;
-      color: #234ad8;
-    }
-    .question-block {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      padding: 15px 20px;
-    }
-    .question-block h3 {
-      margin: 0 0 10px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-    }
-    button {
-      background: #234ad8;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .result {
-      font-weight: bold;
-      font-size: 20px;
-      color: green;
-      margin-top: 20px;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Авиация: Быстрые ссылки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px 24px 28px 24px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        }
+        .top-button {
+            display: block;
+            width: 100%;
+            padding: 18px 0;
+            margin-bottom: 12px;
+            background: #3366cc;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.18s;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 8px rgba(51,102,204,0.07);
+        }
+        .top-button:hover {
+            background: #254a9a;
+        }
+        h1 {
+            font-size: 1.35em;
+            text-align: center;
+            margin: 0 0 28px 0;
+            color: #234080;
+            letter-spacing: 0.01em;
+        }
+    </style>
 </head>
 <body>
-
-  <h1>Тест по заправке A320</h1>
-
-  <form id="quizForm">
-
-    <div class="question-block">
-      <h3>1. Можно ли заправлять самолёт при грозе?</h3>
-      <label><input type="radio" name="q1" value="0"> Да</label>
-      <label><input type="radio" name="q1" value="1"> Нет</label>
+    <div class="container">
+        <h1>Быстрый доступ к расчётам</h1>
+        <button class="top-button" onclick="window.open('https://dispatch.simbrief.com', '_blank')">
+            Расчёт OFP топлива
+        </button>
+        <!-- Здесь появятся другие кнопки позже -->
     </div>
-
-    <div class="question-block">
-      <h3>2. Какое максимальное давление топлива допускается?</h3>
-      <label><input type="radio" name="q2" value="0"> 70 psi</label>
-      <label><input type="radio" name="q2" value="1"> 50 psi</label>
-      <label><input type="radio" name="q2" value="0"> 35 psi</label>
-    </div>
-
-    <div class="question-block">
-      <h3>3. Какие огни можно оставить включенными при заправке?</h3>
-      <label><input type="radio" name="q3" value="1"> Только NAV и LOGO</label>
-      <label><input type="radio" name="q3" value="0"> Все наружные</label>
-      <label><input type="radio" name="q3" value="0"> Beacon, Strobe и Taxi</label>
-    </div>
-
-    <div class="question-block">
-      <h3>4. Сколько времени действует контрольный талон на топливо?</h3>
-      <label><input type="radio" name="q4" value="0"> 12 часов</label>
-      <label><input type="radio" name="q4" value="1"> 6 часов</label>
-      <label><input type="radio" name="q4" value="0"> 24 часа</label>
-    </div>
-
-    <div class="question-block">
-      <h3>5. В каком порядке подключается заземление?</h3>
-      <label><input type="radio" name="q5" value="1"> Сначала к земле, потом к ВС</label>
-      <label><input type="radio" name="q5" value="0"> Сначала к ВС, потом к земле</label>
-    </div>
-
-    <button type="button" onclick="checkAnswers()">Проверить ответы</button>
-  </form>
-
-  <div class="result" id="result"></div>
-
-  <script>
-    function checkAnswers() {
-      const form = document.forms['quizForm'];
-      let score = 0;
-      const total = 5;
-      for (let i = 1; i <= total; i++) {
-        const answer = form['q' + i].value;
-        if (answer === "1") score++;
-      }
-      document.getElementById("result").innerText =
-        `Результат: ${score} из ${total} правильных ответов`;
-    }
-  </script>
-
 </body>
 </html>
