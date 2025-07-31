@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Авиация: OFP / Расчёт топлива</title>
+    <title>Авиация: OFP и Центровка</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +22,7 @@
             display: block;
             width: 100%;
             padding: 18px 0;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             background: #3366cc;
             color: #fff;
             border: none;
@@ -37,14 +37,157 @@
         .top-button:hover {
             background: #254a9a;
         }
+        /* Стили формы центровки */
+        #cgBlock {
+            margin-top: 18px;
+            display: none;
+        }
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        select, input[type=number] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+            font-size: 1em;
+        }
+        button.cg-btn {
+            margin-top: 22px;
+            width: 100%;
+            padding: 14px 0;
+            background: #3366cc;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.17s;
+        }
+        button.cg-btn:hover {
+            background: #254a9a;
+        }
+        .result {
+            margin-top: 22px;
+            padding: 16px;
+            background: #eef3fb;
+            border-radius: 8px;
+            color: #18305c;
+            font-size: 1.07em;
+        }
+        /* Кнопка "Назад" */
+        .back-btn {
+            margin-top: 8px;
+            margin-bottom: 8px;
+            display: block;
+            background: #eee;
+            color: #234080;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 0;
+            width: 100%;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.14s;
+        }
+        .back-btn:hover {
+            background: #d3dbef;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <button class="top-button" onclick="window.open('https://dispatch.simbrief.com', '_blank')">
-            OFP&nbsp;/&nbsp;Расчёт топлива
-        </button>
-        <!-- Здесь позже будут другие кнопки -->
+        <!-- Кнопки -->
+        <div id="mainMenu">
+            <button class="top-button" onclick="window.open('https://dispatch.simbrief.com', '_blank')">
+                OFP&nbsp;/&nbsp;Расчёт топлива
+            </button>
+            <button class="top-button" onclick="showCG()">
+                Центровочный график A320
+            </button>
+        </div>
+        <!-- Центровочный блок (скрыт по умолчанию) -->
+        <div id="cgBlock">
+            <button class="back-btn" onclick="showMenu()">← Назад</button>
+            <form id="cgForm" onsubmit="event.preventDefault(); calculateCG();">
+                <label for="type">Тип самолёта</label>
+                <select id="type" name="type">
+                    <option value="A320">A320</option>
+                    <option value="A321">A321</option>
+                    <option value="A320neo">A320neo</option>
+                    <option value="A321neo">A321neo</option>
+                </select>
+
+                <label for="oew">OEW (кг)</label>
+                <input type="number" id="oew" name="oew" required placeholder="Например, 42600">
+
+                <label for="payload">Payload (кг)</label>
+                <input type="number" id="payload" name="payload" required placeholder="Пассажиры + багаж">
+
+                <label for="fuel">Топливо на вылет (кг)</label>
+                <input type="number" id="fuel" name="fuel" required placeholder="Например, 8000">
+
+                <button type="submit" class="cg-btn">Рассчитать центровку</button>
+            </form>
+
+            <div class="result" id="result" style="display:none;"></div>
+        </div>
     </div>
+    <script>
+        function showCG() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('cgBlock').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('cgForm').reset();
+        }
+        function showMenu() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('cgBlock').style.display = 'none';
+        }
+
+        // Примерные MAC и референсные данные (упрощённо)
+        const configs = {
+            'A320':   { mac: 3860, lemac: 16.6, oew_cg: 21.5 },
+            'A321':   { mac: 4130, lemac: 18.2, oew_cg: 21.2 },
+            'A320neo':{ mac: 3860, lemac: 16.6, oew_cg: 21.5 },
+            'A321neo':{ mac: 4130, lemac: 18.2, oew_cg: 21.2 }
+        };
+
+        function calculateCG() {
+            let type = document.getElementById('type').value;
+            let oew = parseFloat(document.getElementById('oew').value);
+            let payload = parseFloat(document.getElementById('payload').value);
+            let fuel = parseFloat(document.getElementById('fuel').value);
+
+            if(isNaN(oew) || isNaN(payload) || isNaN(fuel)) {
+                alert('Проверьте правильность ввода!');
+                return;
+            }
+
+            // Примерный расчет — для быстрой оценки (точный расчет требует MOM, ARM)
+            let totalWeight = oew + payload + fuel;
+            let oewCG = configs[type].oew_cg; // CG OEW (%MAC) — справочное
+
+            // payload и fuel смещают CG примерно на 1-3% MAC (упрощённо)
+            let payloadEffect = (payload / totalWeight) * 4.0;
+            let fuelEffect = (fuel / totalWeight) * 2.5;
+
+            let cg = oewCG + payloadEffect - fuelEffect;
+
+            let cgStr = cg.toFixed(1);
+
+            let result = `Расчёт CG (центровки):<br><b>${cgStr} %MAC</b><br>
+                <small>(Ориентировочно! Точный расчёт — только с учетом реальных моментов и схемы загрузки.)</small>`;
+
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerHTML = result;
+        }
+    </script>
 </body>
 </html>
